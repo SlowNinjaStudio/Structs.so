@@ -1,0 +1,96 @@
+<!doctype html>
+<html class="no-js" lang="">
+
+<head>
+  <meta charset="utf-8">
+  <title></title>
+  <meta name="description" content="">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <meta property="og:title" content="">
+  <meta property="og:type" content="">
+  <meta property="og:url" content="">
+  <meta property="og:image" content="">
+
+  <link rel="manifest" href="site.webmanifest">
+  <link rel="apple-touch-icon" href="icon.png">
+  <!-- Place favicon.ico in the root directory -->
+
+  <link rel="stylesheet" href="css/normalize.css">
+  <link rel="stylesheet" href="css/main.css">
+
+  <meta name="theme-color" content="#fafafa">
+</head>
+
+<body>
+
+<div class="asset-viewer">
+  <!-- Add your site or application content here -->
+  <canvas id="gameAsset" width="64" height="64" style="border:1px solid #000000;">
+    Your browser does not support the canvas element.
+  </canvas>
+</div>
+  <script>
+    class PixelArtViewer {
+      constructor(canvas) {
+        this.canvas = canvas;
+        this.context = canvas.getContext("2d");
+      }
+      displayImage(path) {
+        const img = new Image();
+        const context = this.context;
+        img.onload = function () {
+          // draw the image into the canvas
+          context.drawImage(img, 0, 0);
+        }
+        img.src = path;
+      }
+      displayImageLayers(layers) {
+        for(let i = 0; i < layers.length; i++) {
+          this.displayImage(layers[i]);
+        }
+      }
+      invert() {
+        const imageData = this.context.getImageData(0, 0, this.canvas.width, this.canvas.height);
+        const data = imageData.data;
+        for (let i = 0; i < data.length; i += 4) {
+          data[i]     = 255 - data[i];     // red
+          data[i + 1] = 255 - data[i + 1]; // green
+          data[i + 2] = 255 - data[i + 2]; // blue
+        }
+        this.context.putImageData(imageData, 0, 0);
+      };
+    }
+
+    const canvas = document.getElementById("gameAsset");
+    canvas.height = canvas.width;
+
+    const imageLayers = [
+      'img/structure-bg-default.png',
+      'img/structure-bg-space.png',
+      'img/structure-bg-water.png',
+      'img/structure-bg-lighten-15.png',
+      'img/structure-static-buildings.png',
+      'img/structure-static-water.png',
+      'img/structure-static-space.png'
+    ];
+
+    const pixelArtViewer = new PixelArtViewer(canvas);
+    pixelArtViewer.displayImageLayers(imageLayers);
+
+    document.addEventListener('click', () => pixelArtViewer.invert());
+  </script>
+
+  <script src="js/vendor/modernizr-3.11.2.min.js"></script>
+  <script src="js/plugins.js"></script>
+  <script src="js/main.js"></script>
+
+  <!-- Google Analytics: change UA-XXXXX-Y to be your site's ID. -->
+  <script>
+    window.ga = function () { ga.q.push(arguments) }; ga.q = []; ga.l = +new Date;
+    ga('create', 'UA-XXXXX-Y', 'auto'); ga('set', 'anonymizeIp', true); ga('set', 'transport', 'beacon'); ga('send', 'pageview')
+  </script>
+  <script src="https://www.google-analytics.com/analytics.js" async></script>
+</body>
+
+</html>
