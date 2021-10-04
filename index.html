@@ -31,6 +31,158 @@
   </canvas>
 </div>
   <script>
+    const AMBITS = {
+      LAND: 'LAND',
+      SKY: 'SKY',
+      SPACE: 'SPACE',
+      WATER: 'WATER',
+    };
+    const FEATURES = {
+      ATTACK: 'ATTACK_SYSTEM',
+      DEFENSIVE: 'DEFENSIVE_SYSTEM',
+      ENGINEERING: 'ENGINEERING_SYSTEM',
+      POWER: 'POWER_SYSTEM',
+      STORAGE: 'STORAGE_SYSTEM'
+    }
+
+    class JsonAjaxer {
+      async get (url) {
+        const response = await fetch(url, {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          redirect: 'follow'
+        });
+        return response.json();
+      }
+    }
+
+    class DroidApi {
+      constructor(scheme, domain, ajax) {
+        this.scheme = scheme;
+        this.domain = domain;
+        this.ajax = (ajax !== undefined) ? ajax: new JsonAjaxer();
+      }
+      getStructures() {
+        return this.ajax.get(`${this.scheme}${this.domain}/api/di/Structure`);
+      }
+    }
+
+    class Structure {
+      constructor() {
+        this.accuracy = 0;
+        this.ambits = [];
+        this.build_rate = 0;
+        this.capacity_current = 0;
+        this.capacity_max = 0;
+        this.charge_rate = 0;
+        this.charging_slot = [];
+        this.charging_slots = 0;
+        this.creator = '';
+        this.description = '';
+        this.drain_rate = 0;
+        this.energyEfficiency = 0;
+        this.energyToBuild = {
+          amount: 0,
+          denom: ''
+        }
+        this.generate_rate = 0;
+        this.features = [];
+        this.hash ='';
+        this.health_current = 0;
+        this.health_max = 0;
+        this.id = '';
+        this.input = '';
+        this.is_mobile = false;
+        this.mass = 0;
+        this.melee_attack = 0;
+        this.melee_defense = 0;
+        this.name = '';
+        this.owner = '';
+        this.parent_id = '';
+        this.range_attack = 0;
+        this.range_defense = 0;
+        this.restoration_rate = 0;
+        this.schematic = '';
+        this.speed = 0;
+        this.storage = [];
+        this.strength = 0;
+        this.supervisor = '';
+      }
+
+      makeFromObject(obj) {
+        const structure = new Structure();
+        Object.assign(structure, obj);
+        return structure;
+      }
+
+      getId() {
+        return this.id;
+      }
+
+      isMobile() {
+        return this.is_mobile;
+      }
+
+      hasAmbit(ambit) {
+        return this.ambits.includes(ambit);
+      }
+      hasAmbitLand() {
+        return this.hasAmbit(AMBITS.LAND);
+      }
+      hasAmbitSky() {
+        return this.hasAmbit(AMBITS.SKY);
+      }
+      hasAmbitSpace() {
+        return this.hasAmbit(AMBITS.SPACE);
+      }
+      hasAmbitWater() {
+        return this.hasAmbit(AMBITS.WATER);
+      }
+
+      hasFeature(feature) {
+        return this.features.includes(feature);
+      }
+      hasFeatureAttack() {
+        return this.hasFeature(FEATURES.ATTACK);
+      }
+      hasFeatureDefensive() {
+        return this.hasFeature(FEATURES.DEFENSIVE);
+      }
+      hasFeatureEngineering() {
+        return this.hasFeature(FEATURES.ENGINEERING);
+      }
+      hasFeaturePower() {
+        return this.hasFeature(FEATURES.POWER);
+      }
+      hasFeatureStorage() {
+        return this.hasFeature(FEATURES.STORAGE);
+      }
+    }
+
+    class DroidUI {
+
+      /**
+       * @param {DroidApi} droidApi
+       */
+      constructor(droidApi = new DroidApi('http://', 'droid.sh')) {
+        this.droidApi = droidApi;
+      }
+
+      /**
+       * @param {string} listId
+       */
+      listStructures(listId) {
+        const listElement = document.getElementById(listId);
+        this.droidApi.getStructures().then(data => {
+          for (let i = 0; i < data.Structure.length; i ++) {
+            console.log(data.Structure[i]);
+          }
+        });
+      }
+    }
+
     class ColorRGB {
       constructor(r, g, b) {
         this.r = r;
@@ -157,6 +309,10 @@
         [new ColorRGB(238, 238, 238), new ColorRGB(255, 100, 100)]
       ]);
     });
+
+    const droidUi = new DroidUI();
+    droidUi.listStructures('gameAsset');
+
   </script>
 
   <script src="js/vendor/modernizr-3.11.2.min.js"></script>
