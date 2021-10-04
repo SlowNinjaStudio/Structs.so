@@ -261,6 +261,10 @@ textarea {
   }
 }
 
+/**
+ * PixelArtViewer
+ */
+
 canvas {
   width: 1024px;
   max-width: 100%;

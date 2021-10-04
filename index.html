@@ -32,24 +32,73 @@
 </div>
   <script>
     class PixelArtViewer {
-      constructor(canvas) {
+
+      /**
+       * @param {HTMLCanvasElement} canvas the target canvas that will become the viewer
+       * @param {Array.<string>} imageLayerPaths the paths to the images to render. Image layers are rendered in order.
+       */
+      constructor(canvas, imageLayerPaths) {
         this.canvas = canvas;
+        this.aspectRatio = canvas.height / canvas.width;
         this.context = canvas.getContext("2d");
+        this.imageLayerPaths = imageLayerPaths;
+        this.numImagesLoaded = 0;
+        this.layers = [];
+
+        this.lockAspectRatio();
+        this.loadAndRenderImageLayers();
       }
-      displayImage(path) {
-        const img = new Image();
-        const context = this.context;
-        img.onload = function () {
-          // draw the image into the canvas
-          context.drawImage(img, 0, 0);
+
+      /**
+       * Locks the aspect ratio so that the aspect ratio is maintained even if the image is responsively resized.
+       */
+      lockAspectRatio() {
+        this.canvas.height = this.canvas.width * this.aspectRatio;
+      }
+
+      /**
+       * Check that all images have been loaded. Used before rendering to reduce re-renders.
+       * @returns {boolean}
+       */
+      areAllImagesLoaded() {
+        return this.numImagesLoaded === this.imageLayerPaths.length;
+      }
+
+      /**
+       * Loads and renders the image layers in the order defined by the image paths.
+       */
+      loadAndRenderImageLayers() {
+        for(let i = 0; i < this.imageLayerPaths.length; i++) {
+          const img = new Image();
+          const viewer = this;
+          img.onload = () => {
+            viewer.numImagesLoaded++;
+            if (viewer.areAllImagesLoaded) {
+              viewer.render();
+            }
+          }
+          img.src = this.imageLayerPaths[i];
+          this.layers[i] = img;
         }
-        img.src = path;
       }
-      displayImageLayers(layers) {
-        for(let i = 0; i < layers.length; i++) {
-          this.displayImage(layers[i]);
+
+      /**
+       * Draw all image layers to the canvas in order.
+       */
+      render() {
+        for(let i = 0; i < this.layers.length; i++) {
+          this.context.drawImage(this.layers[i], 0, 0);
         }
       }
+
+      swapColor() {
+        // TODO
+      }
+
+      swapColors() {
+        // TODO
+      }
+
       invert() {
         const imageData = this.context.getImageData(0, 0, this.canvas.width, this.canvas.height);
         const data = imageData.data;
@@ -62,10 +111,10 @@
       };
     }
 
+    /** @type {HTMLCanvasElement} */
     const canvas = document.getElementById("gameAsset");
-    canvas.height = canvas.width;
 
-    const imageLayers = [
+    const imageLayerPaths = [
       'img/structure-bg-default.png',
       'img/structure-bg-space.png',
       'img/structure-bg-water.png',
@@ -75,8 +124,7 @@
       'img/structure-static-space.png'
     ];
 
-    const pixelArtViewer = new PixelArtViewer(canvas);
-    pixelArtViewer.displayImageLayers(imageLayers);
+    const pixelArtViewer = new PixelArtViewer(canvas, imageLayerPaths);
 
     document.addEventListener('click', () => pixelArtViewer.invert());
   </script>
@@ -86,11 +134,11 @@
   <script src="js/main.js"></script>
 
   <!-- Google Analytics: change UA-XXXXX-Y to be your site's ID. -->
-  <script>
-    window.ga = function () { ga.q.push(arguments) }; ga.q = []; ga.l = +new Date;
-    ga('create', 'UA-XXXXX-Y', 'auto'); ga('set', 'anonymizeIp', true); ga('set', 'transport', 'beacon'); ga('send', 'pageview')
-  </script>
-  <script src="https://www.google-analytics.com/analytics.js" async></script>
+<!--  <script>-->
+<!--    window.ga = function () { ga.q.push(arguments) }; ga.q = []; ga.l = +new Date;-->
+<!--    ga('create', 'UA-XXXXX-Y', 'auto'); ga('set', 'anonymizeIp', true); ga('set', 'transport', 'beacon'); ga('send', 'pageview')-->
+<!--  </script>-->
+<!--  <script src="https://www.google-analytics.com/analytics.js" async></script>-->
 </body>
 
 </html>
