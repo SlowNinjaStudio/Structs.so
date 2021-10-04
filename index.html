@@ -94,6 +94,7 @@
        * Draw all image layers to the canvas in order.
        */
       render() {
+        this.clearCanvas();
         for(let i = 0; i < this.layers.length; i++) {
           this.context.drawImage(this.layers[i], 0, 0);
         }
@@ -128,6 +129,10 @@
         for (let i = 0; i < colorSwapList.length; i++) {
           this.swapColor(colorSwapList[i][0], colorSwapList[i][1]);
         }
+      }
+
+      clearCanvas() {
+        this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
       }
     }
 
