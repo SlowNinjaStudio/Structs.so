@@ -24,13 +24,21 @@
 
 <body>
 
-<div class="asset-viewer">
+<div class="game-asset-wrapper">
   <!-- Add your site or application content here -->
-  <canvas id="gameAsset" width="64" height="64" style="border:1px solid #000000;">
+  <canvas id="gameAsset" class="pixel-art-viewer" width="64" height="64" style="border:1px solid #000000;">
     Your browser does not support the canvas element.
   </canvas>
 </div>
   <script>
+    class ColorRGB {
+      constructor(r, g, b) {
+        this.r = r;
+        this.g = g;
+        this.b = b;
+      }
+    }
+
     class PixelArtViewer {
 
       /**
@@ -91,24 +99,36 @@
         }
       }
 
-      swapColor() {
-        // TODO
-      }
-
-      swapColors() {
-        // TODO
-      }
-
-      invert() {
+      /**
+       * Swap colors in the canvas.
+       * @param {ColorRGB} targetColor
+       * @param {ColorRGB} newColor
+       */
+      swapColor(targetColor, newColor) {
         const imageData = this.context.getImageData(0, 0, this.canvas.width, this.canvas.height);
         const data = imageData.data;
         for (let i = 0; i < data.length; i += 4) {
-          data[i]     = 255 - data[i];     // red
-          data[i + 1] = 255 - data[i + 1]; // green
-          data[i + 2] = 255 - data[i + 2]; // blue
+          const red = data[i];
+          const green = data[i + 1];
+          const blue = data[i + 2];
+          if (red === targetColor.r && green === targetColor.g && blue === targetColor.b) {
+            data[i]     = newColor.r; // red
+            data[i + 1] = newColor.g; // green
+            data[i + 2] = newColor.b; // blue
+          }
         }
         this.context.putImageData(imageData, 0, 0);
-      };
+      }
+
+      /**
+       * Given an array of color pairs, swap the first color with the second color in the canvas.
+       * @param {Array.<Array>} colorSwapList
+       */
+      swapColors(colorSwapList) {
+        for (let i = 0; i < colorSwapList.length; i++) {
+          this.swapColor(colorSwapList[i][0], colorSwapList[i][1]);
+        }
+      }
     }
 
     /** @type {HTMLCanvasElement} */
@@ -126,7 +146,13 @@
 
     const pixelArtViewer = new PixelArtViewer(canvas, imageLayerPaths);
 
-    document.addEventListener('click', () => pixelArtViewer.invert());
+    document.addEventListener('click', () => {
+      // pixelArtViewer.swapColors([
+      //   [new ColorRGB(0, 0, 0), new ColorRGB(255, 255, 255)],
+      //   [new ColorRGB(238, 238, 238), new ColorRGB(255, 100, 100)]
+      // ])
+      pixelArtViewer.render();
+    });
   </script>
 
   <script src="js/vendor/modernizr-3.11.2.min.js"></script>

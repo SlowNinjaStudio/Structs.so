@@ -265,8 +265,7 @@ textarea {
  * PixelArtViewer
  */
 
-canvas {
-  width: 1024px;
+canvas.pixel-art-viewer {
   max-width: 100%;
   max-height: 100%;
   image-rendering: -moz-crisp-edges;
@@ -275,10 +274,15 @@ canvas {
   image-rendering: crisp-edges;
 }
 
-.asset-viewer {
-  max-width: 100%;
-  width: 1024px;
+/* Responsive Asset Wrapper */
+.game-asset-wrapper {
   height: auto;
+  width: 1024px;
+  max-width: 100%;
   max-height: 100%;
 }
+.game-asset-wrapper > canvas {
+  width: 100%;
+}
+
 
