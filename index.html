@@ -16,15 +16,113 @@
   <link rel="apple-touch-icon" href="icon.png">
   <!-- Place favicon.ico in the root directory -->
 
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/normalize.css">
   <link href="https://unpkg.com/nes.css@2.2.0/css/nes.min.css" rel="stylesheet" />
   <link rel="stylesheet" href="css/main.css">
 
   <meta name="theme-color" content="#fafafa">
+  <style>
+    body {
+      background: url(/img/background/space-texture.png);
+      background-size: 256px 256px;
+      image-rendering: -moz-crisp-edges;
+      image-rendering: -webkit-crisp-edges;
+      image-rendering: pixelated;
+      image-rendering: crisp-edges;
+    }
+    h1 {
+      font-size: 32px;
+      font-weight: normal;
+      text-align: center;
+    }
+
+    .container {
+      margin-top: 64px;
+    }
+    .structure-card {
+      background: #FFFFFF;
+      display: inline-block;
+      width: 392px;
+      max-width: 100%;
+      margin: 20px;
+    }
+    .pixel-art-placeholder {
+      display: inline-block;
+      width:256px;
+      height:256px;
+      max-width:100%;
+      background:#CCC;
+      border:1px solid black;
+      margin-bottom: 40px;
+    }
+    .details {
+      font-family: sans-serif;
+      font-size: 14px;
+    }
+    .attribute-label {
+      font-weight: bold;
+    }
+    .nes-container.with-title>.title {
+      font-weight: normal;
+    }
+    .nes-container.structure-card > .nes-container.with-title {
+      margin-bottom: 20px;
+    }
+    .nes-container.structure-card > .game-asset-wrapper {
+      margin: 0 auto 20px auto;
+    }
+    .nav {
+      background: #222222;
+      position: fixed;
+      top: 0;
+      left: 0;
+      border-top: none;
+      border-bottom: 4px solid #000000;
+      height: 64px;
+      width: 100%;
+      z-index: 10;
+      padding: 20px;
+      color: #fff;
+    }
+  </style>
 </head>
 
 <body>
+<div class="nav">Coindroids Uprising</div>
+<div class="container">
+  <div class="nes-container structure-card" style="display: none">
+    <div class="pixel-art-placeholder"></div>
+    <div class="nes-container with-title">
+      <h3 class="title">Mobile Structure</h3>
+      <div class="details">
+        <div>Mobile offensive crab units</div>
+        <br>
+        <div><span class="attribute-label">Structure ID:</span> 5</div>
+        <div><span class="attribute-label">Health:</span> 79/79</div>
+        <div><span class="attribute-label">Battery Charge:</span> 1405303 watt</div>
+      </div>
+    </div>
+    <div class="nes-container with-title">
+      <h3 class="title">Power Systems</h3>
+      <div class="details">
+        <div><span class="attribute-label">Generation Rate:</span> 31</div>
+        <div><span class="attribute-label">Charge Rate:</span> 507</div>
+        <div><span class="attribute-label">Drain Rate:</span> 351</div>
+      </div>
+    </div>
+    <div class="nes-container with-title">
+      <h3 class="title">Engineering Systems</h3>
+      <div class="details">
+        <div><span class="attribute-label">Build Rate:</span> 31</div>
+        <div><span class="attribute-label">Restoration Rate:</span> 16</div>
+      </div>
+    </div>
+  </div>
   <div id="structures-list"></div>
+</div>
 
   <script>
     const AMBITS = {
@@ -360,10 +458,37 @@
       }
       render() {
         return `
-          <div class="game-asset-wrapper">
-            <canvas id="${this.getCanvasId()}" class="pixel-art-viewer" width="64" height="64">
-              Your browser does not support the canvas element.
-            </canvas>
+          <div class="nes-container structure-card">
+            <div class="game-asset-wrapper">
+              <canvas id="${this.getCanvasId()}" class="pixel-art-viewer" width="64" height="64">
+                Your browser does not support the canvas element.
+              </canvas>
+            </div>
+            <div class="nes-container with-title">
+              <h3 class="title">Mobile Structure</h3>
+              <div class="details">
+                <div>Mobile offensive crab units</div>
+                <br>
+                <div><span class="attribute-label">Structure ID:</span> 5</div>
+                <div><span class="attribute-label">Health:</span> 79/79</div>
+                <div><span class="attribute-label">Battery Charge:</span> 1405303 watt</div>
+              </div>
+            </div>
+            <div class="nes-container with-title">
+              <h3 class="title">Power Systems</h3>
+              <div class="details">
+                <div><span class="attribute-label">Generation Rate:</span> 31</div>
+                <div><span class="attribute-label">Charge Rate:</span> 507</div>
+                <div><span class="attribute-label">Drain Rate:</span> 351</div>
+              </div>
+            </div>
+            <div class="nes-container with-title">
+              <h3 class="title">Engineering Systems</h3>
+              <div class="details">
+                <div><span class="attribute-label">Build Rate:</span> 31</div>
+                <div><span class="attribute-label">Restoration Rate:</span> 16</div>
+              </div>
+            </div>
           </div>
         `;
       }
