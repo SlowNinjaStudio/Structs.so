@@ -92,8 +92,11 @@
 </head>
 
 <body>
-<div class="nav">Coindroids Uprising</div>
+<div class="nav">Structures</div>
 <div class="container">
+
+  <div id="color-container" style="background: white"></div>
+
   <div class="nes-container structure-card" style="display: none">
     <div class="pixel-art-placeholder"></div>
     <div class="nes-container with-title">
@@ -192,6 +195,7 @@
         this.name = '';
         this.owner = '';
         this.parent_id = '';
+        this.primary_color = '';
         this.range_attack = 0;
         this.range_defense = 0;
         this.restoration_rate = 0;
@@ -241,6 +245,9 @@
       }
       getEnergyEfficiency() {
         return this.energy_efficiency;
+      }
+      getPrimaryColor() {
+        return this.primary_color;
       }
 
       isMobile() {
@@ -525,6 +532,74 @@
       }
     }
 
+    class StructureMobilePalette {
+      constructor() {
+        this.chassisTop = new ColorRGB(255, 152, 0);
+        this.chassisBottom = new ColorRGB(255, 87, 34);
+        this.waterFin = new ColorRGB(225, 186, 0);
+        this.landTire = new ColorRGB(88, 88, 88);
+        this.landHubCap = new ColorRGB(192, 192, 192);
+        this.skyWing = new ColorRGB(244, 67, 54);
+        this.spaceFlameCore = new ColorRGB(254, 254, 254);
+        this.spaceInnerFlame = new ColorRGB(255, 213, 79);
+        this.spaceOuterFlame = new ColorRGB(255, 61, 0);
+        this.attackGunBarrel = new ColorRGB(158, 158, 158);
+        this.attackGunAccent = new ColorRGB(255, 179, 0);
+        this.powerLightColor = new ColorRGB(118, 255, 3);
+        this.engineeringCraneArm = new ColorRGB(132, 175, 196);
+        this.engineeringCraneClaw = new ColorRGB(220, 232, 238);
+      }
+
+      generateChassisPaletteSwap(paletteSwap, primaryColor) {
+        const shades = primaryColor.getShades(2);
+        paletteSwap.push([this.chassisTop, shades[0]]);
+        paletteSwap.push([this.chassisBottom, shades[1]]);
+      }
+
+      generatePaletteSwap(primaryColor) {
+        const paletteSwap = [];
+        this.generateChassisPaletteSwap(paletteSwap, primaryColor);
+        return paletteSwap;
+      }
+    }
+
+    class StructureStaticPalette {
+      constructor() {
+        this.buildingsLeft = new ColorRGB(224, 224, 224);
+        this.buildingsCenterLeft = new ColorRGB(158, 158, 158);
+        this.buildingsCenter = new ColorRGB(238, 238, 238);
+        this.buildingsCenterStripe = new ColorRGB(85, 85, 85);
+        this.buildingsCenterRight = new ColorRGB(224, 224, 224);
+        this.buildingsRight = new ColorRGB(189, 189, 189);
+        this.buildingsBaseTop = new ColorRGB(176, 190, 197);
+        this.buildingsBaseBottom = new ColorRGB(96, 125, 139);
+        this.skyInnerFlame = new ColorRGB(255, 235, 59);
+        this.skyOuterFlame = new ColorRGB(213, 0, 0);
+        this.defenseInnerShield = new ColorRGB(128, 216, 255);
+        this.defenseOuterShield = new ColorRGB(224, 247, 250);
+        this.powerLightColor = new ColorRGB(118, 255, 3);
+        this.engineeringCraneTower = new ColorRGB(255, 193, 7);
+        this.engineeringCraneClaw = new ColorRGB(147, 147, 135);
+        this.attackTurret = new ColorRGB(124, 146, 90);
+      }
+
+      generateBuildingsPaletteSwap(paletteSwap, primaryColor) {
+        const newMainColor = this.buildingsCenter.mixColors(primaryColor, 0.10);
+        const shades = newMainColor.getShades(5);
+        paletteSwap.push([this.buildingsCenter, shades[0]]);
+        paletteSwap.push([this.buildingsLeft, shades[1]]);
+        paletteSwap.push([this.buildingsRight, shades[2]]);
+        paletteSwap.push([this.buildingsCenterLeft, shades[3]]);
+        paletteSwap.push([this.buildingsCenterStripe, shades[4]]);
+      }
+
+      generatePaletteSwap(primaryColor) {
+        const paletteSwap = [];
+        this.generateBuildingsPaletteSwap(paletteSwap, primaryColor);
+        return paletteSwap;
+      }
+    }
+
     class DroidUIStructure {
       constructor(structure, idPrefix = '') {
         this.structure = structure;
@@ -606,11 +681,34 @@
       /**
        * @param {DroidApi} droidApi
        * @param {StructureArtGenerator} structureArtGenerator
+       * @param {StructureMobilePalette} structureMobilePalette
+       * @param {StructureStaticPalette} structureStaticPalette
        */
-      constructor(droidApi = new DroidApi('http://', 'droid.sh'), structureArtGenerator = new StructureArtGenerator()) {
+      constructor(
+        droidApi = new DroidApi('http://', 'droid.sh'),
+        structureArtGenerator = new StructureArtGenerator(),
+        structureMobilePalette = new StructureMobilePalette(),
+        structureStaticPalette = new StructureStaticPalette()
+      ) {
         this.droidApi = droidApi;
         this.structureArtGenerator = structureArtGenerator;
+        this.structureMobilePalette = structureMobilePalette;
+        this.structureStaticPalette = structureStaticPalette;
         this.structures = [];
+      }
+
+      /**
+       * @param {Structure} structure
+       */
+      getPalette(structure) {
+        let palette = [];
+        const primaryColor = ColorRGB.hexToRgb(structure.getPrimaryColor());
+        if (structure.isMobile() === true) {
+          palette = this.structureMobilePalette.generatePaletteSwap(primaryColor);
+        } else {
+          palette = this.structureStaticPalette.generatePaletteSwap(primaryColor);
+        }
+        return palette;
       }
 
       /**
@@ -643,7 +741,7 @@
           for (let i = 0; i < this.structures.length; i++) {
             /** @type {HTMLCanvasElement} */
             const canvas = document.getElementById(this.structures[i].droidUIStructure.getCanvasId());
-            new PixelArtViewer(canvas, this.structures[i].layers);
+            new PixelArtViewer(canvas, this.structures[i].layers, this.getPalette(this.structures[i].structure));
           }
         });
       }
@@ -655,6 +753,76 @@
         this.g = g;
         this.b = b;
       }
+
+      /**
+       * Return the RGB complimentary color for the given RGB color.
+       */
+      getComplimentaryColor() {
+        return new ColorRGB(
+          255 - this.r,
+          255 - this.g,
+          255 - this.b
+        );
+      }
+
+      /**
+       * Generate a grey based on the luminosity of the given color.
+       */
+      getGrey() {
+        const avg = Math.round((this.r + this.g + this.b) / 3);
+        return new ColorRGB(
+          avg,
+          avg,
+          avg
+        );
+      }
+
+      /**
+       * @param {ColorRGB} otherColor
+       * @param {number} ratio a number between 0 - 1, 0 being the current color and 1 being the other color.
+       */
+      mixColors(otherColor, ratio = 0.5) {
+        return new ColorRGB(
+          Math.round(this.r * ratio + otherColor.r * (1 - ratio)),
+          Math.round(this.g * ratio + otherColor.g * (1 - ratio)),
+          Math.round(this.b * ratio + otherColor.b * (1 - ratio))
+        );
+      }
+
+      /**
+       * @param {number} numShades the number of shades to generate
+       * @param {boolean} lightToDark whether or not the shades are ordered light to dark or from dark to light
+       * @return {Array.<ColorRGB>}
+       */
+      getShades(numShades, lightToDark = true) {
+        const shades = [];
+
+        for (let i = 0; i < numShades; i++) {
+          const numerator = lightToDark ? numShades - i : i + 1;
+          shades.push(new ColorRGB(
+            Math.round(this.r * (numerator / numShades)),
+            Math.round(this.g * (numerator / numShades)),
+            Math.round(this.b * (numerator / numShades))
+          ));
+        }
+        return shades;
+      }
+
+      /**
+       * @param {string} hex color code
+       * @returns {ColorRGB}
+       */
+      static hexToRgb(hex) {
+        const shorthandRegex = /^#?([a-f\d])([a-f\d])([a-f\d])$/i;
+        hex = hex.replace(shorthandRegex, (m, r, g, b) => r + r + g + g + b + b);
+
+        const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+        return new ColorRGB(
+          parseInt(result[1], 16),
+          parseInt(result[2], 16),
+          parseInt(result[3], 16)
+        );
+      }
     }
 
     class PixelArtViewer {
@@ -662,14 +830,16 @@
       /**
        * @param {HTMLCanvasElement} canvas the target canvas that will become the viewer
        * @param {Array.<string>} imageLayerPaths the paths to the images to render. Image layers are rendered in order.
+       * @param {Array.<Array>} palette list of colors to swap
        */
-      constructor(canvas, imageLayerPaths) {
+      constructor(canvas, imageLayerPaths, palette = []) {
         this.canvas = canvas;
         this.aspectRatio = canvas.height / canvas.width;
         this.context = canvas.getContext("2d");
         this.imageLayerPaths = imageLayerPaths;
         this.numImagesLoaded = 0;
         this.layers = [];
+        this.palette = palette;
 
         this.lockAspectRatio();
         this.loadAndRenderImageLayers();
@@ -699,7 +869,7 @@
           const viewer = this;
           img.onload = () => {
             viewer.numImagesLoaded++;
-            if (viewer.areAllImagesLoaded) {
+            if (viewer.areAllImagesLoaded()) {
               viewer.render();
             }
           }
@@ -716,6 +886,7 @@
         for(let i = 0; i < this.layers.length; i++) {
           this.context.drawImage(this.layers[i], 0, 0);
         }
+        this.swapColors(this.palette);
       }
 
       /**
@@ -756,6 +927,27 @@
 
     const droidUi = new DroidUI();
     droidUi.loadStructures('structures-list');
+
+    /**
+     * @param {ColorRGB} color
+     */
+    function colorBlock(color) {
+      return `<div style="width:40px; height:40px; display:inline-block; background: rgb(${color.r}, ${color.g}, ${color.b})"></div>`;
+    }
+
+    const primaryColor = new ColorRGB(255, 145, 0);
+    const complimentaryColor = primaryColor.getComplimentaryColor();
+    const primaryGreyColor = primaryColor.getGrey();
+    let shades = primaryColor.getShades(7, false);
+    shades = shades.concat(complimentaryColor.getShades(7, true));
+    shades = shades.concat(primaryGreyColor.getShades(7, false));
+    const mixedColor = primaryColor.mixColors(new ColorRGB(238, 238, 238), 0.10);
+    shades = shades.concat(mixedColor.getShades(7, true));
+    var colorBlocks = '';
+    for (let i = 0; i < shades.length; i++) {
+      colorBlocks += colorBlock(shades[i]);
+    }
+    document.getElementById('color-container').innerHTML = colorBlocks;
 
   </script>
 
