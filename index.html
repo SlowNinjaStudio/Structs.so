@@ -173,8 +173,8 @@
         this.creator = '';
         this.description = '';
         this.drain_rate = 0;
-        this.energyEfficiency = 0;
-        this.energyToBuild = {
+        this.energy_efficiency = 0;
+        this.energy_to_build = {
           amount: 0,
           denom: ''
         }
@@ -226,6 +226,21 @@
       }
       getAmbits() {
          return this.ambits.join(', ');
+      }
+      getSpeed() {
+        return this.speed;
+      }
+      getAccuracy() {
+        return this.accuracy;
+      }
+      getMass() {
+        return this.mass;
+      }
+      getStrength() {
+        return this.strength;
+      }
+      getEnergyEfficiency() {
+        return this.energy_efficiency;
       }
 
       isMobile() {
@@ -514,7 +529,6 @@
       constructor(structure, idPrefix = '') {
         this.structure = structure;
         this.idPrefix = idPrefix;
-        console.log(structure);
       }
       getCanvasId() {
         return `${this.idPrefix}structure-${this.structure.getId()}`;
@@ -537,6 +551,12 @@
                 <div><span class="attribute-label">Health:</span> ${this.structure.getHealthCurrent()} / ${this.structure.getHealthMax()}</div>
                 <div><span class="attribute-label">Battery Charge:</span> ${this.structure.getBatteryAmount()} ${this.structure.getBatteryDenom()}</div>
                 <div><span class="attribute-label">Ambits:</span> ${this.structure.getAmbits()}</div>
+                <br>
+                <div><span class="attribute-label">Speed:</span> ${this.structure.getSpeed()}</div>
+                <div><span class="attribute-label">Accuracy:</span> ${this.structure.getAccuracy()} / ${this.structure.getHealthMax()}</div>
+                <div><span class="attribute-label">Mass:</span> ${this.structure.getMass()}</div>
+                <div><span class="attribute-label">Strength:</span> ${this.structure.getStrength()}</div>
+                <div><span class="attribute-label">Energy Efficiency:</span> ${this.structure.getEnergyEfficiency()}</div>
               </div>
             </div>
             ${(this.structure.hasFeatureAttack()) ? `
