@@ -95,7 +95,7 @@
 <div class="nav">Structures</div>
 <div class="container">
 
-  <div id="color-container" style="background: white"></div>
+  <div id="color-container" style="background: black"></div>
 
   <div class="nes-container structure-card" style="display: none">
     <div class="pixel-art-placeholder"></div>
@@ -484,7 +484,7 @@
       }
       staticStructureDefensive(layers, structure) {
         if (structure.hasFeatureDefensive()) {
-          layers.push(`${this.imgDir}${this.staticDir}structure-static-attack.png`);
+          layers.push(`${this.imgDir}${this.staticDir}structure-static-defense.png`);
         }
       }
       staticStructureEngineering(layers, structure) {
@@ -551,7 +551,8 @@
       }
 
       generateChassisPaletteSwap(paletteSwap, primaryColor) {
-        const shades = primaryColor.getShades(2);
+        const adjustedColor = primaryColor.clampAvgBrightness(40, 255);
+        const shades = adjustedColor.getShades(2);
         paletteSwap.push([this.chassisTop, shades[0]]);
         paletteSwap.push([this.chassisBottom, shades[1]]);
       }
@@ -584,7 +585,7 @@
       }
 
       generateBuildingsPaletteSwap(paletteSwap, primaryColor) {
-        const newMainColor = this.buildingsCenter.mixColors(primaryColor, 0.10);
+        const newMainColor = this.buildingsCenter.mixColors(primaryColor, 0.60);
         const shades = newMainColor.getShades(5);
         paletteSwap.push([this.buildingsCenter, shades[0]]);
         paletteSwap.push([this.buildingsLeft, shades[1]]);
@@ -593,9 +594,34 @@
         paletteSwap.push([this.buildingsCenterStripe, shades[4]]);
       }
 
+      generateAttack(paletteSwap, primaryColor) {
+        const complimentaryColor = primaryColor.getComplimentaryColor();
+        const adjustedColor = complimentaryColor.clampAvgBrightness(200, 250);
+        paletteSwap.push([this.attackTurret, adjustedColor]);
+      }
+
+      generateDefensive(paletteSwap, primaryColor) {
+        const complimentaryColor = primaryColor.getComplimentaryColor();
+        const outerShieldColor = complimentaryColor.clampAvgBrightness(240, 250);
+        const shieldShades = outerShieldColor.getShades(2);
+
+        paletteSwap.push([this.defenseOuterShield, shieldShades[0]]);
+        paletteSwap.push([this.defenseInnerShield, shieldShades[1]]);
+      }
+
+      generateEngineering(paletteSwap, primaryColor) {
+        const complimentaryColor = primaryColor.getComplimentaryColor();
+        const adjustedColor = complimentaryColor.clampAvgBrightness(100, 220);
+        paletteSwap.push([this.engineeringCraneTower, adjustedColor]);
+      }
+
+
       generatePaletteSwap(primaryColor) {
         const paletteSwap = [];
         this.generateBuildingsPaletteSwap(paletteSwap, primaryColor);
+        this.generateAttack(paletteSwap, primaryColor);
+        this.generateDefensive(paletteSwap, primaryColor);
+        this.generateEngineering(paletteSwap, primaryColor);
         return paletteSwap;
       }
     }
@@ -628,7 +654,7 @@
                 <div><span class="attribute-label">Ambits:</span> ${this.structure.getAmbits()}</div>
                 <br>
                 <div><span class="attribute-label">Speed:</span> ${this.structure.getSpeed()}</div>
-                <div><span class="attribute-label">Accuracy:</span> ${this.structure.getAccuracy()} / ${this.structure.getHealthMax()}</div>
+                <div><span class="attribute-label">Accuracy:</span> ${this.structure.getAccuracy()}</div>
                 <div><span class="attribute-label">Mass:</span> ${this.structure.getMass()}</div>
                 <div><span class="attribute-label">Strength:</span> ${this.structure.getStrength()}</div>
                 <div><span class="attribute-label">Energy Efficiency:</span> ${this.structure.getEnergyEfficiency()}</div>
@@ -742,6 +768,7 @@
             /** @type {HTMLCanvasElement} */
             const canvas = document.getElementById(this.structures[i].droidUIStructure.getCanvasId());
             new PixelArtViewer(canvas, this.structures[i].layers, this.getPalette(this.structures[i].structure));
+            console.log(this.structures[i].structure);
           }
         });
       }
@@ -779,13 +806,13 @@
 
       /**
        * @param {ColorRGB} otherColor
-       * @param {number} ratio a number between 0 - 1, 0 being the current color and 1 being the other color.
+       * @param {number} ratio a number between 0 - 1, the amount of the other color to mix in.
        */
       mixColors(otherColor, ratio = 0.5) {
         return new ColorRGB(
-          Math.round(this.r * ratio + otherColor.r * (1 - ratio)),
-          Math.round(this.g * ratio + otherColor.g * (1 - ratio)),
-          Math.round(this.b * ratio + otherColor.b * (1 - ratio))
+          Math.round(this.r * (1 - ratio) + otherColor.r * ratio),
+          Math.round(this.g * (1 - ratio) + otherColor.g * ratio),
+          Math.round(this.b * (1 - ratio) + otherColor.b * ratio)
         );
       }
 
@@ -821,6 +848,31 @@
           parseInt(result[1], 16),
           parseInt(result[2], 16),
           parseInt(result[3], 16)
+        );
+      }
+
+      /**
+       * Ensures that the color is within a certain range of brightness.
+       *
+       * @param {number} min
+       * @param {number} max
+       * @returns {ColorRGB}
+       */
+      clampAvgBrightness(min, max) {
+        if (min < 0 || max < 0 || min >= max) {
+          throw 'Invalid min or max';
+        }
+        const avg = (this.r + this.g + this.b) / 3;
+        let adjustment = 1;
+        if (avg < min) {
+          adjustment = min / avg;
+        } else if (avg > max) {
+          adjustment = max / avg;
+        }
+        return new ColorRGB(
+          Math.round(this.r * adjustment),
+          Math.round(this.g * adjustment),
+          Math.round(this.b * adjustment)
         );
       }
     }
@@ -932,17 +984,19 @@
      * @param {ColorRGB} color
      */
     function colorBlock(color) {
-      return `<div style="width:40px; height:40px; display:inline-block; background: rgb(${color.r}, ${color.g}, ${color.b})"></div>`;
+      return `<div style="width:40px; height:20px; display:inline-block; background: rgb(${color.r}, ${color.g}, ${color.b})"></div>`;
     }
 
     const primaryColor = new ColorRGB(255, 145, 0);
     const complimentaryColor = primaryColor.getComplimentaryColor();
     const primaryGreyColor = primaryColor.getGrey();
+    const clampedColor = (new ColorRGB(13, 27, 10)).clampAvgBrightness(150, 250);
     let shades = primaryColor.getShades(7, false);
     shades = shades.concat(complimentaryColor.getShades(7, true));
     shades = shades.concat(primaryGreyColor.getShades(7, false));
     const mixedColor = primaryColor.mixColors(new ColorRGB(238, 238, 238), 0.10);
     shades = shades.concat(mixedColor.getShades(7, true));
+    shades = shades.concat(clampedColor.getShades(7, false));
     var colorBlocks = '';
     for (let i = 0; i < shades.length; i++) {
       colorBlocks += colorBlock(shades[i]);
