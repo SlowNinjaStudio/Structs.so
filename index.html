@@ -395,44 +395,44 @@
 
       /* Mobile Structure Ambit Parts */
       mobileStructureLand(layers, structure) {
-        if (structure.hasAmbitLand()) {
+        if (true || structure.hasAmbitLand()) {
           layers.push(`${this.imgDir}${this.mobileDir}structure-mobile-land.png`);
         }
       }
       mobileStructureSky(layers, structure) {
-        if (structure.hasAmbitSky()) {
+        if (true || structure.hasAmbitSky()) {
           layers.push(`${this.imgDir}${this.mobileDir}structure-mobile-sky.png`);
         }
       }
       mobileStructureSpace(layers, structure) {
-        if (structure.hasAmbitSpace()) {
+        if (true || structure.hasAmbitSpace()) {
           layers.push(`${this.imgDir}${this.mobileDir}structure-mobile-space.png`);
         }
       }
       mobileStructureWater(layers, structure) {
-        if (structure.hasAmbitWater()) {
+        if (true || structure.hasAmbitWater()) {
           layers.push(`${this.imgDir}${this.mobileDir}structure-mobile-water.png`);
         }
       }
 
       /* Mobile Structure Feature Parts */
       mobileStructureAttack(layers, structure) {
-        if (structure.hasFeatureAttack()) {
+        if (true || structure.hasFeatureAttack()) {
           layers.push(`${this.imgDir}${this.mobileDir}structure-mobile-attack.png`);
         }
       }
       mobileStructureDefensive(layers, structure) {
-        if (structure.hasFeatureDefensive()) {
+        if (true || structure.hasFeatureDefensive()) {
           layers.push(`${this.imgDir}${this.mobileDir}structure-mobile-attack.png`);
         }
       }
       mobileStructureEngineering(layers, structure) {
-        if (structure.hasFeatureEngineering()) {
+        if (true || structure.hasFeatureEngineering()) {
           layers.push(`${this.imgDir}${this.mobileDir}structure-mobile-engineering.png`);
         }
       }
       mobileStructurePower(layers, structure) {
-        if (structure.hasFeaturePower()) {
+        if (true || structure.hasFeaturePower()) {
           layers.push(`${this.imgDir}${this.mobileDir}structure-mobile-power.png`);
         }
       }
@@ -458,19 +458,19 @@
 
       /* Static Structure Ambit Parts */
       staticStructureSky(layers, structure) {
-        if (structure.hasAmbitSky()) {
+        if (true || structure.hasAmbitSky()) {
           layers.push(`${this.imgDir}${this.staticDir}structure-static-buildings-base.png`);
           layers.push(`${this.imgDir}${this.staticDir}structure-static-sky.png`);
         }
       }
       staticStructureSpace(layers, structure) {
-        if (structure.hasAmbitSpace()) {
+        if (true || structure.hasAmbitSpace()) {
           layers.push(`${this.imgDir}${this.staticDir}structure-static-buildings-base.png`);
           layers.push(`${this.imgDir}${this.staticDir}structure-static-space.png`);
         }
       }
       staticStructureWater(layers, structure) {
-        if (structure.hasAmbitWater()) {
+        if (true || structure.hasAmbitWater()) {
           layers.push(`${this.imgDir}${this.staticDir}structure-static-buildings-base.png`);
           layers.push(`${this.imgDir}${this.staticDir}structure-static-water.png`);
         }
@@ -478,22 +478,22 @@
 
       /* Static Structure Feature Parts */
       staticStructureAttack(layers, structure) {
-        if (structure.hasFeatureAttack()) {
+        if (true || structure.hasFeatureAttack()) {
           layers.push(`${this.imgDir}${this.staticDir}structure-static-attack.png`);
         }
       }
       staticStructureDefensive(layers, structure) {
-        if (structure.hasFeatureDefensive()) {
+        if (true || structure.hasFeatureDefensive()) {
           layers.push(`${this.imgDir}${this.staticDir}structure-static-defense.png`);
         }
       }
       staticStructureEngineering(layers, structure) {
-        if (structure.hasFeatureEngineering()) {
+        if (true || structure.hasFeatureEngineering()) {
           layers.push(`${this.imgDir}${this.staticDir}structure-static-engineering.png`);
         }
       }
       staticStructurePower(layers, structure) {
-        if (structure.hasFeaturePower()) {
+        if (true || structure.hasFeaturePower()) {
           layers.push(`${this.imgDir}${this.staticDir}structure-static-power.png`);
         }
       }
@@ -532,11 +532,62 @@
       }
     }
 
+    class Ranks {
+      constructor(
+        rankS,
+        rankA,
+        rankB,
+        rankC,
+        rankD,
+        rankF,
+      ) {
+        this.rankS = rankS;
+        this.rankA = rankA;
+        this.rankB = rankB;
+        this.rankC = rankC;
+        this.rankD = rankD;
+        this.rankF = rankF;
+      }
+
+      static make(max) {
+        return new Ranks(
+          max - (max * 0.02),
+          max - (max * 0.16),
+          max - (max * 0.50),
+          max - (max * 0.84),
+          max - (max * 0.98),
+          0
+        );
+      }
+    }
+
+    class StructureRanks {
+      constructor() {
+        this.accuracyMax = 255;
+        this.energyEfficiencyMax = 255;
+        this.massMax = 255;
+        this.speedMax = 255;
+        this.strengthMax = 255;
+      }
+      getAttackRanks() {
+        return Ranks.make(this.speedMax + this.accuracyMax);
+      }
+      getDefensiveRanks() {
+        return Ranks.make(this.massMax + this.accuracyMax);
+      }
+      getEngineeringRanks() {
+        return Ranks.make(this.massMax + this.strengthMax);
+      }
+      getPowerRanks() {
+        return Ranks.make(this.energyEfficiencyMax + this.massMax);
+      }
+    }
+
     class StructureMobilePalette {
       constructor() {
         this.chassisTop = new ColorRGB(255, 152, 0);
         this.chassisBottom = new ColorRGB(255, 87, 34);
-        this.waterFin = new ColorRGB(225, 186, 0);
+        this.waterFin = new ColorRGB(255, 186, 0);
         this.landTire = new ColorRGB(88, 88, 88);
         this.landHubCap = new ColorRGB(192, 192, 192);
         this.skyWing = new ColorRGB(244, 67, 54);
@@ -557,9 +608,23 @@
         paletteSwap.push([this.chassisBottom, shades[1]]);
       }
 
+      generateSkyPaletteSwap(paletteSwap, primaryColor) {
+        const adjustedColor = primaryColor.clampAvgBrightness(250, 255);
+        const shades = adjustedColor.getShades(2);
+        paletteSwap.push([this.skyWing, shades[1]]);
+      }
+
+      generateWaterPaletteSwap(paletteSwap, primaryColor) {
+        const adjustedColor = primaryColor.clampAvgBrightness(250, 255);
+        const shades = adjustedColor.getShades(2);
+        paletteSwap.push([this.waterFin, shades[1]]);
+      }
+
       generatePaletteSwap(primaryColor) {
         const paletteSwap = [];
         this.generateChassisPaletteSwap(paletteSwap, primaryColor);
+        this.generateSkyPaletteSwap(paletteSwap, primaryColor);
+        this.generateWaterPaletteSwap(paletteSwap, primaryColor);
         return paletteSwap;
       }
     }
@@ -594,34 +659,84 @@
         paletteSwap.push([this.buildingsCenterStripe, shades[4]]);
       }
 
-      generateAttack(paletteSwap, primaryColor) {
-        const complimentaryColor = primaryColor.getComplimentaryColor();
-        const adjustedColor = complimentaryColor.clampAvgBrightness(200, 250);
-        paletteSwap.push([this.attackTurret, adjustedColor]);
+      generateAttackPaletteSwap(paletteSwap, primaryColor, structure) {
+        const ranks = (new StructureRanks()).getAttackRanks();
+
+        let color = new ColorRGB(146, 131, 90);
+        if (structure.getRangeAttack() > ranks.rankS) {
+          color = new ColorRGB(255, 255, 255);
+        } else if (structure.getRangeAttack() > ranks.rankA) {
+          color = new ColorRGB(90, 112, 146);
+        } else if (structure.getRangeAttack() > ranks.rankB) {
+          color = new ColorRGB(90, 140, 146);
+        } else if (structure.getRangeAttack() > ranks.rankC) {
+          color = new ColorRGB(90, 146, 120);
+        } else if (structure.getRangeAttack() > ranks.rankD) {
+          color = new ColorRGB(124, 146, 90);
+        }
+
+        paletteSwap.push([this.attackTurret, color]);
       }
 
-      generateDefensive(paletteSwap, primaryColor) {
+      generateDefensivePaletteSwap(paletteSwap, primaryColor, structure) {
         const complimentaryColor = primaryColor.getComplimentaryColor();
-        const outerShieldColor = complimentaryColor.clampAvgBrightness(240, 250);
-        const shieldShades = outerShieldColor.getShades(2);
+        const adjustedColor = complimentaryColor.clampAvgBrightness(240, 255);
+        const shieldShades = adjustedColor.getShades(10);
+        const ranks = (new StructureRanks()).getDefensiveRanks();
 
-        paletteSwap.push([this.defenseOuterShield, shieldShades[0]]);
-        paletteSwap.push([this.defenseInnerShield, shieldShades[1]]);
+        let outerShieldColor = shieldShades[4];
+        let innerShieldColor = shieldShades[6];
+        if (structure.getRangeDefense() > ranks.rankS) {
+          outerShieldColor = new ColorRGB(255, 255, 255);
+          innerShieldColor = new ColorRGB(40, 40, 40);
+        } else if (structure.getRangeDefense() > ranks.rankA) {
+          outerShieldColor = shieldShades[0];
+          innerShieldColor = shieldShades[2];
+        } else if (structure.getRangeDefense() > ranks.rankB) {
+          outerShieldColor = shieldShades[1];
+          innerShieldColor = shieldShades[3];
+        } else if (structure.getRangeDefense() > ranks.rankC) {
+          outerShieldColor = shieldShades[2];
+          innerShieldColor = shieldShades[4];
+        } else if (structure.getRangeDefense() > ranks.rankD) {
+          outerShieldColor = shieldShades[3];
+          innerShieldColor = shieldShades[5];
+        }
+
+        paletteSwap.push([this.defenseOuterShield, outerShieldColor]);
+        paletteSwap.push([this.defenseInnerShield, innerShieldColor]);
       }
 
-      generateEngineering(paletteSwap, primaryColor) {
-        const complimentaryColor = primaryColor.getComplimentaryColor();
-        const adjustedColor = complimentaryColor.clampAvgBrightness(100, 220);
-        paletteSwap.push([this.engineeringCraneTower, adjustedColor]);
+      /**
+       * @param {Array.<Array>}paletteSwap
+       * @param {ColorRGB} primaryColor
+       * @param {Structure} structure
+       */
+      generateEngineeringPaletteSwap(paletteSwap, primaryColor, structure) {
+        const ranks = (new StructureRanks()).getEngineeringRanks();
+
+        let color = new ColorRGB(255, 7, 7);
+        if (structure.getBuildRate() > ranks.rankS) {
+          color = new ColorRGB(20, 20, 20);
+        } else if (structure.getBuildRate() > ranks.rankA) {
+          color = new ColorRGB(7, 83, 255);
+        } else if (structure.getBuildRate() > ranks.rankB) {
+          color = new ColorRGB(7, 255, 89);
+        } else if (structure.getBuildRate() > ranks.rankC) {
+          color = new ColorRGB(255, 193, 7);
+        } else if (structure.getBuildRate() > ranks.rankD) {
+          color = new ColorRGB(255, 124, 7);
+        }
+
+        paletteSwap.push([this.engineeringCraneTower, color]);
       }
 
-
-      generatePaletteSwap(primaryColor) {
+      generatePaletteSwap(primaryColor, structure) {
         const paletteSwap = [];
         this.generateBuildingsPaletteSwap(paletteSwap, primaryColor);
-        this.generateAttack(paletteSwap, primaryColor);
-        this.generateDefensive(paletteSwap, primaryColor);
-        this.generateEngineering(paletteSwap, primaryColor);
+        this.generateAttackPaletteSwap(paletteSwap, primaryColor, structure);
+        this.generateDefensivePaletteSwap(paletteSwap, primaryColor, structure);
+        this.generateEngineeringPaletteSwap(paletteSwap, primaryColor, structure);
         return paletteSwap;
       }
     }
@@ -728,11 +843,12 @@
        */
       getPalette(structure) {
         let palette = [];
-        const primaryColor = ColorRGB.hexToRgb(structure.getPrimaryColor());
+        let primaryColor = ColorRGB.hexToRgb(structure.getPrimaryColor());
+        //primaryColor = new ColorRGB(255, 0, 0);
         if (structure.isMobile() === true) {
-          palette = this.structureMobilePalette.generatePaletteSwap(primaryColor);
+          palette = this.structureMobilePalette.generatePaletteSwap(primaryColor, structure);
         } else {
-          palette = this.structureStaticPalette.generatePaletteSwap(primaryColor);
+          palette = this.structureStaticPalette.generatePaletteSwap(primaryColor, structure);
         }
         return palette;
       }
@@ -1002,6 +1118,10 @@
       colorBlocks += colorBlock(shades[i]);
     }
     document.getElementById('color-container').innerHTML = colorBlocks;
+
+
+
+    console.log((new StructureRanks()).getEngineeringRanks());
 
   </script>
 
