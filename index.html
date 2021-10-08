@@ -318,7 +318,7 @@
 
       /* Power */
       getChargingSlotCount () {
-        return this.charging_slot_count;
+        return parseInt(this.charging_slot_count);
       }
       getGenerationRate() {
         return this.generate_rate;
@@ -611,7 +611,13 @@
         this.spaceOuterFlame = new ColorRGB(255, 61, 0);
         this.attackGunBarrel = new ColorRGB(158, 158, 158);
         this.attackGunAccent = new ColorRGB(255, 179, 0);
-        this.powerLightColor = new ColorRGB(118, 255, 3);
+        this.powerLightColor = [
+          new ColorRGB(118, 251, 3),
+          new ColorRGB(118, 252, 3),
+          new ColorRGB(118, 253, 3),
+          new ColorRGB(118, 254, 3),
+          new ColorRGB(118, 255, 3)
+        ];
         this.engineeringCraneArm = new ColorRGB(132, 175, 196);
         this.engineeringCraneClaw = new ColorRGB(220, 232, 238);
         this.defenseInnerShield = new ColorRGB(128, 216, 255);
@@ -735,6 +741,20 @@
       }
 
       /**
+       * @param {Array.<Array>}paletteSwap
+       * @param {ColorRGB} primaryColor
+       * @param {Structure} structure
+       */
+      generatePowerPaletteSwap(paletteSwap, primaryColor, structure) {
+        const maxSlots = 5;
+        const slots = Math.min(structure.getChargingSlotCount(), maxSlots);
+        const offSlots = maxSlots - slots;
+        for (let i = 0; i < offSlots; i++) {
+          paletteSwap.push([this.powerLightColor[i], new ColorRGB(20, 44, 0)]);
+        }
+      }
+
+      /**
        * @param {ColorRGB} primaryColor
        * @param {Structure} structure
        */
@@ -746,6 +766,7 @@
         this.generateAttackPaletteSwap(paletteSwap, primaryColor, structure);
         this.generateDefensivePaletteSwap(paletteSwap, primaryColor, structure);
         this.generateEngineeringPaletteSwap(paletteSwap, primaryColor, structure);
+        this.generatePowerPaletteSwap(paletteSwap, primaryColor, structure);
         return paletteSwap;
       }
     }
@@ -767,7 +788,13 @@
         this.skyOuterFlame = new ColorRGB(213, 0, 0);
         this.defenseInnerShield = new ColorRGB(128, 216, 255);
         this.defenseOuterShield = new ColorRGB(224, 247, 250);
-        this.powerLightColor = new ColorRGB(118, 255, 3);
+        this.powerLightColor = [
+          new ColorRGB(118, 251, 3),
+          new ColorRGB(118, 252, 3),
+          new ColorRGB(118, 253, 3),
+          new ColorRGB(118, 254, 3),
+          new ColorRGB(118, 255, 3)
+        ];
         this.engineeringCraneTower = new ColorRGB(255, 193, 7);
         this.engineeringCraneClaw = new ColorRGB(147, 147, 135);
         this.attackTurret = new ColorRGB(124, 146, 90);
@@ -870,6 +897,20 @@
       }
 
       /**
+       * @param {Array.<Array>}paletteSwap
+       * @param {ColorRGB} primaryColor
+       * @param {Structure} structure
+       */
+      generatePowerPaletteSwap(paletteSwap, primaryColor, structure) {
+        const maxSlots = 5;
+        const slots = Math.min(structure.getChargingSlotCount(), maxSlots);
+        const offSlots = maxSlots - slots;
+        for (let i = 0; i < offSlots; i++) {
+          paletteSwap.push([this.powerLightColor[i], new ColorRGB(20, 44, 0)]);
+        }
+      }
+
+      /**
        * @param {ColorRGB} primaryColor
        * @param {Structure} structure
        */
@@ -879,6 +920,7 @@
         this.generateAttackPaletteSwap(paletteSwap, primaryColor, structure);
         this.generateDefensivePaletteSwap(paletteSwap, primaryColor, structure);
         this.generateEngineeringPaletteSwap(paletteSwap, primaryColor, structure);
+        this.generatePowerPaletteSwap(paletteSwap, primaryColor, structure);
         return paletteSwap;
       }
     }
@@ -1276,10 +1318,6 @@
       colorBlocks += colorBlock(shades[i]);
     }
     document.getElementById('color-container').innerHTML = colorBlocks;
-
-
-
-    console.log((new StructureRanks()).getEngineeringRanks());
 
   </script>
 
