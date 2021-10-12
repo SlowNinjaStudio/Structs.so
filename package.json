@@ -6,6 +6,7 @@
   "author": "",
   "private": true,
   "scripts": {
+    "dev": "webpack --watch --mode=development",
     "build": "webpack --mode=production"
   },
   "devDependencies": {
@@ -15,8 +16,7 @@
   "directories": {
     "doc": "doc"
   },
-  "dependencies": {
-  },
+  "dependencies": {},
   "repository": {
     "type": "git",
     "url": "git+https://netlag@bitbucket.org/coindroids/coindroids-v5-ui.git"
