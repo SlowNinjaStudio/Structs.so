@@ -290,6 +290,11 @@ canvas.pixel-art-viewer {
 /**
  * Site Styling
  */
+@font-face {
+  font-family: "Press Start 2P";
+  src: url("/fonts/Press_Start_2P/PressStart2P-Regular.ttf") format("truetype");
+}
+
 body {
   background: url(/img/background/space-texture.png);
   background-size: 256px 256px;
