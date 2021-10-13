@@ -51,6 +51,7 @@ export class StructureArtGenerator {
   mobileStructureSky(layers, structure) {
     if (structure.hasAmbitSky()) {
       layers.push(`${this.imgDir}${this.mobileDir}structure-mobile-sky.png`);
+      layers.push(`${this.imgDir}${this.mobileDir}structure-mobile-space.png`);
     }
   }
   mobileStructureSpace(layers, structure) {
