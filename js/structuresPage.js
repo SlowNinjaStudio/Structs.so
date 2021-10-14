@@ -150,13 +150,13 @@ eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpac
 
 /***/ }),
 
-/***/ "./src/js/index.js":
-/*!*************************!*\
-  !*** ./src/js/index.js ***!
-  \*************************/
+/***/ "./src/js/structuresPage.js":
+/*!**********************************!*\
+  !*** ./src/js/structuresPage.js ***!
+  \**********************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
-eval("__webpack_require__.r(__webpack_exports__);\n/* harmony import */ var _DroidUI__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./DroidUI */ \"./src/js/DroidUI.js\");\n\n\nconst droidUi = new _DroidUI__WEBPACK_IMPORTED_MODULE_0__.DroidUI();\ndroidUi.loadStructures('structures-list');\n\n\n//# sourceURL=webpack://coindroids-v5-ui/./src/js/index.js?");
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony import */ var _DroidUI__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./DroidUI */ \"./src/js/DroidUI.js\");\n\n\nconst droidUi = new _DroidUI__WEBPACK_IMPORTED_MODULE_0__.DroidUI();\ndroidUi.loadStructures('structures-list');\n\n\n//# sourceURL=webpack://coindroids-v5-ui/./src/js/structuresPage.js?");
 
 /***/ })
 
@@ -220,7 +220,7 @@ eval("__webpack_require__.r(__webpack_exports__);\n/* harmony import */ var _Dro
 /******/ 	// startup
 /******/ 	// Load entry module and return exports
 /******/ 	// This entry module can't be inlined because the eval devtool is used.
-/******/ 	var __webpack_exports__ = __webpack_require__("./src/js/index.js");
+/******/ 	var __webpack_exports__ = __webpack_require__("./src/js/structuresPage.js");
 /******/ 	
 /******/ })()
 ;
