@@ -160,13 +160,13 @@ eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpac
 
 /***/ }),
 
-/***/ "./src/js/pages/structuresPage.js":
+/***/ "./src/js/pages/schematicsPage.js":
 /*!****************************************!*\
-  !*** ./src/js/pages/structuresPage.js ***!
+  !*** ./src/js/pages/schematicsPage.js ***!
   \****************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
-eval("__webpack_require__.r(__webpack_exports__);\n/* harmony import */ var _DroidUI__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../DroidUI */ \"./src/js/DroidUI.js\");\n/* harmony import */ var _common_Navbar__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./common/Navbar */ \"./src/js/pages/common/Navbar.js\");\n\n\n\nconst page = 'structures';\n\nconst navbar = new _common_Navbar__WEBPACK_IMPORTED_MODULE_1__.Navbar(page);\nnavbar.init('nav-wrapper');\n\nconst droidUi = new _DroidUI__WEBPACK_IMPORTED_MODULE_0__.DroidUI();\ndroidUi.loadStructures('structures-list');\n\n\n//# sourceURL=webpack://coindroids-v5-ui/./src/js/pages/structuresPage.js?");
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony import */ var _DroidUI__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../DroidUI */ \"./src/js/DroidUI.js\");\n/* harmony import */ var _common_Navbar__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./common/Navbar */ \"./src/js/pages/common/Navbar.js\");\n\n\n\nconst page = 'schematics';\n\nconst navbar = new _common_Navbar__WEBPACK_IMPORTED_MODULE_1__.Navbar(page);\nnavbar.init('nav-wrapper');\n\nconst droidUi = new _DroidUI__WEBPACK_IMPORTED_MODULE_0__.DroidUI();\ndroidUi.loadStructures('structures-list');\n\n\n//# sourceURL=webpack://coindroids-v5-ui/./src/js/pages/schematicsPage.js?");
 
 /***/ })
 
@@ -230,7 +230,7 @@ eval("__webpack_require__.r(__webpack_exports__);\n/* harmony import */ var _Dro
 /******/ 	// startup
 /******/ 	// Load entry module and return exports
 /******/ 	// This entry module can't be inlined because the eval devtool is used.
-/******/ 	var __webpack_exports__ = __webpack_require__("./src/js/pages/structuresPage.js");
+/******/ 	var __webpack_exports__ = __webpack_require__("./src/js/pages/schematicsPage.js");
 /******/ 	
 /******/ })()
 ;
