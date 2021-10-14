@@ -290,16 +290,8 @@ canvas.pixel-art-viewer {
 /**
  * Site Styling
  */
-@font-face {
-  font-family: "Press Start 2P";
-  src: url("/fonts/Press_Start_2P/PressStart2P-Regular.ttf") format("truetype");
-}
-
-html {
-  background-color: #000000;
-}
-body {
-  background: url(/img/background/space-texture.png);
+html, body {
+  background: #000000 url(/img/background/space-texture.png);
   background-size: 256px 256px;
   image-rendering: -moz-crisp-edges;
   image-rendering: -webkit-crisp-edges;
@@ -317,18 +309,13 @@ h1 {
 .nes-container.with-title>.title {
   font-weight: normal;
 }
-.nav {
-  background: #222222;
+.main-nav {
   position: fixed;
   top: 0;
   left: 0;
-  border-top: none;
-  border-bottom: 4px solid #000000;
-  height: 64px;
-  width: 100%;
   z-index: 10;
-  padding: 20px;
-  color: #fff;
+  width: 100%;
+  border-bottom: 4px solid #000000;
 }
 
 /* Structure Card Styling */
@@ -366,3 +353,4 @@ h1 {
 .nes-container.structure-card > .game-asset-wrapper {
   margin: 0 auto 20px auto;
 }
+
