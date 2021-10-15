@@ -130,13 +130,13 @@ eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpac
 
 /***/ }),
 
-/***/ "./src/js/pages/structuresPage.js":
-/*!****************************************!*\
-  !*** ./src/js/pages/structuresPage.js ***!
-  \****************************************/
+/***/ "./src/js/pages/indexPage.js":
+/*!***********************************!*\
+  !*** ./src/js/pages/indexPage.js ***!
+  \***********************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
-eval("__webpack_require__.r(__webpack_exports__);\n/* harmony import */ var _ui_DroidUI__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../ui/DroidUI */ \"./src/js/ui/DroidUI.js\");\n/* harmony import */ var _common_Navbar__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./common/Navbar */ \"./src/js/pages/common/Navbar.js\");\n\n\n\nconst page = 'structures';\n\nconst navbar = new _common_Navbar__WEBPACK_IMPORTED_MODULE_1__.Navbar(page);\nnavbar.init('nav-wrapper');\n\nconst droidUi = new _ui_DroidUI__WEBPACK_IMPORTED_MODULE_0__.DroidUI();\ndroidUi.loadStructuresByCreator('battery1qs40zuw73uyjtc6j90mkyff43tyc9eh3cgvrxm', 'structures-list');\n\n\n//# sourceURL=webpack://coindroids-v5-ui/./src/js/pages/structuresPage.js?");
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony import */ var _ui_DroidUI__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../ui/DroidUI */ \"./src/js/ui/DroidUI.js\");\n/* harmony import */ var _common_Navbar__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./common/Navbar */ \"./src/js/pages/common/Navbar.js\");\n\n\n\nconst page = 'index';\n\nconst navbar = new _common_Navbar__WEBPACK_IMPORTED_MODULE_1__.Navbar(page);\nnavbar.init('nav-wrapper');\n\nconst droidUi = new _ui_DroidUI__WEBPACK_IMPORTED_MODULE_0__.DroidUI();\ndroidUi.loadStructures( 'structures-list');\n\n\n//# sourceURL=webpack://coindroids-v5-ui/./src/js/pages/indexPage.js?");
 
 /***/ }),
 
@@ -270,7 +270,7 @@ eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpac
 /******/ 	// startup
 /******/ 	// Load entry module and return exports
 /******/ 	// This entry module can't be inlined because the eval devtool is used.
-/******/ 	var __webpack_exports__ = __webpack_require__("./src/js/pages/structuresPage.js");
+/******/ 	var __webpack_exports__ = __webpack_require__("./src/js/pages/indexPage.js");
 /******/ 	
 /******/ })()
 ;

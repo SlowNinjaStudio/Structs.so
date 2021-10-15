@@ -36,31 +36,46 @@ export class DroidApi {
   }
 
   /**
-   * @returns {Promise<*[]>}
+   * @param data response data
+   * @returns {Array.<Structure>}
+   */
+  structureResponseHandler(data) {
+    const structureFactory = new StructureFactory();
+    const structures = [];
+    let rawStructures = data.Structure;
+
+    if (this.loadTestMultiply > 1) {
+      rawStructures = this.multiplyDataLoad(rawStructures, this.loadTestMultiply);
+    }
+
+    for (let i = 0; i < rawStructures.length; i ++) {
+      structures[i] = structureFactory.make(rawStructures[i]);
+      structures[i].id = i;
+    }
+
+    return structures;
+  }
+
+  /**
+   * @returns {Promise<Structure[]>}
    */
   getStructures() {
     return this.ajax.get(`${this.scheme}${this.domain}/api/di/Structure`)
-      .then(data => {
-        const structureFactory = new StructureFactory();
-        const structures = [];
-        let rawStructures = data.Structure;
-
-        if (this.loadTestMultiply > 1) {
-          rawStructures = this.multiplyDataLoad(rawStructures, this.loadTestMultiply);
-        }
-
-        for (let i = 0; i < rawStructures.length; i ++) {
-          structures[i] = structureFactory.make(rawStructures[i]);
-          structures[i].id = i;
-        }
-
-        return structures;
-      })
+      .then(this.structureResponseHandler.bind(this));
   }
 
   /**
    * @param {string} creator id
-   * @returns {Promise<*[]>}
+   * @returns {Promise<Structure[]>}
+   */
+  getStructuresByCreator(creator) {
+    return this.ajax.get(`${this.scheme}${this.domain}/api/di/Structure/creator/${creator}`)
+      .then(this.structureResponseHandler.bind(this));
+  }
+
+  /**
+   * @param {string} creator id
+   * @returns {Promise<Schematic[]>}
    */
   getSchematicsByCreator(creator) {
     return this.ajax.get(`${this.scheme}${this.domain}/api/di/Schematic/creator/${creator}`)

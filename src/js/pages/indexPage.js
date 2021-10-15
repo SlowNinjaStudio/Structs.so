@@ -1,10 +1,10 @@
 import {DroidUI} from "../ui/DroidUI";
 import {Navbar} from "./common/Navbar";
 
-const page = 'structures';
+const page = 'index';
 
 const navbar = new Navbar(page);
 navbar.init('nav-wrapper');
 
 const droidUi = new DroidUI();
-droidUi.loadStructuresByCreator('battery1qs40zuw73uyjtc6j90mkyff43tyc9eh3cgvrxm', 'structures-list');
+droidUi.loadStructures( 'structures-list');

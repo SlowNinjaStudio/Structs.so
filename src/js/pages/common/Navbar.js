@@ -19,7 +19,7 @@ export class Navbar {
                 <a class="nav-link ${ this.page === 'SCHEMATICS' ? 'active' : '' }" href="/schematics.html">Schematics</a>
               </li>
               <li class="nav-item mx-2">
-                <a class="nav-link ${ this.page === 'STRUCTURES' ? 'active' : '' }" href="/index.html">Structures</a>
+                <a class="nav-link ${ this.page === 'STRUCTURES' ? 'active' : '' }" href="/structures.html">Structures</a>
               </li>
             </ul>
             <form class="d-flex">

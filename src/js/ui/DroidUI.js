@@ -59,38 +59,57 @@ export class DroidUI {
   }
 
   /**
+   * @param {Array.<Structure>}structures
+   * @param {string} targetElementId
+   */
+  handleLoadStructures(structures, targetElementId) {
+    const targetElement = document.getElementById(targetElementId);
+    let structuresHtml = '';
+
+    for (let i = 0; i < structures.length; i++) {
+      const droidUIStructure = new DroidUIStructure(structures[i]);
+
+      // Batch drawing by collecting all the HTML first
+      structuresHtml += droidUIStructure.render();
+
+      this.structures[i] = {
+        'structure': structures[i],
+        'droidUIStructure': droidUIStructure,
+        'layers': this.structureArtGenerator.generate(structures[i]),
+      }
+    }
+
+    // Update DOM
+    targetElement.innerHTML = structuresHtml;
+
+    for (let i = 0; i < this.structures.length; i++) {
+      /** @type {HTMLCanvasElement} */
+      const canvas = document.getElementById(this.structures[i].droidUIStructure.getCanvasId());
+      new PixelArtViewer(canvas, this.structures[i].layers, this.getStructurePalette(this.structures[i].structure));
+      console.log(this.structures[i].structure);
+    }
+  }
+
+  /**
    * Load all structures and display them in the target element.
    *
    * @param {string} targetElementId
    */
   loadStructures(targetElementId) {
-    const targetElement = document.getElementById(targetElementId);
+    this.droidApi.getStructures().then((structures) => {
+      this.handleLoadStructures(structures, targetElementId);
+    });
+  }
 
-    let structuresHtml = '';
-
-    this.droidApi.getStructures().then(structures => {
-      for (let i = 0; i < structures.length; i++) {
-        const droidUIStructure = new DroidUIStructure(structures[i]);
-
-        // Batch drawing by collecting all the HTML first
-        structuresHtml += droidUIStructure.render();
-
-        this.structures[i] = {
-          'structure': structures[i],
-          'droidUIStructure': droidUIStructure,
-          'layers': this.structureArtGenerator.generate(structures[i]),
-        }
-      }
-
-      // Update DOM
-      targetElement.innerHTML = structuresHtml;
-
-      for (let i = 0; i < this.structures.length; i++) {
-        /** @type {HTMLCanvasElement} */
-        const canvas = document.getElementById(this.structures[i].droidUIStructure.getCanvasId());
-        new PixelArtViewer(canvas, this.structures[i].layers, this.getStructurePalette(this.structures[i].structure));
-        console.log(this.structures[i].structure);
-      }
+  /**
+   * Load structures by the given creator and display them in the target element.
+   *
+   * @param {string} creator id
+   * @param {string} targetElementId
+   */
+  loadStructuresByCreator(creator, targetElementId) {
+    this.droidApi.getStructuresByCreator(creator).then((structures) => {
+      this.handleLoadStructures(structures, targetElementId);
     });
   }
 
