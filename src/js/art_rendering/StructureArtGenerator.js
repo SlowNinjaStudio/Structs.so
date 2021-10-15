@@ -1,5 +1,5 @@
 /**
- * Assembles the art for a structure using images and layers.
+ * Assembles the art for a structure or schematic using images and layers.
  */
 export class StructureArtGenerator {
   constructor() {
@@ -162,8 +162,8 @@ export class StructureArtGenerator {
   }
 
   /**
-   * Generate the art for a given structure.
-   * @param {Structure} structure
+   * Generate the art for a given structure or schematic.
+   * @param {Structure|Schematic} structure
    */
   generate(structure) {
     let layers = [];

@@ -1,21 +1,15 @@
-import {AMBITS, FEATURES} from "./constants";
+import {AMBITS, FEATURES} from "../constants";
 
 /**
- * Structure Model
+ * Schematic Model
  */
-export class Structure {
+export class Schematic {
   constructor() {
     this.accuracy = 0;
     this.ambits = [];
-    this.battery = {
-      amount: 0,
-      denom: ''
-    };
     this.build_rate = 0;
-    this.capacity_current = 0;
     this.capacity_max = 0;
     this.charge_rate = 0;
-    this.charging_slot = [];
     this.charging_slot_count = 0;
     this.creator = '';
     this.description = '';
@@ -25,29 +19,26 @@ export class Structure {
       amount: 0,
       denom: ''
     }
-    this.generate_rate = 0;
     this.features = [];
+    this.generate_rate = 0;
     this.hash ='';
-    this.health_current = 0;
     this.health_max = 0;
     this.id = '';
     this.input = '';
     this.is_mobile = false;
+    this.is_stationary = true;
     this.mass = 0;
     this.melee_attack = 0;
     this.melee_defense = 0;
     this.name = '';
     this.owner = '';
-    this.parent_id = '';
     this.primary_color = '';
     this.range_attack = 0;
     this.range_defense = 0;
     this.restoration_rate = 0;
-    this.schematic = '';
+    this.secondary_color = '';
     this.speed = 0;
-    this.storage = [];
     this.strength = 0;
-    this.supervisor = '';
   }
 
   /* Base Attributes */
@@ -60,17 +51,14 @@ export class Structure {
   getDescription() {
     return this.description;
   }
-  getHealthCurrent() {
-    return this.health_current;
+  getEnergyToBuildAmount() {
+    return this.energy_to_build.amount;
+  }
+  getEnergyToBuildDenom() {
+    return this.energy_to_build.denom;
   }
   getHealthMax() {
     return this.health_max;
-  }
-  getBatteryAmount() {
-    return this.battery.amount;
-  }
-  getBatteryDenom() {
-    return this.battery.denom;
   }
   getAmbits() {
     return this.ambits.join(', ');
@@ -128,9 +116,6 @@ export class Structure {
   }
   hasFeaturePower() {
     return this.hasFeature(FEATURES.POWER);
-  }
-  hasFeatureStorage() {
-    return this.hasFeature(FEATURES.STORAGE);
   }
 
   /* Attack */

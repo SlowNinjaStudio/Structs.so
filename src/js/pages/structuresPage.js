@@ -1,4 +1,4 @@
-import {DroidUI} from "../DroidUI";
+import {DroidUI} from "../ui/DroidUI";
 import {Navbar} from "./common/Navbar";
 
 const page = 'structures';

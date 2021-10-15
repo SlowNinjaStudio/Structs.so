@@ -1,4 +1,4 @@
-import {Ranks} from "./Ranks";
+import {Ranks} from "../vendor/Ranks";
 
 export class StructureRanks {
   constructor() {

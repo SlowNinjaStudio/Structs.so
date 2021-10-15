@@ -1,5 +1,5 @@
-import {ColorRGB} from "./ColorRGB";
-import {StructureRanks} from "./StructureRanks";
+import {ColorRGB} from "../vendor/ColorRGB";
+import {StructureRanks} from "../models/StructureRanks";
 
 /**
  * Generates palettes for static structures.

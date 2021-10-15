@@ -107,9 +107,9 @@ export class ColorRGB {
       adjustment = max / avg;
     }
     return new ColorRGB(
-      Math.round(this.r * adjustment),
-      Math.round(this.g * adjustment),
-      Math.round(this.b * adjustment)
+      Math.min(255, Math.max(0, Math.round(this.r * adjustment))),
+      Math.min(255, Math.max(0, Math.round(this.g * adjustment))),
+      Math.min(255, Math.max(0, Math.round(this.b * adjustment)))
     );
   }
 }
