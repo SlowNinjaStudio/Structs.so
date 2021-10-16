@@ -7,4 +7,4 @@ const navbar = new Navbar(page);
 navbar.init('nav-wrapper');
 
 const droidUi = new DroidUI();
-droidUi.loadStructuresByCreator('battery1qs40zuw73uyjtc6j90mkyff43tyc9eh3cgvrxm', 'structures-list');
+droidUi.loadStructuresByCreator('structures-list', 'battery1qs40zuw73uyjtc6j90mkyff43tyc9eh3cgvrxm');

@@ -63,6 +63,7 @@ export class DroidUI {
    * @param {string} targetElementId
    */
   handleLoadStructures(structures, targetElementId) {
+    this.structures = [];
     const targetElement = document.getElementById(targetElementId);
     let structuresHtml = '';
 
@@ -86,7 +87,6 @@ export class DroidUI {
       /** @type {HTMLCanvasElement} */
       const canvas = document.getElementById(this.structures[i].droidUIStructure.getCanvasId());
       new PixelArtViewer(canvas, this.structures[i].layers, this.getStructurePalette(this.structures[i].structure));
-      console.log(this.structures[i].structure);
     }
   }
 
@@ -104,11 +104,23 @@ export class DroidUI {
   /**
    * Load structures by the given creator and display them in the target element.
    *
-   * @param {string} creator id
    * @param {string} targetElementId
+   * @param {string} creator id
    */
-  loadStructuresByCreator(creator, targetElementId) {
+  loadStructuresByCreator(targetElementId, creator) {
     this.droidApi.getStructuresByCreator(creator).then((structures) => {
+      this.handleLoadStructures(structures, targetElementId);
+    });
+  }
+
+  /**
+   * Load structures that match the given search string and display them in the target element.
+   *
+   * @param {string} targetElementId
+   * @param {string} searchString
+   */
+  searchAndLoadStructures(targetElementId, searchString) {
+    this.droidApi.searchStructures(searchString).then((structures) => {
       this.handleLoadStructures(structures, targetElementId);
     });
   }
@@ -116,10 +128,10 @@ export class DroidUI {
   /**
    * Load schematics by the given creator and display them in the target element.
    *
-   * @param {string} creator id
    * @param {string} targetElementId
+   * @param {string} creator id
    */
-  loadSchematicsByCreator(creator, targetElementId) {
+  loadSchematicsByCreator(targetElementId, creator) {
     const targetElement = document.getElementById(targetElementId);
 
     let schematicsHtml = '';

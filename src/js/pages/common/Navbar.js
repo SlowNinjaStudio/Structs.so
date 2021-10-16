@@ -1,6 +1,7 @@
 export class Navbar {
-  constructor(page) {
+  constructor(page, options = {}) {
     this.page = page.toUpperCase();
+    this.searchEnabled = options.hasOwnProperty('searchEnabled') && options.searchEnabled;
   }
   render() {
     return `
@@ -22,10 +23,12 @@ export class Navbar {
                 <a class="nav-link ${ this.page === 'STRUCTURES' ? 'active' : '' }" href="/structures.html">Structures</a>
               </li>
             </ul>
-            <form class="d-flex">
-              <input class="form-control me-2 nes-input is-dark" type="search" placeholder="Search" aria-label="Search">
-              <button class="btn btn-outline-success nes-btn is-primary" type="submit">Search</button>
-            </form>
+            ${this.searchEnabled ? `
+              <div class="d-flex">
+                <input id="nav-search-input" class="form-control me-2 nes-input is-dark" type="search" placeholder="Search" aria-label="Search">
+                <button id="nav-search-btn" class="btn btn-outline-success nes-btn is-primary" type="button">Search</button>
+              </div>
+            ` : ''}
           </div>
         </div>
       </nav>

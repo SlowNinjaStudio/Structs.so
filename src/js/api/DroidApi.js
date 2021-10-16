@@ -11,28 +11,11 @@ export class DroidApi {
    * @param {string} scheme example https://
    * @param {string} domain example coindroids.com
    * @param {Object} ajax AJAX handling class
-   * @param {} loadTestMultiply multiply the incoming data by this amount
    */
-  constructor(scheme, domain, ajax, loadTestMultiply = 1) {
+  constructor(scheme, domain, ajax = null) {
     this.scheme = scheme;
     this.domain = domain;
-    this.ajax = (ajax !== undefined) ? ajax: new JsonAjaxer();
-    this.loadTestMultiply = loadTestMultiply;
-  }
-
-  /**
-   * Used for load testing
-   *
-   * @param {Array} dataArray
-   * @param {number} multiplier multiply the incoming data by this amount
-   * @returns {*[]}
-   */
-  multiplyDataLoad(dataArray, multiplier) {
-    let product = [];
-    for (let j = 0; j < multiplier; j++) {
-      product = product.concat(dataArray);
-    }
-    return product;
+    this.ajax = (ajax !== null) ? ajax: new JsonAjaxer();
   }
 
   /**
@@ -42,15 +25,10 @@ export class DroidApi {
   structureResponseHandler(data) {
     const structureFactory = new StructureFactory();
     const structures = [];
-    let rawStructures = data.Structure;
-
-    if (this.loadTestMultiply > 1) {
-      rawStructures = this.multiplyDataLoad(rawStructures, this.loadTestMultiply);
-    }
+    const rawStructures = data.Structure;
 
     for (let i = 0; i < rawStructures.length; i ++) {
       structures[i] = structureFactory.make(rawStructures[i]);
-      structures[i].id = i;
     }
 
     return structures;
@@ -74,6 +52,15 @@ export class DroidApi {
   }
 
   /**
+   * @param searchString
+   * @returns {Promise<Structure[]>}
+   */
+  searchStructures(searchString) {
+    return this.ajax.get(`${this.scheme}${this.domain}/api/di/Structure/search/${encodeURIComponent(searchString)}`)
+      .then(this.structureResponseHandler.bind(this));
+  }
+
+  /**
    * @param {string} creator id
    * @returns {Promise<Schematic[]>}
    */
@@ -82,11 +69,7 @@ export class DroidApi {
       .then(data => {
         const schematicFactory = new SchematicFactory();
         const schematics = [];
-        let rawSchematics = data.Schematic;
-
-        if (this.loadTestMultiply > 1) {
-          rawSchematics = this.multiplyDataLoad(rawSchematics, this.loadTestMultiply);
-        }
+        const rawSchematics = data.Schematic;
 
         for (let i = 0; i < rawSchematics.length; i ++) {
           schematics[i] = schematicFactory.make(rawSchematics[i]);
