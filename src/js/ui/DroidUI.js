@@ -61,14 +61,15 @@ export class DroidUI {
   /**
    * @param {Array.<Structure>}structures
    * @param {string} targetElementId
+   * @param {string} creator
    */
-  handleLoadStructures(structures, targetElementId) {
+  handleLoadStructures(structures, targetElementId, creator = '') {
     this.structures = [];
     const targetElement = document.getElementById(targetElementId);
     let structuresHtml = '';
 
     for (let i = 0; i < structures.length; i++) {
-      const droidUIStructure = new DroidUIStructure(structures[i]);
+      const droidUIStructure = new DroidUIStructure(structures[i], creator);
 
       // Batch drawing by collecting all the HTML first
       structuresHtml += droidUIStructure.render();
@@ -94,10 +95,11 @@ export class DroidUI {
    * Load all structures and display them in the target element.
    *
    * @param {string} targetElementId
+   * @param {string} creator
    */
-  loadStructures(targetElementId) {
+  loadStructures(targetElementId, creator = '') {
     this.droidApi.getStructures().then((structures) => {
-      this.handleLoadStructures(structures, targetElementId);
+      this.handleLoadStructures(structures, targetElementId, creator);
     });
   }
 
@@ -109,7 +111,7 @@ export class DroidUI {
    */
   loadStructuresByCreator(targetElementId, creator) {
     this.droidApi.getStructuresByCreator(creator).then((structures) => {
-      this.handleLoadStructures(structures, targetElementId);
+      this.handleLoadStructures(structures, targetElementId, creator);
     });
   }
 
@@ -118,10 +120,11 @@ export class DroidUI {
    *
    * @param {string} targetElementId
    * @param {string} searchString
+   * @param {string} creator
    */
-  searchAndLoadStructures(targetElementId, searchString) {
+  searchAndLoadStructures(targetElementId, searchString,  creator = '') {
     this.droidApi.searchStructures(searchString).then((structures) => {
-      this.handleLoadStructures(structures, targetElementId);
+      this.handleLoadStructures(structures, targetElementId, creator);
     });
   }
 

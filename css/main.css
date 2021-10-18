@@ -317,6 +317,9 @@ h1 {
   width: 100%;
   border-bottom: 4px solid #000000;
 }
+.nes-btn.nes-btn-fluid {
+  display: block;
+}
 
 /* Structure Card Styling */
 .structure-card-wrapper {
@@ -330,6 +333,9 @@ h1 {
   margin: 20px auto;
   vertical-align: top;
   text-align: left;
+}
+.structure-card .solo-action-wrapper {
+  padding-bottom: 20px;
 }
 .pixel-art-placeholder {
   display: inline-block;

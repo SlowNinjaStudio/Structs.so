@@ -2,12 +2,22 @@
  * Web UI component for structures.
  */
 export class DroidUIStructure {
-  constructor(structure, idPrefix = '') {
+  /**
+   *
+   * @param {Structure} structure
+   * @param {string} creator
+   * @param {string} idPrefix
+   */
+  constructor(structure, creator = '', idPrefix = '') {
     this.structure = structure;
+    this.creator = creator;
     this.idPrefix = idPrefix;
   }
   getCanvasId() {
     return `${this.idPrefix}structure-${this.structure.getId()}`;
+  }
+  isCreator() {
+    return  this.structure.getCreator() === '' || this.structure.getCreator() === this.creator;
   }
   render() {
     return `
@@ -17,6 +27,11 @@ export class DroidUIStructure {
             <canvas id="${this.getCanvasId()}" class="pixel-art-viewer" width="64" height="64">
               Your browser does not support the canvas element.
             </canvas>
+          </div>
+          <div class="row solo-action-wrapper">
+            <div class="col">
+                <a href="#" class="nes-btn ${this.isCreator() ? 'is-primary' : ''} nes-btn-fluid">${this.isCreator() ? 'Command' : 'View'}</a>
+            </div>
           </div>
           <div class="nes-container with-title">
             <h3 class="title">Attributes</h3>
