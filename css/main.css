@@ -337,6 +337,9 @@ h1 {
 .structure-card .solo-action-wrapper {
   padding-bottom: 20px;
 }
+.structure-card .commands .nes-btn {
+  margin-bottom: 10px;
+}
 .pixel-art-placeholder {
   display: inline-block;
   width:256px;

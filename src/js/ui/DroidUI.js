@@ -2,6 +2,7 @@ import {ColorRGB} from "../vendor/ColorRGB";
 import {DroidApi} from "../api/DroidApi";
 import {DroidUISchematic} from "./components/DroidUISchematic";
 import {DroidUIStructure} from "./components/DroidUIStructure";
+import {DroidUIStructureCommandView} from "./components/DroidUIStructureCommandView";
 import {PixelArtViewer} from "../vendor/PixelArtViewer";
 import {SchematicPalette} from "../art_rendering/SchematicPalette";
 import {StructureArtGenerator} from "../art_rendering/StructureArtGenerator";
@@ -99,12 +100,19 @@ export class DroidUI {
   handleLoadSingleStructure(structure, targetElementId, creator = '') {
     const targetElement = document.getElementById(targetElementId);
     const layers = this.structureArtGenerator.generate(structure);
-    const droidUIStructure = new DroidUIStructure(structure, creator);
+    const droidUIStructureCommandView = new DroidUIStructureCommandView(structure, creator);
 
-    targetElement.innerHTML = droidUIStructure.render();
+    this.structures[0] = {
+      'structure': structure,
+      'droidUIStructureCommandView': droidUIStructureCommandView,
+      'layers': this.structureArtGenerator.generate(structure),
+    }
+
+    targetElement.innerHTML = droidUIStructureCommandView.render();
+    droidUIStructureCommandView.initMainMenuEventListeners();
 
     /** @type {HTMLCanvasElement} */
-    const canvas = document.getElementById(droidUIStructure.getCanvasId());
+    const canvas = document.getElementById(droidUIStructureCommandView.getCanvasId());
     new PixelArtViewer(canvas, layers, this.getStructurePalette(structure));
   }
 
