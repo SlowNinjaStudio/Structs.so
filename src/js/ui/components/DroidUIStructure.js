@@ -30,7 +30,12 @@ export class DroidUIStructure {
           </div>
           <div class="row solo-action-wrapper">
             <div class="col">
-                <a href="#" class="nes-btn ${this.isCreator() ? 'is-primary' : ''} nes-btn-fluid">${this.isCreator() ? 'Command' : 'View'}</a>
+                <a
+                  href="/structure.html?structure_id=${this.structure.getId()}"
+                  class="nes-btn ${this.isCreator() ? 'is-primary' : ''} nes-btn-fluid"
+                >
+                    ${this.isCreator() ? 'Command' : 'View'}
+                </a>
             </div>
           </div>
           <div class="nes-container with-title">

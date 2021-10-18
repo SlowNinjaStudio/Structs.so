@@ -92,6 +92,23 @@ export class DroidUI {
   }
 
   /**
+   * @param {Structure} structure
+   * @param {string} targetElementId
+   * @param {string} creator
+   */
+  handleLoadSingleStructure(structure, targetElementId, creator = '') {
+    const targetElement = document.getElementById(targetElementId);
+    const layers = this.structureArtGenerator.generate(structure);
+    const droidUIStructure = new DroidUIStructure(structure, creator);
+
+    targetElement.innerHTML = droidUIStructure.render();
+
+    /** @type {HTMLCanvasElement} */
+    const canvas = document.getElementById(droidUIStructure.getCanvasId());
+    new PixelArtViewer(canvas, layers, this.getStructurePalette(structure));
+  }
+
+  /**
    * Load all structures and display them in the target element.
    *
    * @param {string} targetElementId
@@ -112,6 +129,19 @@ export class DroidUI {
   loadStructuresByCreator(targetElementId, creator) {
     this.droidApi.getStructuresByCreator(creator).then((structures) => {
       this.handleLoadStructures(structures, targetElementId, creator);
+    });
+  }
+
+  /**
+   * Load structure a by structure ID.
+   *
+   * @param {string} targetElementId
+   * @param {string} structureId
+   * @param {string} creator
+   */
+  loadSingleStructure(targetElementId, structureId, creator = '') {
+    this.droidApi.getSingleStructure(structureId).then((structures) => {
+      this.handleLoadSingleStructure(structures.shift(), targetElementId, creator);
     });
   }
 
