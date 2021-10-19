@@ -25,7 +25,7 @@ export class DroidApi {
   structureResponseHandler(data) {
     const structureFactory = new StructureFactory();
     const structures = [];
-    const rawStructures = data.Structure;
+    const rawStructures = Array.isArray(data.Structure) ? data.Structure : [data.Structure];
 
     for (let i = 0; i < rawStructures.length; i ++) {
       structures[i] = structureFactory.make(rawStructures[i]);
@@ -48,6 +48,15 @@ export class DroidApi {
    */
   getStructuresByCreator(creator) {
     return this.ajax.get(`${this.scheme}${this.domain}/api/di/Structure/creator/${creator}`)
+      .then(this.structureResponseHandler.bind(this));
+  }
+
+  /**
+   * @param {string} structureId id
+   * @returns {Promise<Structure[]>}
+   */
+  getSingleStructure(structureId) {
+    return this.ajax.get(`${this.scheme}${this.domain}/api/di/Structure/${structureId}`)
       .then(this.structureResponseHandler.bind(this));
   }
 

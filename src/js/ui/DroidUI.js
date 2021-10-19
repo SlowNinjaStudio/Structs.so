@@ -2,6 +2,7 @@ import {ColorRGB} from "../vendor/ColorRGB";
 import {DroidApi} from "../api/DroidApi";
 import {DroidUISchematic} from "./components/DroidUISchematic";
 import {DroidUIStructure} from "./components/DroidUIStructure";
+import {DroidUIStructureCommandView} from "./components/DroidUIStructureCommandView";
 import {PixelArtViewer} from "../vendor/PixelArtViewer";
 import {SchematicPalette} from "../art_rendering/SchematicPalette";
 import {StructureArtGenerator} from "../art_rendering/StructureArtGenerator";
@@ -61,14 +62,15 @@ export class DroidUI {
   /**
    * @param {Array.<Structure>}structures
    * @param {string} targetElementId
+   * @param {string} creator
    */
-  handleLoadStructures(structures, targetElementId) {
+  handleLoadStructures(structures, targetElementId, creator = '') {
     this.structures = [];
     const targetElement = document.getElementById(targetElementId);
     let structuresHtml = '';
 
     for (let i = 0; i < structures.length; i++) {
-      const droidUIStructure = new DroidUIStructure(structures[i]);
+      const droidUIStructure = new DroidUIStructure(structures[i], creator);
 
       // Batch drawing by collecting all the HTML first
       structuresHtml += droidUIStructure.render();
@@ -91,13 +93,38 @@ export class DroidUI {
   }
 
   /**
+   * @param {Structure} structure
+   * @param {string} targetElementId
+   * @param {string} creator
+   */
+  handleLoadSingleStructure(structure, targetElementId, creator = '') {
+    const targetElement = document.getElementById(targetElementId);
+    const layers = this.structureArtGenerator.generate(structure);
+    const droidUIStructureCommandView = new DroidUIStructureCommandView(structure, creator);
+
+    this.structures[0] = {
+      'structure': structure,
+      'droidUIStructureCommandView': droidUIStructureCommandView,
+      'layers': this.structureArtGenerator.generate(structure),
+    }
+
+    targetElement.innerHTML = droidUIStructureCommandView.render();
+    droidUIStructureCommandView.initMainMenuEventListeners();
+
+    /** @type {HTMLCanvasElement} */
+    const canvas = document.getElementById(droidUIStructureCommandView.getCanvasId());
+    new PixelArtViewer(canvas, layers, this.getStructurePalette(structure));
+  }
+
+  /**
    * Load all structures and display them in the target element.
    *
    * @param {string} targetElementId
+   * @param {string} creator
    */
-  loadStructures(targetElementId) {
+  loadStructures(targetElementId, creator = '') {
     this.droidApi.getStructures().then((structures) => {
-      this.handleLoadStructures(structures, targetElementId);
+      this.handleLoadStructures(structures, targetElementId, creator);
     });
   }
 
@@ -109,7 +136,20 @@ export class DroidUI {
    */
   loadStructuresByCreator(targetElementId, creator) {
     this.droidApi.getStructuresByCreator(creator).then((structures) => {
-      this.handleLoadStructures(structures, targetElementId);
+      this.handleLoadStructures(structures, targetElementId, creator);
+    });
+  }
+
+  /**
+   * Load structure a by structure ID.
+   *
+   * @param {string} targetElementId
+   * @param {string} structureId
+   * @param {string} creator
+   */
+  loadSingleStructure(targetElementId, structureId, creator = '') {
+    this.droidApi.getSingleStructure(structureId).then((structures) => {
+      this.handleLoadSingleStructure(structures.shift(), targetElementId, creator);
     });
   }
 
@@ -118,10 +158,11 @@ export class DroidUI {
    *
    * @param {string} targetElementId
    * @param {string} searchString
+   * @param {string} creator
    */
-  searchAndLoadStructures(targetElementId, searchString) {
+  searchAndLoadStructures(targetElementId, searchString,  creator = '') {
     this.droidApi.searchStructures(searchString).then((structures) => {
-      this.handleLoadStructures(structures, targetElementId);
+      this.handleLoadStructures(structures, targetElementId, creator);
     });
   }
 

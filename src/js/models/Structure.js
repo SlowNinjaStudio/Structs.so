@@ -60,6 +60,9 @@ export class Structure {
   getDescription() {
     return this.description;
   }
+  getCreator() {
+    return this.creator;
+  }
   getHealthCurrent() {
     return this.health_current;
   }

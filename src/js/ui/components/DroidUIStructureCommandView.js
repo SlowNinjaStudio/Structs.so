@@ -1,7 +1,9 @@
 /**
  * Web UI component for structures.
  */
-export class DroidUIStructure {
+import {DroidUICommandMenu} from "./DroidUICommandMenu";
+
+export class DroidUIStructureCommandView {
   /**
    *
    * @param {Structure} structure
@@ -12,37 +14,60 @@ export class DroidUIStructure {
     this.structure = structure;
     this.creator = creator;
     this.idPrefix = idPrefix;
+    this.droidUICommandMenu = new DroidUICommandMenu(structure);
   }
+
   getCanvasId() {
     return `${this.idPrefix}structure-${this.structure.getId()}`;
   }
+
   isCreator() {
     return  this.structure.getCreator() === '' || this.structure.getCreator() === this.creator;
   }
+
+  initMainMenuEventListeners() {
+    if (this.isCreator()) {
+      const commandMenu = new DroidUICommandMenu(this.structure);
+      commandMenu.initMainMenuEventListeners();
+    }
+  }
+
   render() {
     return `
-      <div class="structure-card-wrapper col-sm-12 col-md-6 col-lg-4 col-xl-3">
+      <div class="structure-card-wrapper col-sm-12 col-md-6 col-lg-4">
         <div class="nes-container structure-card">
           <div class="game-asset-wrapper">
             <canvas id="${this.getCanvasId()}" class="pixel-art-viewer" width="64" height="64">
               Your browser does not support the canvas element.
             </canvas>
           </div>
-          <div class="row solo-action-wrapper">
-            <div class="col">
-                <a
-                  href="/structure.html?structure_id=${this.structure.getId()}"
-                  class="nes-btn ${this.isCreator() ? 'is-primary' : ''} nes-btn-fluid"
-                >
-                    ${this.isCreator() ? 'Command' : 'View'}
-                </a>
+          ${this.isCreator() ? `
+            <div class="commands nes-container with-title">
+              <h3 class="title">Command Menu</h3>
+              <div id="command-container">
+                ${this.droidUICommandMenu.renderMainMenu()}
+              </div>
             </div>
-          </div>
+          ` : `
+            <div class="nes-container with-title">
+              <h3 class="title">Structure</h3>
+              <div class="details">
+                <h4>${this.structure.getName()}</h4>
+                <p>${this.structure.getDescription()}</p>
+              </div>
+            </div>
+          `}
+        </div>
+      </div>
+      <div class="structure-card-wrapper col-sm-12 col-md-6 col-lg-4">
+        <div class="nes-container structure-card">
           <div class="nes-container with-title">
             <h3 class="title">Attributes</h3>
             <div class="details">
-              <h4>${this.structure.getName()}</h4>
-              <p>${this.structure.getDescription()}</p>
+              ${this.isCreator() ? `
+                <h4>${this.structure.getName()}</h4>
+                <p>${this.structure.getDescription()}</p>
+              ` : ''}
               <br>
               <div><span class="attribute-label">Structure ID:</span> ${this.structure.getId()}</div>
               <div><span class="attribute-label">Health:</span> ${this.structure.getHealthCurrent()} / ${this.structure.getHealthMax()}</div>
@@ -56,6 +81,10 @@ export class DroidUIStructure {
               <div><span class="attribute-label">Energy Efficiency:</span> ${this.structure.getEnergyEfficiency()}</div>
             </div>
           </div>
+          </div>
+      </div>
+      <div class="structure-card-wrapper col-sm-12 col-md-6 col-lg-4">
+        <div class="nes-container structure-card">
           ${(this.structure.hasFeatureAttack()) ? `
             <div class="nes-container with-title">
               <h3 class="title">Attack Systems</h3>
@@ -84,7 +113,7 @@ export class DroidUIStructure {
             </div>
           ` : ''}
           ${(this.structure.hasFeaturePower()) ?
-            `<div class="nes-container with-title">
+      `<div class="nes-container with-title">
               <h3 class="title">Power Systems</h3>
               <div class="details">
                 <div><span class="attribute-label">Generation Rate:</span> ${this.structure.getGenerationRate()}</div>
@@ -92,7 +121,7 @@ export class DroidUIStructure {
                 <div><span class="attribute-label">Drain Rate:</span> ${this.structure.getDrainRate()}</div>
               </div>
             </div>`
-          : ''}
+      : ''}
         </div>
       </div>
     `;
