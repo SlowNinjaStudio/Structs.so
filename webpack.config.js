@@ -5,6 +5,7 @@ module.exports = {
     indexPage: './src/js/pages/indexPage.js',
     schematicsPage: './src/js/pages/schematicsPage.js',
     structuresPage: './src/js/pages/structuresPage.js',
+    researchPage: './src/js/pages/researchPage.js',
   },
   output: {
     filename: '[name].js',

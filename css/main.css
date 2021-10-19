@@ -354,3 +354,22 @@ h1 {
   margin: 0 auto 20px auto;
 }
 
+
+/* Schematic R&D Styling */
+.schematic-design-wrapper {
+  text-align: center;
+}
+.schematic-design-card {
+  background: #FFFFFF;
+  display: inline-block;
+  width: 600px;
+  max-width: 100%;
+  margin: 20px auto;
+  vertical-align: top;
+  text-align: left;
+}
+
+.nes-container.schematic-design-card > .nes-container.with-title {
+  margin-bottom: 20px;
+}
+
