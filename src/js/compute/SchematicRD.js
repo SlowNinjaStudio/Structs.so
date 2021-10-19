@@ -1,5 +1,5 @@
 import {AMBITS, FEATURES} from "../constants";
-import {decimalToHex} from "../utilities";
+import {decimalToHex} from "../vendor/DecimalToHex";
 
 /* SchematicRD
  * Used for designing new schematics. 

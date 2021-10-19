@@ -1,5 +1,5 @@
 import {AMBITS, FEATURES} from "../constants";
-import {decimalToHex} from "../utilities";
+import {decimalToHex} from "../vendor/DecimalToHex";
 
 import {Schematic} from "../models/Schematic";
 import {Structure} from "../models/Structure";

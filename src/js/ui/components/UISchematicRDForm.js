@@ -156,7 +156,7 @@ export class UISchematicRDForm {
     let process_button = document.getElementById('form_begin_research');
     process_button.disabled = true; 
 
-    process_button.classList.remove('is-success');
+    process_button.classList.remove('is-primary');
     process_button.classList.add('is-disabled');
 
     let new_process_id = this.computer.add_process(this.program);
@@ -172,7 +172,7 @@ export class UISchematicRDForm {
     document.getElementById('form_begin_research').disabled = false; 
 
     document.getElementById('form_begin_research').classList.remove('is-disabled');
-    document.getElementById('form_begin_research').classList.add('is-success');
+    document.getElementById('form_begin_research').classList.add('is-primary');
 
     document.getElementById('results').innerHTML = '';
 
