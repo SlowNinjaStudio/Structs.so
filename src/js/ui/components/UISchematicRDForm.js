@@ -106,12 +106,11 @@ export class UISchematicRDForm {
                   <progress id="progress_cpu" class="nes-progress is-primary is-pattern" value="0" max="100"></progress>
                 </div>
               </p>
+              <input type="text" value="" id="running_process_id" hidden=hidden />
           </section>
         </div>
 
-        <div id="results">
-        
-        </div>
+        <div id="results"></div>
 
     `;
   }
@@ -153,16 +152,23 @@ export class UISchematicRDForm {
   }
 
   runProcess(){
-    document.getElementById('form_begin_research').disabled = true; 
 
-    document.getElementById('form_begin_research').classList.remove('is-success');
-    document.getElementById('form_begin_research').classList.add('is-disabled');
+    let process_button = document.getElementById('form_begin_research');
+    process_button.disabled = true; 
+
+    process_button.classList.remove('is-success');
+    process_button.classList.add('is-disabled');
 
     let new_process_id = this.computer.add_process(this.program);
     this.computer.run_process(new_process_id);
+
+    document.getElementById('running_process_id').value = new_process_id;
   }
 
   clearAll(){
+
+    this.computer.stop_process(document.getElementById('running_process_id').value);
+
     document.getElementById('form_begin_research').disabled = false; 
 
     document.getElementById('form_begin_research').classList.remove('is-disabled');

@@ -10,8 +10,9 @@
  */
  
 export class ComputeProcessDetails {
-  constructor(process_id, program) {
+  constructor(process_id, type, program) {
     this.id = process_id;
+    this.type = type;
 
     this.prefix   = program.getInputPrefix();
     this.pattern  = program.generatePattern();

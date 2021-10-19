@@ -34,7 +34,7 @@ export class ComputeProcess {
       this.type = 'Unknown Program';
     }
     
-    this.compute_process_details = new ComputeProcessDetails(process_id, program);
+    this.compute_process_details = new ComputeProcessDetails(process_id, this.type, program);
     
     this.hashes_per_second = 0;
     this.difficulty = program.generateDifficulty();
@@ -63,7 +63,6 @@ export class ComputeProcess {
         if (typeof result.data[1] != 'undefined') {
           
           processes[result.data[0].id].results.push(result.data[1]);
-          console.log(result.data[1].hash)
           processes[result.data[0].id].stop();
 
           document.getElementById('time_estimate_human').value = 'Research Complete!';
@@ -71,7 +70,8 @@ export class ComputeProcess {
           document.getElementById('progress_cpu_value').innerHTML =  100
 
 
-          // generate the result rectangle 
+          // generate the result rectangle
+          // This section needs to be more flexible depending on result.data[1].compute_process.type 
           let schematic = new Schematic()
           schematic.schematicFromHash(result.data[1].hash)
           schematic.id  = 'virtual'
@@ -88,8 +88,6 @@ export class ComputeProcess {
         console.log('[Process ID #' + result.data[0].id + '] Started ' + processes[result.data[0].id].start + ' Current ' + current_time);
         console.log('[Process ID #' + result.data[0].id + '] Rounds of hashing since last check-in: ' + result.data[0].rounds_total + ' ' + '(' + (100.0 * (result.data[0].rounds_total / processes[result.data[0].id].difficulty)) + '%)');
         console.log('[Process ID #' + result.data[0].id + '] Hashes per second ' + processes[result.data[0].id].hashes_per_second)
-
-
       
       }
 
