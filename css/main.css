@@ -340,6 +340,12 @@ h1 {
 .structure-card .commands .nes-btn {
   margin-bottom: 10px;
 }
+img.structure-card-icon {
+  margin-left: 5px;
+  vertical-align: text-bottom;
+  width:16px;
+  height:16px;
+}
 .pixel-art-placeholder {
   display: inline-block;
   width:256px;
