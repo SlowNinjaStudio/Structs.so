@@ -6,6 +6,9 @@ import {StructureBuild} from "./StructureBuild"
 
 import {secondsToString} from "../vendor/SecondsToString"
 
+import {Schematic} from "../models/Schematic"
+import {DroidUISchematic} from "../ui/components/DroidUISchematic";
+
 /*
  * ComputeProcess
  *
@@ -66,6 +69,16 @@ export class ComputeProcess {
           document.getElementById('time_estimate_human').value = 'Research Complete!';
           document.getElementById('progress_cpu').value = processes[result.data[0].id].difficulty; 
           document.getElementById('progress_cpu_value').innerHTML =  100
+
+
+          // generate the result rectangle 
+          let schematic = new Schematic()
+          schematic.schematicFromHash(result.data[1].hash)
+          schematic.id  = 'virtual'
+          let schematic_ui = new DroidUISchematic(schematic, 'result')
+          document.getElementById('results').innerHTML = schematic_ui.render()
+
+
         } else {
           document.getElementById('time_estimate_human').value = secondsToString((processes[result.data[0].id].difficulty - result.data[0].rounds_total) / processes[result.data[0].id].hashes_per_second);
           document.getElementById('progress_cpu').value = result.data[0].rounds_total; 

@@ -3,6 +3,7 @@ import {SchematicRD} from "../../compute/SchematicRD";
 import {AMBITS, FEATURES} from "../../constants";
 import {secondsToString} from "../../vendor/SecondsToString"
 
+
 /**
  * Web UI component for schematic.
  */
@@ -92,10 +93,9 @@ export class UISchematicRDForm {
               <button type="button" class="nes-btn is-warning" id="form_clear_research">Clear</button>
             </p>
           </section>
-        </div>
 
-        <div class="nes-container schematic-design-card">
-          <section class="nes-container">
+          <section class="nes-container with-title">
+          <p class="title">Status</p>
             <div class="nes-field">
               <label for="time_estimate_human">Expected Time to Research</label>
               <input type="text" id="time_estimate_human" class="nes-input is-success" value="Instant Discovery Likely" disabled>
@@ -109,6 +109,10 @@ export class UISchematicRDForm {
           </section>
         </div>
 
+        <div id="results">
+        
+        </div>
+
     `;
   }
   init(id) {
@@ -119,6 +123,7 @@ export class UISchematicRDForm {
 
   initMainButtonEventListeners() {
     document.getElementById('form_begin_research').addEventListener('click', this)
+    document.getElementById('form_clear_research').addEventListener('click', this)
   }
 
   initOptionsEventListeners() {
@@ -134,7 +139,11 @@ export class UISchematicRDForm {
     switch(e.type) {
         case "click":
           if (e.target.id == 'form_begin_research') {
-            this.runProcess();
+            if (!document.getElementById('form_begin_research').disabled) {
+             this.runProcess();
+            }
+          } else if (e.target.id == 'form_clear_research') {
+            this.clearAll();
           }
         break;
         case "change":
@@ -144,8 +153,36 @@ export class UISchematicRDForm {
   }
 
   runProcess(){
+    document.getElementById('form_begin_research').disabled = true; 
+
+    document.getElementById('form_begin_research').classList.remove('is-success');
+    document.getElementById('form_begin_research').classList.add('is-disabled');
+
     let new_process_id = this.computer.add_process(this.program);
     this.computer.run_process(new_process_id);
+  }
+
+  clearAll(){
+    document.getElementById('form_begin_research').disabled = false; 
+
+    document.getElementById('form_begin_research').classList.remove('is-disabled');
+    document.getElementById('form_begin_research').classList.add('is-success');
+
+    document.getElementById('results').innerHTML = '';
+
+    document.getElementById('form_ambit_land').checked = false;
+    document.getElementById('form_ambit_water').checked = false;
+    document.getElementById('form_ambit_sky').checked = false;
+    document.getElementById('form_ambit_space').checked = false;
+
+    document.getElementById('form_feature_engineering').checked = false;
+    document.getElementById('form_feature_defensive').checked = false;
+    document.getElementById('form_feature_attack').checked = false;
+    document.getElementById('form_feature_storage').checked = false;
+    document.getElementById('form_feature_power').checked = false;
+
+    this.commitConfigurationToProgram();
+
   }
 
   commitConfigurationToProgram() {
@@ -208,6 +245,8 @@ export class UISchematicRDForm {
       let initial_hashrate = 100000;  
       let difficulty = this.program.generateDifficulty();
 
+
+      document.getElementById('progress_cpu').value = 0;
       document.getElementById('progress_cpu').max = difficulty;
 
       let estimated_seconds = difficulty / initial_hashrate;
