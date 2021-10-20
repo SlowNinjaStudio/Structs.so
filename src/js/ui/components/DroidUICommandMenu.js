@@ -1,6 +1,8 @@
 /**
  * Web UI component for structures.
  */
+import {DroidUI} from "../DroidUI";
+
 export class DroidUICommandMenu {
   /**
    * @param {Structure} structure
@@ -53,8 +55,10 @@ export class DroidUICommandMenu {
         <div class="col">
             <a
               id="build-from-schematic-command"
-              href="javascript:void(0)"
+              href="#offcanvas"
               class="nes-btn is-warning nes-btn-fluid"
+              data-bs-toggle="offcanvas"
+              role="button"
             >
               Build from Schematic
             </a>
@@ -96,6 +100,10 @@ export class DroidUICommandMenu {
   }
 
   initEngineeringSubmenuEventListeners() {
+    document.getElementById('build-from-schematic-command').addEventListener('click', function() {
+      const ui = new DroidUI();
+      ui.loadSchematicSelectionList('structure-selection', this.structure.getId());
+    }.bind(this));
     document.getElementById('main-menu-command').addEventListener('click', function() {
       const commandMenu = new DroidUICommandMenu(this.structure);
       document.getElementById('command-container').innerHTML = commandMenu.renderMainMenu();
