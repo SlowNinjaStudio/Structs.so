@@ -8,6 +8,7 @@ import {SchematicPalette} from "../art_rendering/SchematicPalette";
 import {StructureArtGenerator} from "../art_rendering/StructureArtGenerator";
 import {StructureMobilePalette} from "../art_rendering/StructureMobilePalette";
 import {StructureStaticPalette} from "../art_rendering/StructureStaticPalette";
+import {DroidUISchematicListItem} from "./components/DroidUISchematicListItem";
 
 /**
  * Web App
@@ -197,6 +198,44 @@ export class DroidUI {
       for (let i = 0; i < this.schematics.length; i++) {
         /** @type {HTMLCanvasElement} */
         const canvas = document.getElementById(this.schematics[i].droidUISchematic.getCanvasId());
+        new PixelArtViewer(canvas, this.schematics[i].layers, this.getSchematicPalette(this.schematics[i].schematic));
+        console.log(this.schematics[i].schematic);
+      }
+    });
+  }
+
+  /**
+   * @param {string} targetElementId
+   * @param {string} structureId
+   * @param {string} searchString
+   */
+  loadSchematicSelectionList(targetElementId, structureId, searchString = '') {
+    const targetElement = document.getElementById(targetElementId);
+    const targetElementTitle = document.getElementById(`${targetElementId}-title`);
+    targetElementTitle.innerHTML = 'Select Schematic';
+
+    let schematicsHtml = '';
+
+    this.droidApi.searchSchematicsByStructure(structureId, searchString).then(schematics => {
+      for (let i = 0; i < schematics.length; i++) {
+        const droidUISchematicListItem = new DroidUISchematicListItem(schematics[i]);
+
+        // Batch drawing by collecting all the HTML first
+        schematicsHtml += droidUISchematicListItem.render();
+
+        this.schematics[i] = {
+          'schematic': schematics[i],
+          'droidUISchematicListItem': droidUISchematicListItem,
+          'layers': this.structureArtGenerator.generate(schematics[i]),
+        }
+      }
+
+      // Update DOM
+      targetElement.innerHTML = schematicsHtml;
+
+      for (let i = 0; i < this.schematics.length; i++) {
+        /** @type {HTMLCanvasElement} */
+        const canvas = document.getElementById(this.schematics[i].droidUISchematicListItem.getCanvasId());
         new PixelArtViewer(canvas, this.schematics[i].layers, this.getSchematicPalette(this.schematics[i].schematic));
         console.log(this.schematics[i].schematic);
       }

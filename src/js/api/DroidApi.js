@@ -70,22 +70,37 @@ export class DroidApi {
   }
 
   /**
+   * @param data response data
+   * @returns {Schematic[]}
+   */
+  schematicResponseHandler(data) {
+    const schematicFactory = new SchematicFactory();
+    const schematics = [];
+    const rawSchematics = data.Schematic;
+
+    for (let i = 0; i < rawSchematics.length; i ++) {
+      schematics[i] = schematicFactory.make(rawSchematics[i]);
+    }
+
+    return schematics;
+  }
+
+  /**
    * @param {string} creator id
    * @returns {Promise<Schematic[]>}
    */
   getSchematicsByCreator(creator) {
     return this.ajax.get(`${this.scheme}${this.domain}/api/di/Schematic/creator/${creator}`)
-      .then(data => {
-        const schematicFactory = new SchematicFactory();
-        const schematics = [];
-        const rawSchematics = data.Schematic;
+      .then(this.schematicResponseHandler.bind(this));
+  }
 
-        for (let i = 0; i < rawSchematics.length; i ++) {
-          schematics[i] = schematicFactory.make(rawSchematics[i]);
-          schematics[i].id = i;
-        }
-
-        return schematics;
-      })
+  /**
+   * @param {string} structureId
+   * @param {string} searchString
+   * @returns {Promise<Schematic[]>}
+   */
+  searchSchematicsByStructure(structureId, searchString) {
+    return this.ajax.get(`${this.scheme}${this.domain}/api/di/Schematic/search/${structureId}/${encodeURIComponent(searchString)}`)
+      .then(this.schematicResponseHandler.bind(this));
   }
 }
