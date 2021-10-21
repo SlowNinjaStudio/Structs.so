@@ -1,6 +1,8 @@
 import {ColorRGB} from "../vendor/ColorRGB";
 import {DroidApi} from "../api/DroidApi";
+import {DroidUIMessagePanel} from "./components/DroidUIMessagePanel";
 import {DroidUISchematic} from "./components/DroidUISchematic";
+import {DroidUISchematicListItem} from "./components/DroidUISchematicListItem";
 import {DroidUIStructure} from "./components/DroidUIStructure";
 import {DroidUIStructureCommandView} from "./components/DroidUIStructureCommandView";
 import {PixelArtViewer} from "../vendor/PixelArtViewer";
@@ -8,7 +10,7 @@ import {SchematicPalette} from "../art_rendering/SchematicPalette";
 import {StructureArtGenerator} from "../art_rendering/StructureArtGenerator";
 import {StructureMobilePalette} from "../art_rendering/StructureMobilePalette";
 import {StructureStaticPalette} from "../art_rendering/StructureStaticPalette";
-import {DroidUISchematicListItem} from "./components/DroidUISchematicListItem";
+import {DroidUIMessageListItem} from "./components/DroidUIMessageListItem";
 
 /**
  * Web App
@@ -64,8 +66,9 @@ export class DroidUI {
    * @param {Array.<Structure>}structures
    * @param {string} targetElementId
    * @param {string} creator
+   * @param {DroidUIMessagePanel} emptyMessage
    */
-  handleLoadStructures(structures, targetElementId, creator = '') {
+  handleLoadStructures(structures, targetElementId, creator = '', emptyMessage = null) {
     this.structures = [];
     const targetElement = document.getElementById(targetElementId);
     let structuresHtml = '';
@@ -84,6 +87,9 @@ export class DroidUI {
     }
 
     // Update DOM
+    if (structuresHtml === '' && emptyMessage !== null) {
+      structuresHtml = emptyMessage.render();
+    }
     targetElement.innerHTML = structuresHtml;
 
     for (let i = 0; i < this.structures.length; i++) {
@@ -125,7 +131,10 @@ export class DroidUI {
    */
   loadStructures(targetElementId, creator = '') {
     this.droidApi.getStructures().then((structures) => {
-      this.handleLoadStructures(structures, targetElementId, creator);
+      this.handleLoadStructures(structures, targetElementId, creator, new DroidUIMessagePanel(
+        'No Structures Available',
+        `Whoops, an error occurred and the Genesis Library has gone missing.`
+      ));
     });
   }
 
@@ -137,7 +146,10 @@ export class DroidUI {
    */
   loadStructuresByCreator(targetElementId, creator) {
     this.droidApi.getStructuresByCreator(creator).then((structures) => {
-      this.handleLoadStructures(structures, targetElementId, creator);
+      this.handleLoadStructures(structures, targetElementId, creator, new DroidUIMessagePanel(
+        'No Structures Available',
+        `You don't own any structures. Use the Genesis Library structure and a schematic to create your first structure.`
+      ));
     });
   }
 
@@ -163,7 +175,10 @@ export class DroidUI {
    */
   searchAndLoadStructures(targetElementId, searchString,  creator = '') {
     this.droidApi.searchStructures(searchString).then((structures) => {
-      this.handleLoadStructures(structures, targetElementId, creator);
+      this.handleLoadStructures(structures, targetElementId, creator, new DroidUIMessagePanel(
+        'No Structures Found',
+        `No structures found matching your search terms. Try using less or different keywords.`
+      ));
     });
   }
 
@@ -193,25 +208,53 @@ export class DroidUI {
       }
 
       // Update DOM
+      if (schematicsHtml === '') {
+        const emptyMessage = new DroidUIMessagePanel(
+          'No Schematics Available',
+          `You don't own any schematics. To create a schematic go to R&D.`
+        );
+        schematicsHtml = emptyMessage.render();
+      }
       targetElement.innerHTML = schematicsHtml;
 
       for (let i = 0; i < this.schematics.length; i++) {
         /** @type {HTMLCanvasElement} */
         const canvas = document.getElementById(this.schematics[i].droidUISchematic.getCanvasId());
         new PixelArtViewer(canvas, this.schematics[i].layers, this.getSchematicPalette(this.schematics[i].schematic));
-        console.log(this.schematics[i].schematic);
       }
     });
   }
 
   /**
+   * @param {string} schematicsHtml
+   * @param {string} searchString
+   * @returns {string}
+   */
+  schematicSelectionListOutputHelper(schematicsHtml, searchString) {
+    if (schematicsHtml === '' && searchString === '') {
+      const emptyMessage = new DroidUIMessageListItem(
+        `There are no compatible schematics for this structure.`
+        + ` A compatible schematic must have one ambit (water, land, sky, or space) in common with the current structure.`
+      );
+      schematicsHtml = emptyMessage.render();
+    } else if (schematicsHtml === '' && searchString !== '') {
+      const emptyMessage = new DroidUIMessageListItem(
+        `No compatible schematics found matching your search terms. Try using less or different keywords.`
+      );
+      schematicsHtml = emptyMessage.render();
+    }
+    return schematicsHtml;
+  }
+
+  /**
    * @param {string} targetElementId
+   * @param {string} targetElementTitleId
    * @param {string} structureId
    * @param {string} searchString
    */
-  loadSchematicSelectionList(targetElementId, structureId, searchString = '') {
+  loadSchematicSelectionList(targetElementId, targetElementTitleId, structureId, searchString = '') {
     const targetElement = document.getElementById(targetElementId);
-    const targetElementTitle = document.getElementById(`${targetElementId}-title`);
+    const targetElementTitle = document.getElementById(`${targetElementTitleId}`);
     targetElementTitle.innerHTML = 'Select Schematic';
 
     let schematicsHtml = '';
@@ -231,13 +274,12 @@ export class DroidUI {
       }
 
       // Update DOM
-      targetElement.innerHTML = schematicsHtml;
+      targetElement.innerHTML = this.schematicSelectionListOutputHelper(schematicsHtml, searchString);
 
       for (let i = 0; i < this.schematics.length; i++) {
         /** @type {HTMLCanvasElement} */
         const canvas = document.getElementById(this.schematics[i].droidUISchematicListItem.getCanvasId());
         new PixelArtViewer(canvas, this.schematics[i].layers, this.getSchematicPalette(this.schematics[i].schematic));
-        console.log(this.schematics[i].schematic);
       }
     });
   }

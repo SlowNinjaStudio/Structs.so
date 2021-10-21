@@ -25,7 +25,20 @@ export class DroidUISchematic {
               <p>${this.schematic.getDescription()}</p>
               <br>
               <div><span class="attribute-label">Structure ID:</span> ${this.schematic.getId()}</div>
-              <div><span class="attribute-label">Ambits:</span> ${this.schematic.getAmbits()}</div>
+              <div><span class="attribute-label">Ambits:</span>
+                ${this.schematic.hasAmbitWater() ? `
+                  <img src="/img/icons/icon-ambit-water.png" alt="Water" title="Water"/> Water
+                ` : ''}
+                ${this.schematic.hasAmbitLand() ? `
+                  <img src="/img/icons/icon-ambit-land.png" alt="Land" title="Land"/> Land
+                ` : ''}
+                ${this.schematic.hasAmbitSky() ? `
+                  <img src="/img/icons/icon-ambit-sky.png" alt="Sky" title="Sky"/> Sky
+                ` : ''}
+                ${this.schematic.hasAmbitSpace() ? `
+                  <img src="/img/icons/icon-ambit-space.png" alt="Space" title="Space"/> Space
+                ` : ''}
+              </div>
               <div><span class="attribute-label">Energy to Build:</span> Requires ${this.schematic.getEnergyToBuildAmount()} ${this.schematic.getEnergyToBuildDenom()}</div>
               <br>
               <div>
