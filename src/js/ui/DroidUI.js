@@ -10,6 +10,7 @@ import {SchematicPalette} from "../art_rendering/SchematicPalette";
 import {StructureArtGenerator} from "../art_rendering/StructureArtGenerator";
 import {StructureMobilePalette} from "../art_rendering/StructureMobilePalette";
 import {StructureStaticPalette} from "../art_rendering/StructureStaticPalette";
+import {DroidUIMessageListItem} from "./components/DroidUIMessageListItem";
 
 /**
  * Web App
@@ -220,19 +221,40 @@ export class DroidUI {
         /** @type {HTMLCanvasElement} */
         const canvas = document.getElementById(this.schematics[i].droidUISchematic.getCanvasId());
         new PixelArtViewer(canvas, this.schematics[i].layers, this.getSchematicPalette(this.schematics[i].schematic));
-        console.log(this.schematics[i].schematic);
       }
     });
   }
 
   /**
+   * @param {string} schematicsHtml
+   * @param {string} searchString
+   * @returns {string}
+   */
+  schematicSelectionListOutputHelper(schematicsHtml, searchString) {
+    if (schematicsHtml === '' && searchString === '') {
+      const emptyMessage = new DroidUIMessageListItem(
+        `There are no compatible schematics for this structure.`
+        + ` A compatible schematic must have one ambit (water, land, sky, or space) in common with the current structure.`
+      );
+      schematicsHtml = emptyMessage.render();
+    } else if (schematicsHtml === '' && searchString !== '') {
+      const emptyMessage = new DroidUIMessageListItem(
+        `No compatible schematics found matching your search terms. Try using less or different keywords.`
+      );
+      schematicsHtml = emptyMessage.render();
+    }
+    return schematicsHtml;
+  }
+
+  /**
    * @param {string} targetElementId
+   * @param {string} targetElementTitleId
    * @param {string} structureId
    * @param {string} searchString
    */
-  loadSchematicSelectionList(targetElementId, structureId, searchString = '') {
+  loadSchematicSelectionList(targetElementId, targetElementTitleId, structureId, searchString = '') {
     const targetElement = document.getElementById(targetElementId);
-    const targetElementTitle = document.getElementById(`${targetElementId}-title`);
+    const targetElementTitle = document.getElementById(`${targetElementTitleId}`);
     targetElementTitle.innerHTML = 'Select Schematic';
 
     let schematicsHtml = '';
@@ -252,13 +274,12 @@ export class DroidUI {
       }
 
       // Update DOM
-      targetElement.innerHTML = schematicsHtml;
+      targetElement.innerHTML = this.schematicSelectionListOutputHelper(schematicsHtml, searchString);
 
       for (let i = 0; i < this.schematics.length; i++) {
         /** @type {HTMLCanvasElement} */
         const canvas = document.getElementById(this.schematics[i].droidUISchematicListItem.getCanvasId());
         new PixelArtViewer(canvas, this.schematics[i].layers, this.getSchematicPalette(this.schematics[i].schematic));
-        console.log(this.schematics[i].schematic);
       }
     });
   }

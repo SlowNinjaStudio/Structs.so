@@ -412,3 +412,11 @@ img.structure-card-icon {
   font-family: sans-serif;
   text-align: left;
 }
+
+/* Offcanvas */
+.offcanvas-search {
+  padding: 0 15px;
+}
+#offcanvas-search-input {
+  height: 44px;
+}

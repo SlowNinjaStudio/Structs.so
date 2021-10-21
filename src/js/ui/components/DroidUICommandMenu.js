@@ -100,10 +100,28 @@ export class DroidUICommandMenu {
   }
 
   initEngineeringSubmenuEventListeners() {
+    const droidUi = new DroidUI();
+
+    const searchHandler = function() {
+      const searchString = document.getElementById('offcanvas-search-input').value;
+      droidUi.loadSchematicSelectionList(
+        'offcanvas-body',
+        'offcanvas-title',
+        this.structure.getId(),
+        searchString
+      );
+    }.bind(this);
+    document.getElementById('offcanvas-search-btn').addEventListener('click', searchHandler);
+    document.getElementById('offcanvas-search-input').addEventListener('keypress', (event) => {
+      if (event.key === 'Enter') {
+        searchHandler(event);
+      }
+    });
+
     document.getElementById('build-from-schematic-command').addEventListener('click', function() {
-      const ui = new DroidUI();
-      ui.loadSchematicSelectionList('structure-selection', this.structure.getId());
+      droidUi.loadSchematicSelectionList('offcanvas-body', 'offcanvas-title', this.structure.getId());
     }.bind(this));
+
     document.getElementById('main-menu-command').addEventListener('click', function() {
       const commandMenu = new DroidUICommandMenu(this.structure);
       document.getElementById('command-container').innerHTML = commandMenu.renderMainMenu();
