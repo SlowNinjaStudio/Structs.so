@@ -45,7 +45,20 @@ export class DroidUIStructure {
               <p>${this.structure.getDescription()}</p>
               <br>
               <div><span class="attribute-label">Structure ID:</span> ${this.structure.getId()}</div>
-              <div><span class="attribute-label">Ambits:</span> ${this.structure.getAmbits()}</div>
+              <div><span class="attribute-label">Ambits:</span>
+                ${this.structure.hasAmbitWater() ? `
+                  <img src="/img/icons/icon-ambit-water.png" alt="Water" title="Water"/> Water
+                ` : ''}
+                ${this.structure.hasAmbitLand() ? `
+                  <img src="/img/icons/icon-ambit-land.png" alt="Land" title="Land"/> Land
+                ` : ''}
+                ${this.structure.hasAmbitSky() ? `
+                  <img src="/img/icons/icon-ambit-sky.png" alt="Sky" title="Sky"/> Sky
+                ` : ''}
+                ${this.structure.hasAmbitSpace() ? `
+                  <img src="/img/icons/icon-ambit-space.png" alt="Space" title="Space"/> Space
+                ` : ''}
+              </div>
               <br>
               <div>
                 <img src="/img/icons/icon-health.png" alt="Health Icon" class="structure-card-icon">

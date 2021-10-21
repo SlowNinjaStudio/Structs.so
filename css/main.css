@@ -359,6 +359,9 @@ img.structure-card-icon {
   font-family: sans-serif;
   font-size: 14px;
 }
+.details img {
+  vertical-align: text-bottom;
+}
 .attribute-label {
   font-weight: bold;
 }
