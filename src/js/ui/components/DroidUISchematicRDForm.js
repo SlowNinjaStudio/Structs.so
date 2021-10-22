@@ -103,6 +103,8 @@ export class DroidUISchematicRDForm {
   init(id) {
     const formWrapper = document.getElementById(id);
     formWrapper.innerHTML = this.render();
+
+    this.compute_status.init('compute_status', this.program) 
   }
 
 
@@ -232,7 +234,7 @@ export class DroidUISchematicRDForm {
       }      
       this.program.features = features    
 
-      this.compute_status.init('compute_status', this.program)  
+      this.compute_status.setProgram(this.program) 
   
   }
 

@@ -2,6 +2,7 @@ import {ColorRGB} from "../vendor/ColorRGB";
 import {DroidApi} from "../api/DroidApi";
 import {DroidUIMessagePanel} from "./components/DroidUIMessagePanel";
 import {DroidUISchematic} from "./components/DroidUISchematic";
+import {DroidUINewSchematic} from "./components/DroidUINewSchematic";
 import {DroidUISchematicListItem} from "./components/DroidUISchematicListItem";
 import {DroidUIStructure} from "./components/DroidUIStructure";
 import {DroidUIStructureCommandView} from "./components/DroidUIStructureCommandView";
@@ -295,8 +296,8 @@ export class DroidUI {
 
     let schematicsHtml = '';
 
-    const droidUISchematic = new DroidUINewSchematic(schematic);
-    schematicsHtml += droidUISchematic.render();
+    const droidUINewSchematic = new DroidUINewSchematic(schematic);
+    schematicsHtml += droidUINewSchematic.render();
 
     this.schematics[0] = {
       'schematic': schematic,

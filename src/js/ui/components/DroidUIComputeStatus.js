@@ -44,6 +44,11 @@ export class DroidUIComputeStatus {
     const formWrapper = document.getElementById(id);
     formWrapper.innerHTML = this.render();
 
+    this.setProgram(program);
+
+  }
+
+  setProgram(program){
     this.program = program;
     this.program_difficulty = this.program.generateDifficulty();
 
@@ -55,9 +60,7 @@ export class DroidUIComputeStatus {
 
     let estimated_seconds = this.program_difficulty / CONFIG.INITIAL_HASHRATE;
     this.setTimeEstimateBox(estimated_seconds);
-
   }
-
 
   initMainButtonEventListeners() {
     //Unused

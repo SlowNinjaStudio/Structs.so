@@ -11,9 +11,9 @@ export class DroidUINewSchematic {
   }
   render() {
     return `
-      <div class="schematic-result-wrapper col-sm-12 col-md-6 col-lg-4 col-xl-3">
+      <div class="schematic-result-wrapper">
         <div class="nes-container schematic-result-card">
-          <div class="game-asset-wrapper">
+          <div class="new-schematic-asset-wrapper">
             <canvas id="${this.getCanvasId()}" class="pixel-art-viewer" width="64" height="64">
               Your browser does not support the canvas element.
             </canvas>
