@@ -6,6 +6,7 @@ module.exports = {
     schematicsPage: './src/js/pages/schematicsPage.js',
     structureViewPage: './src/js/pages/structureViewPage.js',
     structuresPage: './src/js/pages/structuresPage.js',
+    researchPage: './src/js/pages/researchPage.js',
   },
   output: {
     filename: '[name].js',

@@ -14,7 +14,7 @@ export class Navbar {
           <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
               <li class="nav-item mx-2">
-                <a class="nav-link ${ this.page === 'R&D' ? 'active' : '' }" href="#">R&D</a>
+                <a class="nav-link ${ this.page === 'R&D' ? 'active' : '' }" href="/research.html">R&D</a>
               </li>
               <li class="nav-item mx-2">
                 <a class="nav-link ${ this.page === 'SCHEMATICS' ? 'active' : '' }" href="/schematics.html">Schematics</a>
