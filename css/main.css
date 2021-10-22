@@ -442,3 +442,40 @@ img.structure-card-icon {
   height: 44px;
 }
 
+/* Status Styling */
+.compute-status-wrapper {
+  text-align: center;
+}
+.compute-status-card {
+  background: #FFFFFF;
+  display: inline-block;
+  width: 600px;
+  max-width: 100%;
+  margin: 20px auto;
+  vertical-align: top;
+  text-align: left;
+}
+
+.nes-container.compute-status-card > .nes-container.with-title {
+  margin-bottom: 20px;
+}
+
+
+/* Schematic Result Styling */
+.schematic-result-wrapper {
+  text-align: center;
+}
+.schematic-result-card {
+  background: #FFFFFF;
+  display: inline-block;
+  width: 600px;
+  max-width: 100%;
+  margin: 20px auto;
+  vertical-align: top;
+  text-align: left;
+}
+
+.nes-container.schematic-result-card > .nes-container.with-title {
+  margin-bottom: 20px;
+}
+

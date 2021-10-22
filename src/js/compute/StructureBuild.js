@@ -45,7 +45,6 @@ export class StructureBuild {
     this.accuracy = false;
     this.accuracy_min = 0;
     this.accuracy_max = 255;
-
   }
 
   getInputPrefix(){

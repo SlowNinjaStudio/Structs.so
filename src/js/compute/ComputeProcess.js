@@ -7,7 +7,12 @@ import {StructureBuild} from "./StructureBuild"
 import {secondsToString} from "../vendor/SecondsToString"
 
 import {Schematic} from "../models/Schematic"
-import {DroidUISchematic} from "../ui/components/DroidUISchematic";
+
+import {DroidUIComputeStatus} from "../ui/components/DroidUIComputeStatus"
+
+import {DroidUI} from "../ui/DroidUI"
+
+
 
 /*
  * ComputeProcess
@@ -57,6 +62,8 @@ export class ComputeProcess {
       this.worker.onmessage = function (result) {
         console.log('Received from action worker [Process ID #' + result.data[0].id + ']...');
 
+        let compute_status = new DroidUIComputeStatus();
+
         let current_time = Date.now()
         processes[result.data[0].id].hashes_per_second = result.data[0].rounds_total / (((current_time - processes[result.data[0].id].start) / 1000.0) + 1)
 
@@ -64,25 +71,28 @@ export class ComputeProcess {
           
           processes[result.data[0].id].results.push(result.data[1]);
           processes[result.data[0].id].stop();
-
-          document.getElementById('time_estimate_human').value = 'Research Complete!';
-          document.getElementById('progress_cpu').value = processes[result.data[0].id].difficulty; 
-          document.getElementById('progress_cpu_value').innerHTML =  100
-
+          
+          compute_status.setComplete(); 
+          
 
           // generate the result rectangle
           // This section needs to be more flexible depending on result.data[1].compute_process.type 
-          let schematic = new Schematic()
-          schematic.schematicFromHash(result.data[1].hash)
-          schematic.id  = 'virtual'
-          let schematic_ui = new DroidUISchematic(schematic, 'result')
-          document.getElementById('results').innerHTML = schematic_ui.render()
+
+          if (result.data[1].type = 'Schematic R&D') {
+            let schematic = new Schematic()
+            schematic.schematicFromHash(result.data[1].hash)
+      
+            let droid_ui = new DroidUI();
+            droid_ui.loadNewSchematic(schematic, 'found_schematic_list');
+          }
+
+          if (result.data[1].type = 'Structure Retooling') {
+            console.log('Finished retooling but idk what to do with the results');
+          }
 
 
         } else {
-          document.getElementById('time_estimate_human').value = secondsToString((processes[result.data[0].id].difficulty - result.data[0].rounds_total) / processes[result.data[0].id].hashes_per_second);
-          document.getElementById('progress_cpu').value = result.data[0].rounds_total; 
-          document.getElementById('progress_cpu_value').innerHTML =  Math.round(100.0 * (result.data[0].rounds_total / processes[result.data[0].id].difficulty))         
+          compute_status.updateStatus(result.data[0].rounds_total, processes[result.data[0].id].hashes_per_second, processes[result.data[0].id].difficulty); 
         }
 
         console.log('[Process ID #' + result.data[0].id + '] Started ' + processes[result.data[0].id].start + ' Current ' + current_time);

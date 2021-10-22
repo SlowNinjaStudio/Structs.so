@@ -45,6 +45,9 @@ export class Schematic {
   getId() {
     return this.id;
   }
+  getHash() {
+    return this.hash;
+  }
   getName() {
     return this.name;
   }
@@ -158,6 +161,8 @@ export class Schematic {
 
   /* Build Schematic from Hash Rather than API */
   schematicFromHash(hash) {
+
+    this.hash = hash;
 
     this.is_mobile = hash.substring(16,17) == '1'
     this.is_stationary = !this.is_mobile

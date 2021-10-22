@@ -283,4 +283,43 @@ export class DroidUI {
       }
     });
   }
+
+  /**
+   * Load new schematic as generated during the R&D process
+   *
+   * @param {Schematic} schematic
+   * @param {string} targetElementId
+   */
+  loadNewSchematic(schematic, targetElementId) {
+    const targetElement = document.getElementById(targetElementId);
+
+    let schematicsHtml = '';
+
+    const droidUISchematic = new DroidUINewSchematic(schematic);
+    schematicsHtml += droidUISchematic.render();
+
+    this.schematics[0] = {
+      'schematic': schematic,
+      'droidUINewSchematic': droidUINewSchematic,
+      'layers': this.structureArtGenerator.generate(schematic),
+    }
+
+    // Update DOM
+    if (schematicsHtml === '') {
+      // We really shouldn't get here. 
+      // Why are you calling loadNewSchematic without a new schematic?
+      const emptyMessage = new DroidUIMessagePanel(
+        'No Schematics Available',
+        `You don't own any schematics. To create a schematic go to R&D.`
+      );
+      schematicsHtml = emptyMessage.render();
+    }
+    
+    targetElement.innerHTML = schematicsHtml;
+
+    /** @type {HTMLCanvasElement} */
+    const canvas = document.getElementById(this.schematics[0].droidUINewSchematic.getCanvasId());
+    new PixelArtViewer(canvas, this.schematics[0].layers, this.getSchematicPalette(this.schematics[0].schematic));
+      
+  }
 }

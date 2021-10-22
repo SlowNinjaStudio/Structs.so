@@ -4,13 +4,17 @@ import {AMBITS, FEATURES} from "../../constants";
 import {secondsToString} from "../../vendor/SecondsToString"
 
 
+import {DroidUIComputeStatus} from "./DroidUIComputeStatus"
+
 /**
  * Web UI component for schematic.
  */
-export class UISchematicRDForm {
+export class DroidUISchematicRDForm {
   constructor() {
     this.program = new SchematicRD();
     this.computer = new Computer();
+
+    this.compute_status = new DroidUIComputeStatus();
   }
   render() {
     return `
@@ -94,24 +98,6 @@ export class UISchematicRDForm {
             </p>
           </section>
 
-          <section class="nes-container with-title">
-          <p class="title">Status</p>
-            <div class="nes-field">
-              <label for="time_estimate_human">Expected Time to Research</label>
-              <input type="text" id="time_estimate_human" class="nes-input is-success" value="Instant Discovery Likely" disabled>
-            </div>
-              <p>
-                <div class="nes-field is-inline">
-                  <label for="progress_cpu">Est.(<span id="progress_cpu_value">0</span>%)</label>
-                  <progress id="progress_cpu" class="nes-progress is-primary is-pattern" value="0" max="100"></progress>
-                </div>
-              </p>
-              <input type="text" value="" id="running_process_id" hidden=hidden />
-          </section>
-        </div>
-
-        <div id="results"></div>
-
     `;
   }
   init(id) {
@@ -162,19 +148,19 @@ export class UISchematicRDForm {
     let new_process_id = this.computer.add_process(this.program);
     this.computer.run_process(new_process_id);
 
-    document.getElementById('running_process_id').value = new_process_id;
+    this.compute_status.setProcessID(new_process_id);
   }
 
   clearAll(){
 
-    this.computer.stop_process(document.getElementById('running_process_id').value);
+    this.computer.stop_process(document.getElementById('compute_status_running_process_id').value);
 
     document.getElementById('form_begin_research').disabled = false; 
 
     document.getElementById('form_begin_research').classList.remove('is-disabled');
     document.getElementById('form_begin_research').classList.add('is-primary');
 
-    document.getElementById('results').innerHTML = '';
+    document.getElementById('found_schematic_list').innerHTML = '';
 
     document.getElementById('form_ambit_land').checked = false;
     document.getElementById('form_ambit_water').checked = false;
@@ -244,31 +230,9 @@ export class UISchematicRDForm {
       if(document.getElementById('form_feature_storage').checked) {
         features.push(FEATURES.STORAGE)
       }      
-      this.program.features = features      
+      this.program.features = features    
 
-      
-      // TODO set this somewhere else prob. Maybe as a constant
-      let initial_hashrate = 100000;  
-      let difficulty = this.program.generateDifficulty();
-
-
-      document.getElementById('progress_cpu').value = 0;
-      document.getElementById('progress_cpu').max = difficulty;
-
-      let estimated_seconds = difficulty / initial_hashrate;
-
-      document.getElementById('time_estimate_human').value = secondsToString(estimated_seconds);
-
-      document.getElementById('time_estimate_human').classList.remove('is-error');
-      document.getElementById('time_estimate_human').classList.remove('is-warning');
-      document.getElementById('time_estimate_human').classList.remove('is-success');
-      if (estimated_seconds > 86400) {
-        document.getElementById('time_estimate_human').classList.add('is-error');
-      } else if (estimated_seconds > 3600 * 6) {
-        document.getElementById('time_estimate_human').classList.add('is-warning');
-      } else {
-        document.getElementById('time_estimate_human').classList.add('is-success');
-      }
+      this.compute_status.init('compute_status', this.program)  
   
   }
 
