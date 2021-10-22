@@ -18,18 +18,22 @@ export class DroidUINewSchematic {
               Your browser does not support the canvas element.
             </canvas>
           </div>
-         <div class="nes-container with-title">
-            <div class="nes-field">
-              <label for="new_schematic_name">Name</label>
-              <input type="text" id="new_schematic_name" class="nes-input" value="" >
+         <div class="nes-container with-title container-fluid">
+            <div class="row">
+              <div class="nes-field col">
+                <label for="new_schematic_name">Name</label>
+                <input type="text" id="new_schematic_name" class="nes-input" value="" >
+              </div>
             </div>
-            <div class="nes-field">
-              <label for="new_schematic_description">Description</label>
-              <input type="text" id="new_schematic_description" class="nes-input" value="">
+            <div class="row">
+              <div class="nes-field col">
+                <label for="new_schematic_description">Description</label>
+                <input type="text" id="new_schematic_description" class="nes-input" value="">
+              </div>
             </div>
             <div class="row solo-action-wrapper">
               <div class="col">
-                <a href="" class="nes-btn is-primary nes-btn-fluid">Patent</a>
+                <a href="javascript:void(0)" class="nes-btn is-primary nes-btn-fluid">Patent</a>
               </div>
             </div>
           </div>
@@ -37,7 +41,7 @@ export class DroidUINewSchematic {
           <div class="nes-container with-title">
             <h3 class="title">Attributes</h3>
             <div class="details">
-         
+
               <div><span class="attribute-label">Ambits:</span>
                 ${this.schematic.hasAmbitWater() ? `
                   <img src="/img/icons/icon-ambit-water.png" alt="Water" title="Water"/> Water

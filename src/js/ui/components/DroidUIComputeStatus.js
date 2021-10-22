@@ -10,7 +10,7 @@ import {secondsToString} from "../../vendor/SecondsToString"
  */
 export class DroidUIComputeStatus {
   constructor() {
-    
+
     this.computer = new Computer();
     this.program;
     this.program_difficulty = 0;
@@ -21,7 +21,7 @@ export class DroidUIComputeStatus {
   }
   render() {
     return `
- 
+      <div class="col">
         <div class="nes-container compute-status-card">
           <section class="nes-container with-title">
           <p class="title">Status</p>
@@ -38,6 +38,7 @@ export class DroidUIComputeStatus {
               <input type="text" value="" id="compute_status_running_process_id" hidden=hidden />
           </section>
         </div>
+      </div>
     `;
   }
   init(id, program) {
@@ -53,7 +54,7 @@ export class DroidUIComputeStatus {
     this.program_difficulty = this.program.generateDifficulty();
 
     this.time_estimate_box = document.getElementById('compute_status_time_estimate_human');
-  
+
     this.progress_bar_cpu = document.getElementById('compute_status_progress_bar_cpu');
     this.progress_bar_cpu.value = 0;
     this.progress_bar_cpu.max = this.program_difficulty;
@@ -101,10 +102,10 @@ export class DroidUIComputeStatus {
     // Clear all the possible colour classes
     this.time_estimate_box.classList.remove('is-error');
     this.time_estimate_box.classList.remove('is-warning');
-    this.time_estimate_box.classList.remove('is-success'); 
+    this.time_estimate_box.classList.remove('is-success');
 
     // Apply the new one
-   this.time_estimate_box.classList.add(color_class); 
+   this.time_estimate_box.classList.add(color_class);
   }
 
   updateStatus(completed_effort, hashes_per_second, difficulty) {

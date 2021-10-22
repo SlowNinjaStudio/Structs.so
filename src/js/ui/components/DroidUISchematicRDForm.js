@@ -18,7 +18,7 @@ export class DroidUISchematicRDForm {
   }
   render() {
     return `
- 
+      <div class="col">
         <div class="nes-container schematic-design-card">
           <section class="nes-container with-title">
             <p class="title">Design Schematic</p>
@@ -39,23 +39,22 @@ export class DroidUISchematicRDForm {
                 <div class="nes-field">
                   <label for="form_ambit_land">
                     <input type="checkbox" class="nes-checkbox changing-option" id="form_ambit_land" name="ambits[0]" value="LAND"/>
-                    <span>Land</span>
+                    <span>(<img src="/img/icons/icon-ambit-land.png" alt="Land Ambit Icon">)Land</span>
                   </label>
 
                   <label for="form_ambit_water">
                     <input type="checkbox" class="nes-checkbox changing-option" id="form_ambit_water" name="ambits[1]" value="WATER"/>
-                    <span>Water</span>
+                    <span>(<img src="/img/icons/icon-ambit-water.png" alt="Water Ambit Icon">)Water</span>
                   </label>
-
 
                   <label for="form_ambit_sky">
                     <input type="checkbox" class="nes-checkbox changing-option" id="form_ambit_sky" name="ambits[2]" value="SKY"/>
-                    <span>Sky</span>
+                    <span>(<img src="/img/icons/icon-ambit-sky.png" alt="Sky Ambit Icon">)Sky</span>
                   </label>
 
                   <label for="form_ambit_space">
                     <input type="checkbox" class="nes-checkbox changing-option" id="form_ambit_space" name="ambits[3]" value="SPACE"/>
-                    <span>Space</span>
+                    <span>(<img src="/img/icons/icon-ambit-space.png" alt="Space Ambit Icon">)Space</span>
                   </label>
                 </div>
               </div>
@@ -66,25 +65,24 @@ export class DroidUISchematicRDForm {
                 <div class="nes-field">
                   <label for="form_feature_attack">
                     <input type="checkbox" class="nes-checkbox changing-option" id="form_feature_attack" name="features[]" value="ATTACK"/>
-                    <span>Attack Systems</span>
+                    <span>(<img src="/img/icons/icon-attack-range.png" alt="Attack Icon">)Attack Systems</span>
                   </label>
 
                   <label for="form_feature_defensive">
                     <input type="checkbox" class="nes-checkbox changing-option" id="form_feature_defensive" name="features[]" value="DEFENSIVE"/>
-                    <span>Defensive Systems</span>
+                    <span>(<img src="/img/icons/icon-def-melee.png" alt="Defense Icon">)Defensive Systems</span>
                   </label>
 
 
                   <label for="form_feature_engineering">
                     <input type="checkbox" class="nes-checkbox changing-option" id="form_feature_engineering" name="features[]" value="ENGINEERING"/>
-                    <span>Engineering Systems</span>
+                    <span>(<img src="/img/icons/icon-eng-build.png" alt="Engineering Icon">)Engineering Systems</span>
                   </label>
 
                   <label for="form_feature_power">
                     <input type="checkbox" class="nes-checkbox changing-option" id="form_feature_power" name="features[]" value="POWER"/>
-                    <span>Power Systems</span>
+                    <span>(<img src="/img/icons/icon-power-charge.png" alt="Power Icon">)Power Systems</span>
                   </label>
-
                   <label for="form_feature_storage">
                     <input type="checkbox" class="nes-checkbox changing-option" id="form_feature_storage" name="features[]" value="STORAGE"/>
                     <span>Storage Systems</span>
@@ -93,18 +91,25 @@ export class DroidUISchematicRDForm {
               </div>
             </p>
             <p>
-              <button type="button" class="nes-btn is-primary" id="form_begin_research">Begin Research</button>
-              <button type="button" class="nes-btn is-warning" id="form_clear_research">Clear</button>
+              <div class="row">
+                <div class="col">
+                  <button type="button" class="nes-btn nes-btn-fluid is-primary" id="form_begin_research">Begin Research</button>
+                </div>
+                <div class="col-auto">
+                  <button type="button" class="nes-btn is-warning" id="form_clear_research">Clear</button>
+                </div>
+              </div>
             </p>
           </section>
-
+        </div>
+      </div>
     `;
   }
   init(id) {
     const formWrapper = document.getElementById(id);
     formWrapper.innerHTML = this.render();
 
-    this.compute_status.init('compute_status', this.program) 
+    this.compute_status.init('compute_status', this.program)
   }
 
 
@@ -119,7 +124,7 @@ export class DroidUISchematicRDForm {
     for(var i = 0; i < itemSelection.length; i++) {
       itemSelection[i].addEventListener("change", this);
     }
-    
+
   }
 
   handleEvent(e) {
@@ -134,7 +139,7 @@ export class DroidUISchematicRDForm {
           }
         break;
         case "change":
-            this.commitConfigurationToProgram();  
+            this.commitConfigurationToProgram();
         break;
     }
   }
@@ -142,7 +147,7 @@ export class DroidUISchematicRDForm {
   runProcess(){
 
     let process_button = document.getElementById('form_begin_research');
-    process_button.disabled = true; 
+    process_button.disabled = true;
 
     process_button.classList.remove('is-primary');
     process_button.classList.add('is-disabled');
@@ -157,7 +162,7 @@ export class DroidUISchematicRDForm {
 
     this.computer.stop_process(document.getElementById('compute_status_running_process_id').value);
 
-    document.getElementById('form_begin_research').disabled = false; 
+    document.getElementById('form_begin_research').disabled = false;
 
     document.getElementById('form_begin_research').classList.remove('is-disabled');
     document.getElementById('form_begin_research').classList.add('is-primary');
@@ -183,7 +188,7 @@ export class DroidUISchematicRDForm {
 
 
       this.program.instance = 'battery14nwxc4c4dxugugaqv0em6npfyt8su2v9k3prud'
-  
+
       if (document.getElementById('form_mobility').value == 'Mobile') {
         this.program.is_mobile = true;
       } else {
@@ -206,7 +211,7 @@ export class DroidUISchematicRDForm {
 
       if(document.getElementById('form_ambit_space').checked) {
         ambits.push(AMBITS.SPACE)
-      }      
+      }
 
       this.program.ambits = ambits
 
@@ -227,15 +232,15 @@ export class DroidUISchematicRDForm {
 
       if(document.getElementById('form_feature_power').checked) {
         features.push(FEATURES.POWER)
-      }      
+      }
 
       if(document.getElementById('form_feature_storage').checked) {
         features.push(FEATURES.STORAGE)
-      }      
-      this.program.features = features    
+      }
+      this.program.features = features
 
-      this.compute_status.setProgram(this.program) 
-  
+      this.compute_status.setProgram(this.program)
+
   }
 
 }

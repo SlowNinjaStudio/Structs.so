@@ -380,13 +380,18 @@ img.structure-card-icon {
 .schematic-design-card {
   background: #FFFFFF;
   display: inline-block;
-  width: 600px;
+  width: 100%;
   max-width: 100%;
   margin: 20px auto;
   vertical-align: top;
   text-align: left;
 }
-
+.schematic-design-card .nes-field img {
+  vertical-align: text-top;
+}
+.schematic-design-card .nes-btn-fluid {
+  width: 100%;
+}
 .nes-container.schematic-design-card > .nes-container.with-title {
   margin-bottom: 20px;
 }
@@ -449,7 +454,7 @@ img.structure-card-icon {
 .compute-status-card {
   background: #FFFFFF;
   display: inline-block;
-  width: 600px;
+  width: 100%;
   max-width: 100%;
   margin: 20px auto;
   vertical-align: top;
@@ -468,11 +473,17 @@ img.structure-card-icon {
 .schematic-result-card {
   background: #FFFFFF;
   display: inline-block;
-  width: 600px;
+  width: 100%;
   max-width: 100%;
   margin: 20px auto;
   vertical-align: top;
   text-align: left;
+}
+.schematic-result-card .solo-action-wrapper {
+  padding: 20px 0;
+}
+.schematic-result-card .solo-action-wrapper a {
+  width: 100%;
 }
 
 .nes-container.schematic-result-card > .nes-container.with-title {
@@ -484,12 +495,12 @@ img.structure-card-icon {
  */
 .new-schematic-asset-wrapper {
   height: auto;
-  width: 500px;
+  width: 512px;
   max-width: 100%;
   max-height: 100%;
+  margin: 0 auto 20px auto;
 }
 .new-schematic-asset-wrapper > canvas {
   width: 100%;
 }
-
 
