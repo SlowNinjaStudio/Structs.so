@@ -395,6 +395,11 @@ img.structure-card-icon {
 .nes-container.schematic-design-card > .nes-container.with-title {
   margin-bottom: 20px;
 }
+@media screen and (max-width: 576px) {
+  .schematic-design-card .nes-field > label {
+    font-size: 12px;
+  }
+}
 
 
 /* Structure List Item Styling */
@@ -504,3 +509,14 @@ img.structure-card-icon {
   width: 100%;
 }
 
+/**
+ * Responsive Styling Page Overrides
+ */
+@media screen and (max-width: 576px) {
+  #research .nes-container {
+    padding: 20px;
+  }
+  #research  .nes-checkbox {
+    margin-left: 10px;
+  }
+}

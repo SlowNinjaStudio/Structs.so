@@ -65,27 +65,26 @@ export class DroidUISchematicRDForm {
                 <div class="nes-field">
                   <label for="form_feature_attack">
                     <input type="checkbox" class="nes-checkbox changing-option" id="form_feature_attack" name="features[]" value="ATTACK"/>
-                    <span>(<img src="/img/icons/icon-attack-range.png" alt="Attack Icon">)Attack Systems</span>
+                    <span>(<img src="/img/icons/icon-attack-range.png" alt="Attack Icon">)Attack <span class="d-none d-xl-inline">Systems</span></span>
                   </label>
 
                   <label for="form_feature_defensive">
                     <input type="checkbox" class="nes-checkbox changing-option" id="form_feature_defensive" name="features[]" value="DEFENSIVE"/>
-                    <span>(<img src="/img/icons/icon-def-melee.png" alt="Defense Icon">)Defensive Systems</span>
+                    <span>(<img src="/img/icons/icon-def-melee.png" alt="Defense Icon">)Defense <span class="d-none d-xl-inline">Systems</span></span>
                   </label>
-
 
                   <label for="form_feature_engineering">
                     <input type="checkbox" class="nes-checkbox changing-option" id="form_feature_engineering" name="features[]" value="ENGINEERING"/>
-                    <span>(<img src="/img/icons/icon-eng-build.png" alt="Engineering Icon">)Engineering Systems</span>
+                    <span>(<img src="/img/icons/icon-eng-build.png" alt="Engineering Icon">)Engineer<span class="d-none d-xl-inline">ing Systems</span></span>
                   </label>
 
                   <label for="form_feature_power">
                     <input type="checkbox" class="nes-checkbox changing-option" id="form_feature_power" name="features[]" value="POWER"/>
-                    <span>(<img src="/img/icons/icon-power-charge.png" alt="Power Icon">)Power Systems</span>
+                    <span>(<img src="/img/icons/icon-power-charge.png" alt="Power Icon">)Power <span class="d-none d-xl-inline">Systems</span></span>
                   </label>
                   <label for="form_feature_storage">
                     <input type="checkbox" class="nes-checkbox changing-option" id="form_feature_storage" name="features[]" value="STORAGE"/>
-                    <span>Storage Systems</span>
+                    <span>Storage <span class="d-none d-xl-inline">Systems</span></span>
                   </label>
                 </div>
               </div>
