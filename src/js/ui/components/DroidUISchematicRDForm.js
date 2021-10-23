@@ -24,12 +24,12 @@ export class DroidUISchematicRDForm {
             <p class="title">Design Schematic</p>
             <p>
               <label>
-                <input type="radio" class="nes-radio changing-option" id="form_mobility" name="form_mobility" value="Mobile" checked />
+                <input type="radio" class="nes-radio changing-option" id="form_mobility_mobile" name="form_mobility" value="Mobile" checked />
                 <span>Mobile</span>
               </label>
 
               <label>
-                <input type="radio" class="nes-radio changing-option" id="form_mobility" name="form_mobility" value="Stationary" />
+                <input type="radio" class="nes-radio changing-option" id="form_mobility_stationary" name="form_mobility" value="Stationary" />
                 <span>Stationary</span>
               </label>
             </p>
@@ -189,7 +189,7 @@ export class DroidUISchematicRDForm {
 
       this.program.instance = 'battery14nwxc4c4dxugugaqv0em6npfyt8su2v9k3prud'
 
-      if (document.getElementById('form_mobility').value == 'Mobile') {
+      if (document.getElementById('form_mobility_mobile').checked) {
         this.program.is_mobile = true;
       } else {
         this.program.is_mobile = false;
