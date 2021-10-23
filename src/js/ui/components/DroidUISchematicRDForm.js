@@ -82,10 +82,11 @@ export class DroidUISchematicRDForm {
                     <input type="checkbox" class="nes-checkbox changing-option" id="form_feature_power" name="features[]" value="POWER"/>
                     <span>(<img src="/img/icons/icon-power-charge.png" alt="Power Icon">)Power <span class="d-none d-xl-inline">Systems</span></span>
                   </label>
-                  <label for="form_feature_storage">
-                    <input type="checkbox" class="nes-checkbox changing-option" id="form_feature_storage" name="features[]" value="STORAGE"/>
-                    <span>Storage <span class="d-none d-xl-inline">Systems</span></span>
-                  </label>
+
+<!--                  <label for="form_feature_storage">-->
+<!--                    <input type="checkbox" class="nes-checkbox changing-option" id="form_feature_storage" name="features[]" value="STORAGE"/>-->
+<!--                    <span>Storage <span class="d-none d-xl-inline">Systems</span></span>-->
+<!--                  </label>-->
                 </div>
               </div>
             </p>
@@ -233,7 +234,8 @@ export class DroidUISchematicRDForm {
         features.push(FEATURES.POWER)
       }
 
-      if(document.getElementById('form_feature_storage').checked) {
+      const formFeatureStorageElm = document.getElementById('form_feature_storage');
+      if(formFeatureStorageElm !== null && formFeatureStorageElm.checked) {
         features.push(FEATURES.STORAGE)
       }
       this.program.features = features
