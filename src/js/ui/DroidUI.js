@@ -250,7 +250,7 @@ export class DroidUI {
   /**
    * @param {string} targetElementId
    * @param {string} targetElementTitleId
-   * @param {string} structureId
+   * @param {Structure} structure
    * @param {string} searchString
    */
   loadSchematicSelectionList(targetElementId, targetElementTitleId, structure, searchString = '') {
