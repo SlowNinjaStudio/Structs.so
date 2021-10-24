@@ -107,7 +107,7 @@ export class DroidUICommandMenu {
       droidUi.loadSchematicSelectionList(
         'offcanvas-body',
         'offcanvas-title',
-        this.structure.getId(),
+        this.structure,
         searchString
       );
     }.bind(this);
@@ -119,7 +119,7 @@ export class DroidUICommandMenu {
     });
 
     document.getElementById('build-from-schematic-command').addEventListener('click', function() {
-      droidUi.loadSchematicSelectionList('offcanvas-body', 'offcanvas-title', this.structure.getId());
+      droidUi.loadSchematicSelectionList('offcanvas-body', 'offcanvas-title', this.structure);
     }.bind(this));
 
     document.getElementById('main-menu-command').addEventListener('click', function() {

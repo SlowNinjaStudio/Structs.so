@@ -253,16 +253,16 @@ export class DroidUI {
    * @param {string} structureId
    * @param {string} searchString
    */
-  loadSchematicSelectionList(targetElementId, targetElementTitleId, structureId, searchString = '') {
+  loadSchematicSelectionList(targetElementId, targetElementTitleId, structure, searchString = '') {
     const targetElement = document.getElementById(targetElementId);
     const targetElementTitle = document.getElementById(`${targetElementTitleId}`);
     targetElementTitle.innerHTML = 'Select Schematic';
 
     let schematicsHtml = '';
 
-    this.droidApi.searchSchematicsByStructure(structureId, searchString).then(schematics => {
+    this.droidApi.searchSchematicsByStructure(structure.getId(), searchString).then(schematics => {
       for (let i = 0; i < schematics.length; i++) {
-        const droidUISchematicListItem = new DroidUISchematicListItem(schematics[i]);
+        const droidUISchematicListItem = new DroidUISchematicListItem(schematics[i], structure);
 
         // Batch drawing by collecting all the HTML first
         schematicsHtml += droidUISchematicListItem.render();
@@ -281,6 +281,8 @@ export class DroidUI {
         /** @type {HTMLCanvasElement} */
         const canvas = document.getElementById(this.schematics[i].droidUISchematicListItem.getCanvasId());
         new PixelArtViewer(canvas, this.schematics[i].layers, this.getSchematicPalette(this.schematics[i].schematic));
+
+        this.schematics[i].droidUISchematicListItem.initMainBuildEventListeners();
       }
     });
   }

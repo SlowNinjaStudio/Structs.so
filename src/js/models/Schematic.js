@@ -120,6 +120,9 @@ export class Schematic {
   hasFeaturePower() {
     return this.hasFeature(FEATURES.POWER);
   }
+  hasFeatureStorage() {
+    return this.hasFeature(FEATURES.STORAGE);
+  }
 
   /* Attack */
   getMeleeAttack() {

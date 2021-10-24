@@ -28,6 +28,17 @@
 <div id="nav-wrapper"></div>
 <div class="main-container container">
   <div id="structure" class="row"></div>
+  <div id="build_modal">
+    <dialog class="nes-dialog" id="build-status-dialog">
+      <form method="dialog">
+        <p class="title">Building...</p>
+        <div id="compute_status" class="row"></div>
+        <menu class="dialog-menu">
+          <button class="nes-btn is-error">Cancel</button>
+        </menu>
+      </form>
+    </dialog>
+  </div>
 </div>
 
 <div class="offcanvas offcanvas-start" tabindex="-1" id="offcanvas">
@@ -47,6 +58,9 @@
   </div>
   <div id="offcanvas-body" class="offcanvas-body"></div>
 </div>
+
+
+
 
 <script src="js/vendor/modernizr-3.11.2.min.js"></script>
 <script src="js/plugins.js"></script>

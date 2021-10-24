@@ -75,19 +75,24 @@ export class ComputeProcess {
           compute_status.setComplete(); 
           
 
-          // generate the result rectangle
-          // This section needs to be more flexible depending on result.data[1].compute_process.type 
+          /*
+           * Generate the result rectangle
+           */
 
-          if (result.data[1].type = 'Schematic R&D') {
+          if (result.data[1].compute_process.type == 'Schematic R&D') {
             let schematic = new Schematic()
             schematic.schematicFromHash(result.data[1].hash)
       
             let droid_ui = new DroidUI();
             droid_ui.loadNewSchematic(schematic, 'found_schematic_list');
-          }
 
-          if (result.data[1].type = 'Structure Retooling') {
+          } else if (result.data[1].compute_process.type == 'Structure Retooling') {
             console.log('Finished retooling but idk what to do with the results');
+            console.log(result.data[1].hash);
+            document.getElementById('build-status-dialog').close();
+
+
+          
           }
 
 

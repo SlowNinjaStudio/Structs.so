@@ -64,8 +64,8 @@ export class StructureBuild {
     // set, we can skip and proceed safely.
     //
     // The same checks will be performed when a schema is added. 
-    if (typeof this.performing_structure != 'undefined'){
-      if (!this.performing_structure.sharesAmbit(new_schematic.getAmbits())){
+    if (typeof this.performing_structure != 'undefined' && this.performing_structure != null){
+      if (!this.performing_structure.sharesAmbit(new_schematic.ambits)){
         // TODO some sort of better error handling
         alert('No shared ambit');
         return;
@@ -87,15 +87,15 @@ export class StructureBuild {
     // set, we can skip and proceed safely.
     //
     // The same checks will be performed when a schema is added.  
-    if (typeof this.schematic != 'undefined'){
-      if (!structure.sharesAmbit(this.schematic.getAmbits())){
+    if (typeof this.schematic != 'undefined' && this.schematic != null){
+      if (!structure.sharesAmbit(this.schematic.ambits)){
         // TODO some sort of better error handling
         alert('No shared ambit');
         return;
       }
     }
 
-    if (!this.structure.hasFeatureEngineering()) {
+    if (!structure.hasFeatureEngineering()) {
       // TODO some sort of better error handling
       alert('No engineering capabilities');
       return;        

@@ -117,6 +117,14 @@ export class Structure {
     return this.hasAmbit(AMBITS.WATER);
   }
 
+  sharesAmbit(other_ambits) {
+    for (var i = 0; i < other_ambits.length; i++) {
+
+      if (this.ambits.includes(other_ambits[i])) { return true }; 
+    }
+    return false;
+  }
+
   hasFeature(feature) {
     return this.features.includes(feature);
   }

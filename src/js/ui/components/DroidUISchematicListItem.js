@@ -1,12 +1,27 @@
+import {Computer, processes, next_process_id} from "../../compute/Computer";
+import {StructureBuild} from "../../compute/StructureBuild";
+import {AMBITS, FEATURES, CONFIG} from "../../constants";
+import {secondsToString} from "../../vendor/SecondsToString"
+
+import {DroidUIComputeStatus} from "./DroidUIComputeStatus"
+
 export class DroidUISchematicListItem {
 
   /**
    * @param {Schematic} schematic
    * @param {string} idPrefix
    */
-  constructor(schematic, idPrefix = '') {
+  constructor(schematic, structure, idPrefix = '') {
     this.schematic = schematic;
     this.idPrefix = idPrefix;
+
+    this.computer = new Computer();
+
+    this.program = new StructureBuild();
+    this.program.setSchematic(schematic);
+    this.program.setPerformingStructure(structure);
+
+    this.compute_status;
   }
   getCanvasId() {
     return `${this.idPrefix}schematic-list-item-${this.schematic.getId()}`;
@@ -50,6 +65,11 @@ export class DroidUISchematicListItem {
             <div class="row">
               <div class="col text-truncate">
                 <span class="attribute-label">Requires:</span> ${this.schematic.getEnergyToBuildAmount()} ${this.schematic.getEnergyToBuildDenom()}
+              </div>
+            </div>
+            <div class="row">
+              <div class="col text-truncate">
+                <span class="attribute-label">Est. Time:</span> ${secondsToString(this.program.generateDifficulty() / CONFIG.INITIAL_HASHRATE)}
               </div>
             </div>
           </div>
@@ -138,10 +158,33 @@ export class DroidUISchematicListItem {
         </div>
         <div class="row gx-2 mt-2">
           <div class="col">
-            <a href="#" class="nes-btn nes-btn-fluid is-warning">Build</a>
+            <a href="#" class="nes-btn nes-btn-fluid is-warning" id="schematic_list_build_${this.schematic.getId()}" name="${this.schematic.getId()}">Build</a>
           </div>
         </div>
       </div>
     `;
+  }
+
+  initMainBuildEventListeners() {
+  
+      document.getElementById('schematic_list_build_' + this.schematic.getId()).addEventListener('click', function() {
+      
+        // Hide the selector
+        // Move this into the DroidUI if it's not already there. 
+        document.getElementById('offcanvas').classList.remove('show');
+        
+        //Move this into DroidUI
+        document.getElementById('build-status-dialog').showModal();
+
+        this.compute_status = new DroidUIComputeStatus();
+        this.compute_status.init('compute_status', this.program);
+
+        let new_process_id = this.computer.add_process(this.program);
+        this.computer.run_process(new_process_id);
+
+        this.compute_status.setProcessID(new_process_id);       
+
+      }.bind(this));
+    
   }
 }
