@@ -75,6 +75,10 @@ export class ComputeProcess {
           compute_status.setComplete(); 
           
 
+
+            console.log(result.data[1].hash);
+            console.log(result.data[1].input);
+
           /*
            * Generate the result rectangle
            */
@@ -88,7 +92,6 @@ export class ComputeProcess {
 
           } else if (result.data[1].compute_process.type == 'Structure Retooling') {
             console.log('Finished retooling but idk what to do with the results');
-            console.log(result.data[1].hash);
             document.getElementById('build-status-dialog').close();
 
 
