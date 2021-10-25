@@ -173,12 +173,10 @@ export class DroidUISchematicCondensed {
   }
 
   initMainBuildEventListeners() {
-
       document.getElementById('schematic_list_build_' + this.schematic.getId()).addEventListener('click', function() {
-
         // Hide the selector
         // Move this into the DroidUI if it's not already there.
-        document.getElementById('offcanvas').classList.remove('show');
+        window.bootstrap.Offcanvas.getInstance(document.getElementById('offcanvas')).hide();
 
         //Move this into DroidUI
         document.getElementById('build-status-dialog').showModal();
