@@ -1,15 +1,13 @@
-import {Computer, processes, next_process_id} from "../../compute/Computer";
-import {SchematicRD} from "../../compute/SchematicRD";
-import {AMBITS, FEATURES, CONFIG} from "../../constants";
+import {Computer} from "../../compute/Computer";
+import {CONFIG} from "../../constants";
 import {secondsToString} from "../../vendor/SecondsToString"
-
-
 
 /**
  * Web UI component for schematic.
  */
 export class DroidUIComputeStatus {
-  constructor() {
+  constructor(isModal = false) {
+    this.isModal = isModal;
 
     this.computer = new Computer();
     this.program;
@@ -22,7 +20,7 @@ export class DroidUIComputeStatus {
   render() {
     return `
       <div class="col">
-        <div class="nes-container compute-status-card">
+        <div class="${this.isModal ? '' : 'nes-container'} compute-status-card">
           <section class="nes-container with-title">
           <p class="title">Status</p>
             <div class="nes-field">

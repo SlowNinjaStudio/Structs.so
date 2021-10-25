@@ -181,7 +181,7 @@ export class DroidUISchematicCondensed {
         //Move this into DroidUI
         document.getElementById('build-status-dialog').showModal();
 
-        this.compute_status = new DroidUIComputeStatus();
+        this.compute_status = new DroidUIComputeStatus(true);
         this.compute_status.init('compute_status', this.program);
 
         let new_process_id = this.computer.add_process(this.program);

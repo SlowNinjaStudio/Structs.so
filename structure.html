@@ -30,12 +30,17 @@
   <div id="structure" class="row"></div>
   <div id="build_modal">
     <dialog class="nes-dialog" id="build-status-dialog">
+      <p class="title">Building...</p>
+      <div id="compute_status" class="row"></div>
       <form method="dialog">
-        <p class="title">Building...</p>
-        <div id="compute_status" class="row"></div>
-        <menu class="dialog-menu">
-          <button class="nes-btn is-error">Cancel</button>
-        </menu>
+        <div class="dialog-menu row text-center">
+          <div class="col">
+            <button class="nes-btn is-error">Cancel</button>
+          </div>
+          <div class="col">
+            <a href="#" class="nes-btn is-disabled" disabled="disabled">View</a>
+          </div>
+        </div>
       </form>
     </dialog>
   </div>
