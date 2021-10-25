@@ -121,7 +121,7 @@ export class DroidUIComputeStatus {
   setComplete(){
     this.progress_bar_cpu.value = this.progress_bar_cpu.max
     this.progress_bar_cpu_value = '100'
-    this.time_estimate_box.value = 'Research Complete!';
+    this.time_estimate_box.value = 'Task Complete!';
   }
 
 }
