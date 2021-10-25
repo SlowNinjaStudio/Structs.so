@@ -320,6 +320,10 @@ h1 {
 .nes-btn.nes-btn-fluid {
   display: block;
 }
+.nes-dialog {
+  padding: 20px 10px;
+  max-width: 100%;
+}
 
 /* Structure Card Styling */
 .structure-card-wrapper {
