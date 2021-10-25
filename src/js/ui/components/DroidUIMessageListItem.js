@@ -8,7 +8,7 @@ export class DroidUIMessageListItem {
   }
   render() {
     return `
-      <div class="structure-list-item container p-3">
+      <div class="structure-condensed container p-3">
         <div class="row">
           <div class="col">${this.message}</div>
         </div>

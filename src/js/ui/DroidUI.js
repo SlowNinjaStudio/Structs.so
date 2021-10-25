@@ -3,7 +3,7 @@ import {DroidApi} from "../api/DroidApi";
 import {DroidUIMessagePanel} from "./components/DroidUIMessagePanel";
 import {DroidUISchematic} from "./components/DroidUISchematic";
 import {DroidUINewSchematic} from "./components/DroidUINewSchematic";
-import {DroidUISchematicListItem} from "./components/DroidUISchematicListItem";
+import {DroidUISchematicCondensed} from "./components/DroidUISchematicCondensed";
 import {DroidUIStructure} from "./components/DroidUIStructure";
 import {DroidUIStructureCommandView} from "./components/DroidUIStructureCommandView";
 import {PixelArtViewer} from "../vendor/PixelArtViewer";
@@ -12,6 +12,7 @@ import {StructureArtGenerator} from "../art_rendering/StructureArtGenerator";
 import {StructureMobilePalette} from "../art_rendering/StructureMobilePalette";
 import {StructureStaticPalette} from "../art_rendering/StructureStaticPalette";
 import {DroidUIMessageListItem} from "./components/DroidUIMessageListItem";
+import {DroidUISchematicCondensedCTABuild} from "./components/DroidUISchematicCondensedCTABuild";
 
 /**
  * Web App
@@ -262,14 +263,18 @@ export class DroidUI {
 
     this.droidApi.searchSchematicsByStructure(structure.getId(), searchString).then(schematics => {
       for (let i = 0; i < schematics.length; i++) {
-        const droidUISchematicListItem = new DroidUISchematicListItem(schematics[i], structure);
+        const droidUISchematicCondensed = new DroidUISchematicCondensed(
+          schematics[i],
+          structure,
+          new DroidUISchematicCondensedCTABuild(schematics[i])
+        );
 
         // Batch drawing by collecting all the HTML first
-        schematicsHtml += droidUISchematicListItem.render();
+        schematicsHtml += droidUISchematicCondensed.render();
 
         this.schematics[i] = {
           'schematic': schematics[i],
-          'droidUISchematicListItem': droidUISchematicListItem,
+          'droidUISchematicCondensed': droidUISchematicCondensed,
           'layers': this.structureArtGenerator.generate(schematics[i]),
         }
       }
@@ -279,10 +284,10 @@ export class DroidUI {
 
       for (let i = 0; i < this.schematics.length; i++) {
         /** @type {HTMLCanvasElement} */
-        const canvas = document.getElementById(this.schematics[i].droidUISchematicListItem.getCanvasId());
+        const canvas = document.getElementById(this.schematics[i].droidUISchematicCondensed.getCanvasId());
         new PixelArtViewer(canvas, this.schematics[i].layers, this.getSchematicPalette(this.schematics[i].schematic));
 
-        this.schematics[i].droidUISchematicListItem.initMainBuildEventListeners();
+        this.schematics[i].droidUISchematicCondensed.initMainBuildEventListeners();
       }
     });
   }
@@ -309,7 +314,7 @@ export class DroidUI {
 
     // Update DOM
     if (schematicsHtml === '') {
-      // We really shouldn't get here. 
+      // We really shouldn't get here.
       // Why are you calling loadNewSchematic without a new schematic?
       const emptyMessage = new DroidUIMessagePanel(
         'No Schematics Available',
@@ -317,12 +322,12 @@ export class DroidUI {
       );
       schematicsHtml = emptyMessage.render();
     }
-    
+
     targetElement.innerHTML = schematicsHtml;
 
     /** @type {HTMLCanvasElement} */
     const canvas = document.getElementById(this.schematics[0].droidUINewSchematic.getCanvasId());
     new PixelArtViewer(canvas, this.schematics[0].layers, this.getSchematicPalette(this.schematics[0].schematic));
-      
+
   }
 }
