@@ -20,6 +20,9 @@ export class Instance {
 
     /*
      * force = true //destroys old account!
+     * 
+     * Should probably create some sort of account
+     * graveyard instead of just saving over the old one
      */
    async init(mnemonic = '', force = false) {
        let identity = JSON.parse(localStorage.getItem('identity'));
