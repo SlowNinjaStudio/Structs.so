@@ -331,4 +331,15 @@ export class DroidUI {
 
     droidUINewSchematic.initMainPatentEventListeners();
   }
+
+  /**
+   * @param {Schematic} schematic
+   * @param droidUIComponent
+   */
+  renderPixelArtSchematic(schematic, droidUIComponent) {
+    const layers = this.structureArtGenerator.generate(schematic);
+    const canvas = document.getElementById(droidUIComponent.getCanvasId());
+    const palette = this.getSchematicPalette(schematic);
+    new PixelArtViewer(canvas, layers, palette);
+  }
 }
