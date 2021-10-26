@@ -298,7 +298,7 @@ export class DroidUI {
    * @param {Schematic} schematic
    * @param {string} targetElementId
    */
-  loadNewSchematic(schematic, targetElementId) {
+   loadNewSchematic(schematic, targetElementId) {
     const targetElement = document.getElementById(targetElementId);
 
     let schematicsHtml = '';
@@ -329,5 +329,6 @@ export class DroidUI {
     const canvas = document.getElementById(this.schematics[0].droidUINewSchematic.getCanvasId());
     new PixelArtViewer(canvas, this.schematics[0].layers, this.getSchematicPalette(this.schematics[0].schematic));
 
+    droidUINewSchematic.initMainPatentEventListeners();
   }
 }

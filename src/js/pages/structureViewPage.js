@@ -1,5 +1,9 @@
 import {DroidUI} from "../ui/DroidUI";
 import {Navbar} from "./common/Navbar";
+import {Instance} from "../models/Instance";
+
+const instance = new Instance();
+await instance.init();
 
 const page = 'structure';
 
@@ -10,4 +14,4 @@ const urlParams = new URLSearchParams(window.location.search);
 const structureId = urlParams.get('structure_id');
 
 const droidUi = new DroidUI();
-droidUi.loadSingleStructure('structure', structureId, 'battery1qs40zuw73uyjtc6j90mkyff43tyc9eh3cgvrxm');
+droidUi.loadSingleStructure('structure', structureId, instance.address);

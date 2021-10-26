@@ -51,7 +51,7 @@ export class ComputeProcess {
       // New (maybe temporary) was uses the processes array to store
       // state acrosse all running jobs. This array is brought
       // into the runtime through the Computer import
-      this.worker.onmessage = function (result) {
+      this.worker.onmessage = async function (result) {
         console.log('Received from action worker [Process ID #' + result.data[0].id + ']...');
 
         let compute_status = new DroidUIComputeStatus();
@@ -75,7 +75,7 @@ export class ComputeProcess {
 
           if (result.data[1].compute_process.type === 'Schematic R&D') {
             let schematic = new Schematic()
-            schematic.schematicFromHash(result.data[1].hash)
+            schematic.schematicFromHash(result.data[1].hash, result.data[1].input)
 
             let droid_ui = new DroidUI();
             droid_ui.loadNewSchematic(schematic, 'found_schematic_list');

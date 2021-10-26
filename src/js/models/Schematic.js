@@ -163,9 +163,10 @@ export class Schematic {
   }
 
   /* Build Schematic from Hash Rather than API */
-  schematicFromHash(hash) {
+  schematicFromHash(hash, input) {
 
     this.hash = hash;
+    this.input = input;
 
     this.is_mobile = hash.substring(16,17) == '1'
     this.is_stationary = !this.is_mobile
@@ -178,14 +179,14 @@ export class Schematic {
 
 
     this.energy_to_build = { amount:( this.speed + this.accuracy + this.mass + this.strength), denom:"watt"}
-    
+
     let hasEngineeringSystems = hash.substring(0,3) == "111"
     let hasStorageSystems     = hash.substring(3,5) == "11"
-    let hasDefensiveSystems   = hash.substring(5,6) == "1" 
-    let hasAttackSystems      = hash.substring(6,7) == "1"   
-    let hasPowerSystems       = hash.substring(7,8) == "1" 
-    
-    
+    let hasDefensiveSystems   = hash.substring(5,6) == "1"
+    let hasAttackSystems      = hash.substring(6,7) == "1"
+    let hasPowerSystems       = hash.substring(7,8) == "1"
+
+
     if (hasPowerSystems) {
       this.features.push(FEATURES.POWER)
     }
@@ -209,7 +210,7 @@ export class Schematic {
     let ambitSpace  = hash.substring(8,11)  == "111"
     let ambitSky    = hash.substring(11,13) == "11"
     let ambitWater  = hash.substring(13,15) == "11"
-    let ambitLand   = hash.substring(15,16) == "1"  
+    let ambitLand   = hash.substring(15,16) == "1"
 
     if (ambitLand) {
       this.ambits.push(AMBITS.LAND)
@@ -227,7 +228,7 @@ export class Schematic {
       this.ambits.push(AMBITS.SPACE)
     }
 
-    // These could theoretically be skipped if wanting to do faster 
+    // These could theoretically be skipped if wanting to do faster
     // hashing but for the sake of prettier pictures let's do it
     if (this.mass == 0) { console.log('this schema sucks')}
     if (this.strength == 0) { console.log('this schema sucks')}
@@ -269,11 +270,11 @@ export class Schematic {
       this.restoration_rate = (this.speed * this.accuracy) % this.strength
     } else {
       this.build_rate       = 0
-      this.restoration_rate = 0 
+      this.restoration_rate = 0
     }
 
     if (hasStorageSystems) {
-      this.capacity_max  = this.mass - this.strength  
+      this.capacity_max  = this.mass - this.strength
     } else {
       this.capacity_max  = 0
     }

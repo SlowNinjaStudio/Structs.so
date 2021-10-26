@@ -1,8 +1,10 @@
+import {DroidUIComputeStatus} from "./DroidUIComputeStatus";
+import {Instance} from "../../models/Instance"
 /**
  * Web UI component for newly designed schematic.
  */
 export class DroidUINewSchematic {
-  constructor(schematic, idPrefix = '') {
+  constructor(schematic, instance, idPrefix = '') {
     this.schematic = schematic;
     this.idPrefix = idPrefix;
   }
@@ -33,7 +35,7 @@ export class DroidUINewSchematic {
             </div>
             <div class="row solo-action-wrapper">
               <div class="col">
-                <a href="javascript:void(0)" class="nes-btn is-primary nes-btn-fluid">Patent</a>
+                <a href="javascript:void(0)" id="new_schematic_patent_${this.schematic.getHash()}" class="nes-btn is-primary nes-btn-fluid">Patent</a>
               </div>
             </div>
           </div>
@@ -151,5 +153,33 @@ export class DroidUINewSchematic {
         </div>
       </div>
     `;
+  }
+
+  initMainPatentEventListeners() {
+    document.getElementById('new_schematic_patent_' + this.schematic.getHash()).addEventListener('click', async function() {
+      console.log('patenting new..');
+      const instance = new Instance();
+      await instance.init();
+
+
+      const personlization = {
+        name: document.getElementById('new_schematic_name').value,
+        description: document.getElementById('new_schematic_description').value
+      }
+
+      const fee = {
+        amount: [
+          {
+            denom: "watt",
+            amount: "1",
+          },
+        ],
+        gas: "180000",
+      };
+
+
+      await instance.performPatent(this.schematic, personlization, fee)
+    }.bind(this));
+
   }
 }

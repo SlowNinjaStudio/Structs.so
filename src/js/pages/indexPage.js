@@ -1,5 +1,10 @@
 import {DroidUI} from "../ui/DroidUI";
 import {Navbar} from "./common/Navbar";
+import {Instance} from "../models/Instance"
+
+
+const instance = new Instance();
+await instance.init();
 
 const page = 'index';
 
@@ -7,11 +12,11 @@ const navbar = new Navbar(page, { searchEnabled: true });
 navbar.init('nav-wrapper');
 
 const droidUi = new DroidUI();
-droidUi.loadStructures( 'structures-list', 'battery1qs40zuw73uyjtc6j90mkyff43tyc9eh3cgvrxm');
+droidUi.loadStructures( 'structures-list', instance.address);
 
 const searchHandler = function() {
   const searchString = document.getElementById('nav-search-input').value;
-  droidUi.searchAndLoadStructures('structures-list', searchString, 'battery1qs40zuw73uyjtc6j90mkyff43tyc9eh3cgvrxm');
+  droidUi.searchAndLoadStructures('structures-list', searchString, instance.address);
 };
 
 document.getElementById('nav-search-btn').addEventListener('click', searchHandler);

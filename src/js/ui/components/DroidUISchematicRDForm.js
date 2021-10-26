@@ -2,7 +2,7 @@ import {Computer, processes, next_process_id} from "../../compute/Computer";
 import {SchematicRD} from "../../compute/SchematicRD";
 import {AMBITS, FEATURES} from "../../constants";
 import {secondsToString} from "../../vendor/SecondsToString"
-
+import {Instance} from "../../models/Instance"
 
 import {DroidUIComputeStatus} from "./DroidUIComputeStatus"
 
@@ -105,11 +105,14 @@ export class DroidUISchematicRDForm {
       </div>
     `;
   }
-  init(id) {
+  async init(id) {
     const formWrapper = document.getElementById(id);
     formWrapper.innerHTML = this.render();
 
     this.compute_status.init('compute_status', this.program)
+
+    this.instance = new Instance();
+    await this.instance.init();
   }
 
 
@@ -160,8 +163,9 @@ export class DroidUISchematicRDForm {
 
   clearAll(){
 
-    this.computer.stop_process(document.getElementById('compute_status_running_process_id').value);
-
+    if (document.getElementById('compute_status_running_process_id').value != '') {
+      this.computer.stop_process(document.getElementById('compute_status_running_process_id').value);
+    }
     document.getElementById('form_begin_research').disabled = false;
 
     document.getElementById('form_begin_research').classList.remove('is-disabled');
@@ -177,7 +181,7 @@ export class DroidUISchematicRDForm {
     document.getElementById('form_feature_engineering').checked = false;
     document.getElementById('form_feature_defensive').checked = false;
     document.getElementById('form_feature_attack').checked = false;
-    document.getElementById('form_feature_storage').checked = false;
+   // document.getElementById('form_feature_storage').checked = false;
     document.getElementById('form_feature_power').checked = false;
 
     this.commitConfigurationToProgram();
@@ -187,7 +191,7 @@ export class DroidUISchematicRDForm {
   commitConfigurationToProgram() {
 
 
-      this.program.instance = 'battery135st4t426nc4dzk9g3r93v3pyaf5wkp9gf66np'
+      this.program.instance = this.instance.address;
 
       if (document.getElementById('form_mobility_mobile').checked) {
         this.program.is_mobile = true;

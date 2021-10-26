@@ -12,9 +12,9 @@ navbar.init('nav-wrapper');
 
 
 const schematic_design_form = new DroidUISchematicRDForm();
-schematic_design_form.init('schematic_rd_form');
+await schematic_design_form.init('schematic_rd_form');
 schematic_design_form.initMainButtonEventListeners();
-schematic_design_form.initOptionsEventListeners(); 
+schematic_design_form.initOptionsEventListeners();
 
 
 
