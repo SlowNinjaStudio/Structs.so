@@ -5,6 +5,7 @@ import {secondsToString} from "../../vendor/SecondsToString"
 
 import {DroidUIComputeStatus} from "./DroidUIComputeStatus"
 import {DroidUISchematicCondensedCTANone} from "./DroidUISchematicCondensedCTANone";
+import {DroidUI} from "../DroidUI";
 
 export class DroidUISchematicCondensed {
 
@@ -23,6 +24,7 @@ export class DroidUISchematicCondensed {
     computeStatus = null
   ) {
     this.schematic = schematic;
+    this.structure = structure;
     this.idPrefix = idPrefix;
     this.callToAction = callToAction;
 
@@ -180,6 +182,15 @@ export class DroidUISchematicCondensed {
 
         //Move this into DroidUI
         document.getElementById('build-status-dialog').showModal();
+
+        const uiSchematic = new DroidUISchematicCondensed(
+          this.schematic,
+          this.structure,
+          new DroidUISchematicCondensedCTANone(),
+          'build-status-modal-'
+        );
+        document.getElementById('build-status-selected-schematic').innerHTML = uiSchematic.render();
+        (new DroidUI()).renderPixelArtSchematic(this.schematic, uiSchematic);
 
         this.compute_status = new DroidUIComputeStatus(true);
         this.compute_status.init('compute_status', this.program);
