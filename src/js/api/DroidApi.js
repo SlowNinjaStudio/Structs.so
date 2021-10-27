@@ -103,4 +103,19 @@ export class DroidApi {
     return this.ajax.get(`${this.scheme}${this.domain}/api/di/Schematic/search/${structureId}/${encodeURIComponent(searchString)}`)
       .then(this.schematicResponseHandler.bind(this));
   }
+
+  /**
+   * @param {obj} request
+   * @returns {Promise<obj>}
+   */
+  performFaucetRequest(request) {
+    return this.ajax.post(`${this.scheme}${this.domain}/faucet/`, request)
+      .then( this.faucetRequestResponseHandler );
+  }
+
+  faucetRequestResponseHandler(response) {
+    console.log(response)
+    document.getElementById('amount_received').innerHTML = response.transfers[0].coin;
+    document.getElementById('faucet-success-dialog').showModal();
+  }
 }

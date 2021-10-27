@@ -2,7 +2,7 @@ import { stringToPath, Random, Bip39 } from "@cosmjs/crypto";
 import {DirectSecp256k1HdWallet} from "@cosmjs/proto-signing";
 
 import {Server} from "../cosmos/Server"
-import {assertIsBroadcastTxSuccess} from "@cosmjs/stargate";
+import {assertIsBroadcastTxSuccess, BankExtension} from "@cosmjs/stargate";
 
 /**
  * Instance Model
@@ -39,18 +39,22 @@ export class Instance {
 
     }
 
-   lazyLoad() {
-    let identity = JSON.parse(localStorage.getItem('identity'));
+    /*
+     * Used if you just want to pull from the local storage without the
+     * possibility of create. Main benefit is that there is no async/await.
+     */
+     lazyLoad() {
+      let identity = JSON.parse(localStorage.getItem('identity'));
 
-    if (!(identity === null || (typeof identity === 'undefined'))) {
+      if (!(identity === null || (typeof identity === 'undefined'))) {
 
-      this.name = identity.name;
-      this.mood = identity.mood;
-      this.mnemonic = identity.mnemonic;
-      this.address = identity.address;
+        this.name = identity.name;
+        this.mood = identity.mood;
+        this.mnemonic = identity.mnemonic;
+        this.address = identity.address;
 
+      }
     }
-  }
 
     async createIdentity(mnemonic) {
 
@@ -211,6 +215,17 @@ export class Instance {
 
         return result;
 
+    }
+
+    /*
+     *
+     */
+    async queryBalance() {
+      let server = new Server();
+      await server.init(await this.getWallet());
+
+      let balance_query_result = await server.client.getBalance(this.address, "watt")
+      return balance_query_result;
     }
 }
 
