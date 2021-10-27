@@ -90,7 +90,7 @@ export class Instance {
         this.wallet = await DirectSecp256k1HdWallet.fromMnemonic(
             this.mnemonic,
             stringToPath("m/44'/118'/0'/0/0"),
-            "battery"
+            "droid"
         );
 
         return this.wallet;
