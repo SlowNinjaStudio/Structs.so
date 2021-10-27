@@ -16,6 +16,7 @@ export class DroidUIComputeStatus {
     this.time_estimate_box = document.getElementById('compute_status_time_estimate_human');
     this.progress_bar_cpu = document.getElementById('compute_status_progress_bar_cpu');
     this.progress_bar_cpu_value = document.getElementById('compute_status_progress_cpu_value');
+    this.compute_status_time_label = document.getElementById('compute_status_time_label');
   }
   render() {
     return `
@@ -24,7 +25,7 @@ export class DroidUIComputeStatus {
           <section class="nes-container with-title">
           <p class="title">Status</p>
             <div class="nes-field">
-              <label for="compute_status_time_estimate_human">Expected Time to Research</label>
+              <label for="compute_status_time_estimate_human" id="compute_status_time_label">Expected Time to Compute</label>
               <input type="text" id="compute_status_time_estimate_human" class="nes-input is-success" value="Instant Discovery Likely" disabled>
             </div>
               <p>
@@ -44,6 +45,12 @@ export class DroidUIComputeStatus {
     formWrapper.innerHTML = this.render();
 
     this.setProgram(program);
+
+    if (this.isModal) {
+      document.getElementById('building_dialog_cancel_button').addEventListener('click', async function() {
+        this.computer.stop_process(document.getElementById('compute_status_running_process_id').value);
+      }.bind(this));
+    }
 
   }
 
@@ -122,6 +129,15 @@ export class DroidUIComputeStatus {
     this.time_estimate_box.value = 'Task Complete!';
   }
 
+  setError(error_message) {
+    this.compute_status_time_label.innerHTML = 'Compute Error!'
+    this.time_estimate_box.value = error_message;
+
+    this.time_estimate_box.classList.remove('is-warning');
+    this.time_estimate_box.classList.remove('is-success');
+    this.time_estimate_box.classList.add('is-error');
+
+  }
 }
 
 

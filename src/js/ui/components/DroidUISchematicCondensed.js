@@ -7,6 +7,8 @@ import {DroidUIComputeStatus} from "./DroidUIComputeStatus"
 import {DroidUISchematicCondensedCTANone} from "./DroidUISchematicCondensedCTANone";
 import {DroidUI} from "../DroidUI";
 
+import {Instance} from "../../models/Instance"
+
 export class DroidUISchematicCondensed {
 
   /**
@@ -30,11 +32,13 @@ export class DroidUISchematicCondensed {
 
     this.computer = new Computer();
 
-    this.program = new StructureBuild();
-    this.program.setSchematic(schematic);
-    this.program.setPerformingStructure(structure);
+    if (!(typeof structure == 'undefined' || structure == null)) {
+      this.program = new StructureBuild();
+      this.program.setSchematic(schematic);
+      this.program.setPerformingStructure(structure);
 
-    this.compute_status = computeStatus;
+      this.compute_status = computeStatus;
+    }
   }
   getCanvasId() {
     return `${this.idPrefix}schematic-list-item-${this.schematic.getId()}`;
@@ -82,7 +86,7 @@ export class DroidUISchematicCondensed {
             </div>
             <div class="row">
               <div class="col text-truncate">
-                <span class="attribute-label">Est. Time:</span> ${secondsToString(this.program.generateDifficulty() / CONFIG.INITIAL_HASHRATE)}
+                <span class="attribute-label">Est. Time:</span> ${(typeof this.program != 'undefined') ? secondsToString(this.program.generateDifficulty() / CONFIG.INITIAL_HASHRATE) : ''}
               </div>
             </div>
           </div>
@@ -175,13 +179,19 @@ export class DroidUISchematicCondensed {
   }
 
   initMainBuildEventListeners() {
-      document.getElementById('schematic_list_build_' + this.schematic.getId()).addEventListener('click', function() {
+
+      document.getElementById('schematic_list_build_' + this.schematic.getId()).addEventListener('click', async function() {
         // Hide the selector
         // Move this into the DroidUI if it's not already there.
         window.bootstrap.Offcanvas.getInstance(document.getElementById('offcanvas')).hide();
 
         //Move this into DroidUI
         document.getElementById('build-status-dialog').showModal();
+
+        let instance = new Instance();
+        await instance.init();
+
+        this.program.instance = instance.address;
 
         const uiSchematic = new DroidUISchematicCondensed(
           this.schematic,

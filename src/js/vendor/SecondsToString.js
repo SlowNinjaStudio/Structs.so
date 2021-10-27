@@ -5,7 +5,8 @@
  * Displays the first-most important sections only.
  */
 export function secondsToString(seconds) {
-
+  if (seconds <= 0)
+    return "!HODL! System in Overdrive"
   let num_years = Math.floor(seconds / 31536000);
   let num_days = Math.floor((seconds % 31536000) / 86400);
   let num_hours = Math.floor(((seconds % 31536000) % 86400) / 3600);

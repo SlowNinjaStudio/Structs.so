@@ -31,12 +31,26 @@ export class Instance {
             identity = await this.createIdentity(mnemonic);
         }
 
+        console.log(identity.address)
         this.name = identity.name;
         this.mood = identity.mood;
         this.mnemonic = identity.mnemonic;
         this.address = identity.address;
 
     }
+
+   lazyLoad() {
+    let identity = JSON.parse(localStorage.getItem('identity'));
+
+    if (!(identity === null || (typeof identity === 'undefined'))) {
+
+      this.name = identity.name;
+      this.mood = identity.mood;
+      this.mnemonic = identity.mnemonic;
+      this.address = identity.address;
+
+    }
+  }
 
     async createIdentity(mnemonic) {
 
@@ -161,14 +175,20 @@ export class Instance {
             }
         };
 
+
         let result = await server.client.signAndBroadcast(this.address, [msgCreateSchematic], fee);
-        assertIsBroadcastTxSuccess(result);
+        console.log(result)
+        //assertIsBroadcastTxSuccess(result);
+
+        return result;
 
     }
 
-    async performBuild(program, compute_result, personalization, fee) {
+    async performBuild(compute_result, personalization, fee) {
         let server = new Server();
         await server.init(await this.getWallet());
+
+        console.log(compute_result)
 
         const msgCreateStructure = {
             typeUrl: "/di.MsgCreateStructure",
@@ -178,14 +198,18 @@ export class Instance {
                 description:personalization.description,
                 hash:compute_result.hash,
                 input:compute_result.input,
-                schematic: program.schematic.hash,
-                performing_structure: program.performing_structure.getId(),
+                schematic: compute_result.compute_process.program.schematic.hash,
+                performing_structure: compute_result.compute_process.program.performing_structure.id,
                 owner: this.address
             }
         };
 
         let result = await server.client.signAndBroadcast(this.address, [msgCreateStructure], fee);
-        assertIsBroadcastTxSuccess(result);
+        console.log(result)
+
+        //assertIsBroadcastTxSuccess(result);
+
+        return result;
 
     }
 }

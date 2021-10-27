@@ -1,5 +1,14 @@
 import {DroidUIComputeStatus} from "./DroidUIComputeStatus";
 import {Instance} from "../../models/Instance"
+import {Structure} from "../../models/Structure"
+
+import {DroidUISchematicRDForm} from "./DroidUISchematicRDForm"
+import {DroidUISchematicCondensed} from "./DroidUISchematicCondensed";
+import {DroidUISchematicCondensedCTANone} from "./DroidUISchematicCondensedCTANone";
+import {DroidUI} from "../DroidUI";
+
+
+
 /**
  * Web UI component for newly designed schematic.
  */
@@ -178,7 +187,30 @@ export class DroidUINewSchematic {
       };
 
 
-      await instance.performPatent(this.schematic, personlization, fee)
+
+      try {
+        let tx_results = await instance.performPatent(this.schematic, personlization, fee)
+
+        if (typeof tx_results.data != 'undefined') {
+          let rd_form = new DroidUISchematicRDForm();
+
+          rd_form.clearAll()
+          //Move this into DroidUI
+
+          this.schematic.name = personlization.name;
+          this.schematic.description = personlization.description;
+
+          let c2a = new DroidUISchematicCondensedCTANone();
+          let mini_schematic = new DroidUISchematicCondensed(this.schematic,null,c2a)
+          document.getElementById('patented-schematic').innerHTML = mini_schematic.render();
+          document.getElementById('patent-success-dialog').showModal();
+          (new DroidUI()).renderPixelArtSchematic(this.schematic, mini_schematic);
+
+        }
+      } catch(err) {
+        console.log(err)
+      }
+
     }.bind(this));
 
   }

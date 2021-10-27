@@ -15,6 +15,9 @@ export class DroidUISchematicRDForm {
     this.computer = new Computer();
 
     this.compute_status = new DroidUIComputeStatus();
+
+    this.instance = new Instance();
+    this.instance.lazyLoad();
   }
   render() {
     return `
