@@ -112,7 +112,7 @@ export class ComputeProcess {
               if (typeof tx_result.data !='undefined') {
                 //Maybe move this parser into its program
                 console.log(JSON.parse(tx_result.rawLog))
-
+                console.log(tx_result)
                 let tx_result_parsed = JSON.parse(tx_result.rawLog)
                 // I don't fully understand how consistent this is yet.
                 // entire section needs some love.
