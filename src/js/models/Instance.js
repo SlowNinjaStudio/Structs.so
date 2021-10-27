@@ -225,6 +225,11 @@ export class Instance {
       await server.init(await this.getWallet());
 
       let balance_query_result = await server.client.getBalance(this.address, "watt")
+
+      if (typeof balance_query_result == 'undefined' || balance_query_result == null){
+        balance_query_result = {amount: 0, denom:'watt'}
+      }
+
       return balance_query_result;
     }
 }
