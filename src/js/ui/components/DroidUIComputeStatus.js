@@ -10,13 +10,8 @@ export class DroidUIComputeStatus {
     this.isModal = isModal;
 
     this.computer = new Computer();
-    this.program;
     this.program_difficulty = 0;
 
-    this.time_estimate_box = document.getElementById('compute_status_time_estimate_human');
-    this.progress_bar_cpu = document.getElementById('compute_status_progress_bar_cpu');
-    this.progress_bar_cpu_value = document.getElementById('compute_status_progress_cpu_value');
-    this.compute_status_time_label = document.getElementById('compute_status_time_label');
   }
   render() {
     return `
@@ -40,49 +35,19 @@ export class DroidUIComputeStatus {
       </div>
     `;
   }
-  init(id, program) {
-    const formWrapper = document.getElementById(id);
-    formWrapper.innerHTML = this.render();
 
-    this.setProgram(program);
-
-    if (this.isModal) {
-      document.getElementById('building_dialog_cancel_button').addEventListener('click', async function() {
-        this.computer.stop_process(document.getElementById('compute_status_running_process_id').value);
-      }.bind(this));
-    }
-
-  }
 
   setProgram(program){
     this.program = program;
     this.program_difficulty = this.program.generateDifficulty();
 
-    this.time_estimate_box = document.getElementById('compute_status_time_estimate_human');
-
-    this.progress_bar_cpu = document.getElementById('compute_status_progress_bar_cpu');
-    this.progress_bar_cpu.value = 0;
-    this.progress_bar_cpu.max = this.program_difficulty;
+    document.getElementById('compute_status_progress_bar_cpu').value = 0;
+    document.getElementById('compute_status_progress_bar_cpu').max = this.program_difficulty;
 
     let estimated_seconds = this.program_difficulty / CONFIG.INITIAL_HASHRATE;
     this.setTimeEstimateBox(estimated_seconds);
   }
 
-  initMainButtonEventListeners() {
-    //Unused
-  }
-
-
-  handleEvent(e) {
-    switch(e.type) {
-        case "click":
-          //Unused
-        break;
-        case "change":
-          //Unused
-        break;
-    }
-  }
   setProcessID(process_id) {
     document.getElementById('compute_status_running_process_id').value = process_id;
   }
@@ -92,7 +57,7 @@ export class DroidUIComputeStatus {
   }
 
   setTimeEstimateBox(estimated_seconds) {
-    this.time_estimate_box.value = secondsToString(estimated_seconds);
+    document.getElementById('compute_status_time_estimate_human').value = secondsToString(estimated_seconds);
 
     if (estimated_seconds > 86400) {
       this.setTimeEstimateBoxColour('is-error');
@@ -105,37 +70,37 @@ export class DroidUIComputeStatus {
 
   setTimeEstimateBoxColour(color_class) {
     // Clear all the possible colour classes
-    this.time_estimate_box.classList.remove('is-error');
-    this.time_estimate_box.classList.remove('is-warning');
-    this.time_estimate_box.classList.remove('is-success');
+    document.getElementById('compute_status_time_estimate_human').classList.remove('is-error');
+    document.getElementById('compute_status_time_estimate_human').classList.remove('is-warning');
+    document.getElementById('compute_status_time_estimate_human').classList.remove('is-success');
 
     // Apply the new one
-   this.time_estimate_box.classList.add(color_class);
+    document.getElementById('compute_status_time_estimate_human').classList.add(color_class);
   }
 
   updateStatus(completed_effort, hashes_per_second, difficulty) {
     let percent_complete = Math.round((completed_effort / difficulty ) * 100)
     let estimated_seconds = (difficulty - completed_effort) / hashes_per_second
 
-    this.progress_bar_cpu.value = completed_effort;
-    this.progress_bar_cpu_value.innerHTML = percent_complete;
+    document.getElementById('compute_status_progress_bar_cpu').value = completed_effort;
+    document.getElementById('compute_status_progress_cpu_value').innerHTML = percent_complete;
     this.setTimeEstimateBox(estimated_seconds)
 
   }
 
   setComplete(){
-    this.progress_bar_cpu.value = this.progress_bar_cpu.max
-    this.progress_bar_cpu_value = '100'
-    this.time_estimate_box.value = 'Task Complete!';
+    document.getElementById('compute_status_progress_bar_cpu').value = document.getElementById('compute_status_progress_bar_cpu').max
+    document.getElementById('compute_status_progress_cpu_value').innerHTML = '100'
+    document.getElementById('compute_status_time_estimate_human').value = 'Task Complete!';
   }
 
   setError(error_message) {
-    this.compute_status_time_label.innerHTML = 'Compute Error!'
-    this.time_estimate_box.value = error_message;
+    document.getElementById('compute_status_time_label').innerHTML = 'Compute Error!'
+    document.getElementById('compute_status_time_estimate_human').value = error_message;
 
-    this.time_estimate_box.classList.remove('is-warning');
-    this.time_estimate_box.classList.remove('is-success');
-    this.time_estimate_box.classList.add('is-error');
+    document.getElementById('compute_status_time_estimate_human').classList.remove('is-warning');
+    document.getElementById('compute_status_time_estimate_human').classList.remove('is-success');
+    document.getElementById('compute_status_time_estimate_human').classList.add('is-error');
 
   }
 }

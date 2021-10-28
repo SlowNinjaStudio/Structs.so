@@ -106,7 +106,7 @@ export class DroidApi {
 
   /**
    * @param {obj} request
-   * @returns {Promise<obj>}
+   * @returns {Promise<string>}
    */
   performFaucetRequest(request) {
     return this.ajax.post(`${this.scheme}${this.domain}/faucet/`, request)
@@ -114,8 +114,7 @@ export class DroidApi {
   }
 
   faucetRequestResponseHandler(response) {
-    console.log(response)
-    document.getElementById('amount_received').innerHTML = response.transfers[0].coin;
-    document.getElementById('faucet-success-dialog').showModal();
+    return response.transfers[0].coin;
+
   }
 }

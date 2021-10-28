@@ -170,8 +170,7 @@ export class DroidUINewSchematic {
       const instance = new Instance();
       await instance.init();
 
-
-      const personlization = {
+      const personalization = {
         name: document.getElementById('new_schematic_name').value,
         description: document.getElementById('new_schematic_description').value
       }
@@ -186,10 +185,8 @@ export class DroidUINewSchematic {
         gas: "180000",
       };
 
-
-
       try {
-        let tx_results = await instance.performPatent(this.schematic, personlization, fee)
+        let tx_results = await instance.performPatent(this.schematic, personalization, fee)
 
         if (typeof tx_results.data != 'undefined') {
           let rd_form = new DroidUISchematicRDForm();
@@ -197,21 +194,14 @@ export class DroidUINewSchematic {
           rd_form.clearAll()
           //Move this into DroidUI
 
-          this.schematic.name = personlization.name;
-          this.schematic.description = personlization.description;
+          this.schematic.name = personalization.name;
+          this.schematic.description = personalization.description;
 
-          let c2a = new DroidUISchematicCondensedCTANone();
-          let mini_schematic = new DroidUISchematicCondensed(this.schematic,null,c2a)
-          document.getElementById('patented-schematic').innerHTML = mini_schematic.render();
-          document.getElementById('patent-success-dialog').showModal();
-          (new DroidUI()).renderPixelArtSchematic(this.schematic, mini_schematic);
-
+          (new DroidUI()).loadSchematicPatentedModal(this.schematic);
         }
       } catch(err) {
         console.log(err)
       }
-
     }.bind(this));
-
   }
 }

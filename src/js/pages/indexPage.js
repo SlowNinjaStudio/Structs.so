@@ -35,6 +35,6 @@ if (current_balance.amount == 0) {
   let api = new DroidApi('https://', 'droid.sh')
   const obj = { address: instance.address,  coins: ['1337watt']}
 
-  api.performFaucetRequest(obj)
+  droidUi.loadWattReceivedModal(await api.performFaucetRequest(obj))
 
 }

@@ -38,19 +38,11 @@
         <div id="found_schematic_list" class="row"></div>
       </div>
     </div>
-    <div id="research_modal">
-      <dialog class="nes-dialog" id="patent-success-dialog">
-        <p class="title">Patented!</p>
-        <div id="patented-schematic"></div>
-        <form method="dialog">
-          <div class="dialog-menu row text-center">
-            <div class="col">
-              <button class="nes-btn is-success" id="research_modal_done_button">Celebratory Robo-Click</button>
-            </div>
-          </div>
-        </form>
-      </dialog>
-    </div>
+
+    <!--- Might need to add this to each page for a consistent Modal fade ---->
+    <div id="modal-container"></div>
+    <div class="modal-backdrop fade show" id="backdrop" style="display: none;"></div>
+
   </div>
 
   <script src="js/vendor/modernizr-3.11.2.min.js"></script>

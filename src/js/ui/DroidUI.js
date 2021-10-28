@@ -13,6 +13,9 @@ import {StructureMobilePalette} from "../art_rendering/StructureMobilePalette";
 import {StructureStaticPalette} from "../art_rendering/StructureStaticPalette";
 import {DroidUIMessageListItem} from "./components/DroidUIMessageListItem";
 import {DroidUISchematicCondensedCTABuild} from "./components/DroidUISchematicCondensedCTABuild";
+import {DroidUIWattReceivedModal} from "./components/DroidUIWattReceivedModal";
+import {DroidUISchematicRDPatentedModal} from "./components/DroidUISchematicRDPatentedModal";
+import {DroidUIStructureBuildStatusModal} from "./components/DroidUIStructureBuildStatusModal";
 
 /**
  * Web App
@@ -330,6 +333,36 @@ export class DroidUI {
     new PixelArtViewer(canvas, this.schematics[0].layers, this.getSchematicPalette(this.schematics[0].schematic));
 
     droidUINewSchematic.initMainPatentEventListeners();
+  }
+
+  loadWattReceivedModal(amount) {
+     let watt_received_modal = new DroidUIWattReceivedModal(amount);
+
+     document.getElementById('modal-container').innerHTML = watt_received_modal.render();
+
+     watt_received_modal.initEventListeners();
+     watt_received_modal.showModal();
+  }
+
+  loadSchematicPatentedModal(schematic) {
+    let schematic_patented_modal = new DroidUISchematicRDPatentedModal(schematic);
+
+    document.getElementById('modal-container').innerHTML = schematic_patented_modal.render();
+
+    this.renderPixelArtSchematic(schematic, schematic_patented_modal.schematicCondensed);
+
+    schematic_patented_modal.initEventListeners();
+    schematic_patented_modal.showModal();
+  }
+
+  loadStructureBuildStatusModal(schematic, structure, program, process_id){
+    let structureBuildStatusModal = new DroidUIStructureBuildStatusModal(schematic, structure, program, process_id)
+
+    document.getElementById('modal-container').innerHTML = structureBuildStatusModal.render();
+    (new DroidUI()).renderPixelArtSchematic(schematic, structureBuildStatusModal.uiSchematic);
+
+    structureBuildStatusModal.initEventListeners();
+    structureBuildStatusModal.showModal();
   }
 
   /**
