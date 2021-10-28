@@ -203,10 +203,12 @@ export class Instance {
                 hash:compute_result.hash,
                 input:compute_result.input,
                 schematic: compute_result.compute_process.program.schematic.hash,
-                performing_structure: compute_result.compute_process.program.performing_structure.id,
+                performingStructure: compute_result.compute_process.program.performing_structure.id,
                 owner: this.address
             }
         };
+
+        console.log(msgCreateStructure)
 
         let result = await server.client.signAndBroadcast(this.address, [msgCreateStructure], fee);
         console.log(result)
