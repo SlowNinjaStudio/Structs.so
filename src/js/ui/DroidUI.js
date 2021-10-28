@@ -27,7 +27,7 @@ export class DroidUI {
    * @param {SchematicPalette} schematicPalette
    */
   constructor(
-    droidApi = new DroidApi('http://', 'droid.sh'),
+    droidApi = new DroidApi('https://', 'droid.sh'),
     structureArtGenerator = new StructureArtGenerator(),
     structureMobilePalette = new StructureMobilePalette(),
     structureStaticPalette = new StructureStaticPalette(),

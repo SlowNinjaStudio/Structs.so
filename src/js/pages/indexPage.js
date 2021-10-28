@@ -32,7 +32,7 @@ console.log("Balance " + current_balance.amount + current_balance.denom)
 // shhhh don't loook here, kthnx.
 if (current_balance.amount == 0) {
 
-  let api = new DroidApi('http://', 'droid.sh')
+  let api = new DroidApi('https://', 'droid.sh')
   const obj = { address: instance.address,  coins: ['1337watt']}
 
   api.performFaucetRequest(obj)
