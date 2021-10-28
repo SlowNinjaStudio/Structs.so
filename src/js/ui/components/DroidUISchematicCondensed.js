@@ -8,6 +8,7 @@ import {DroidUISchematicCondensedCTANone} from "./DroidUISchematicCondensedCTANo
 import {DroidUI} from "../DroidUI";
 
 import {Instance} from "../../models/Instance"
+import {DroidUIStructureBuildStatusModal} from "./DroidUIStructureBuildStatusModal";
 
 export class DroidUISchematicCondensed {
 
@@ -31,6 +32,8 @@ export class DroidUISchematicCondensed {
     this.callToAction = callToAction;
 
     this.computer = new Computer();
+
+    this.structureBuildStatusModal;
 
     if (!(typeof structure == 'undefined' || structure == null)) {
       this.program = new StructureBuild();
@@ -185,30 +188,16 @@ export class DroidUISchematicCondensed {
         // Move this into the DroidUI if it's not already there.
         window.bootstrap.Offcanvas.getInstance(document.getElementById('offcanvas')).hide();
 
-        //Move this into DroidUI
-        document.getElementById('build-status-dialog').showModal();
-
         let instance = new Instance();
         await instance.init();
-
         this.program.instance = instance.address;
 
-        const uiSchematic = new DroidUISchematicCondensed(
-          this.schematic,
-          this.structure,
-          new DroidUISchematicCondensedCTANone(),
-          'build-status-modal-'
-        );
-        document.getElementById('build-status-selected-schematic').innerHTML = uiSchematic.render();
-        (new DroidUI()).renderPixelArtSchematic(this.schematic, uiSchematic);
-
-        this.compute_status = new DroidUIComputeStatus(true);
-        this.compute_status.init('compute_status', this.program);
-
         let new_process_id = this.computer.add_process(this.program);
+
+        (new DroidUI()).loadStructureBuildStatusModal(this.schematic, this.structure, this.program, new_process_id)
+
         this.computer.run_process(new_process_id);
 
-        this.compute_status.setProcessID(new_process_id);
 
       }.bind(this));
 

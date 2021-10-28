@@ -13,6 +13,13 @@ import {StructureMobilePalette} from "../art_rendering/StructureMobilePalette";
 import {StructureStaticPalette} from "../art_rendering/StructureStaticPalette";
 import {DroidUIMessageListItem} from "./components/DroidUIMessageListItem";
 import {DroidUISchematicCondensedCTABuild} from "./components/DroidUISchematicCondensedCTABuild";
+import {DroidUIWattReceivedModal} from "./components/DroidUIWattReceivedModal";
+import {DroidUISchematicRDPatentedModal} from "./components/DroidUISchematicRDPatentedModal";
+import {DroidUIStructureBuildStatusModal} from "./components/DroidUIStructureBuildStatusModal";
+import {Droid} from "../models/Droid";
+import {DroidUIDroid} from "./components/DroidUIDroid";
+import {DroidArtGenerator} from "../art_rendering/DroidArtGenerator";
+
 
 /**
  * Web App
@@ -21,23 +28,14 @@ export class DroidUI {
 
   /**
    * @param {DroidApi} droidApi
-   * @param {StructureArtGenerator} structureArtGenerator
-   * @param {StructureMobilePalette} structureMobilePalette
-   * @param {StructureStaticPalette} structureStaticPalette
-   * @param {SchematicPalette} schematicPalette
    */
-  constructor(
-    droidApi = new DroidApi('https://', 'droid.sh'),
-    structureArtGenerator = new StructureArtGenerator(),
-    structureMobilePalette = new StructureMobilePalette(),
-    structureStaticPalette = new StructureStaticPalette(),
-    schematicPalette = new SchematicPalette()
-  ) {
+  constructor(droidApi = new DroidApi('https://', 'droid.sh')) {
     this.droidApi = droidApi;
-    this.structureArtGenerator = structureArtGenerator;
-    this.structureMobilePalette = structureMobilePalette;
-    this.structureStaticPalette = structureStaticPalette;
-    this.schematicPalette = schematicPalette;
+    this.droidArtGenerator = new DroidArtGenerator();
+    this.structureArtGenerator = new StructureArtGenerator();
+    this.structureMobilePalette = new StructureMobilePalette();
+    this.structureStaticPalette = new StructureStaticPalette();
+    this.schematicPalette = new SchematicPalette();
     this.structures = [];
     this.schematics = [];
   }
@@ -332,6 +330,36 @@ export class DroidUI {
     droidUINewSchematic.initMainPatentEventListeners();
   }
 
+  loadWattReceivedModal(amount) {
+     let watt_received_modal = new DroidUIWattReceivedModal(amount);
+
+     document.getElementById('modal-container').innerHTML = watt_received_modal.render();
+
+     watt_received_modal.initEventListeners();
+     watt_received_modal.showModal();
+  }
+
+  loadSchematicPatentedModal(schematic) {
+    let schematic_patented_modal = new DroidUISchematicRDPatentedModal(schematic);
+
+    document.getElementById('modal-container').innerHTML = schematic_patented_modal.render();
+
+    this.renderPixelArtSchematic(schematic, schematic_patented_modal.schematicCondensed);
+
+    schematic_patented_modal.initEventListeners();
+    schematic_patented_modal.showModal();
+  }
+
+  loadStructureBuildStatusModal(schematic, structure, program, process_id){
+    let structureBuildStatusModal = new DroidUIStructureBuildStatusModal(schematic, structure, program, process_id)
+
+    document.getElementById('modal-container').innerHTML = structureBuildStatusModal.render();
+    (new DroidUI()).renderPixelArtSchematic(schematic, structureBuildStatusModal.uiSchematic);
+
+    structureBuildStatusModal.initEventListeners();
+    structureBuildStatusModal.showModal();
+  }
+
   /**
    * @param {Schematic} schematic
    * @param droidUIComponent
@@ -341,5 +369,22 @@ export class DroidUI {
     const canvas = document.getElementById(droidUIComponent.getCanvasId());
     const palette = this.getSchematicPalette(schematic);
     new PixelArtViewer(canvas, layers, palette);
+  }
+
+  /**
+   * @param {string} targetElementId
+   * @param {string} droidHash
+   */
+  loadDroid(targetElementId, droidHash) {
+    const targetElement = document.getElementById(targetElementId);
+    const droid = new Droid(droidHash);
+    const droidUIDroid = new DroidUIDroid(droid);
+    const layers = this.droidArtGenerator.generate(droid);
+
+    targetElement.innerHTML = droidUIDroid.render();
+
+    /** @type {HTMLCanvasElement} */
+    const canvas = document.getElementById(droidUIDroid.getCanvasId());
+    new PixelArtViewer(canvas, layers, []);
   }
 }

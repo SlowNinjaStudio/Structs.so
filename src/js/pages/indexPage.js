@@ -8,15 +8,17 @@ await instance.init();
 
 const page = 'index';
 
-const navbar = new Navbar(page, { searchEnabled: true });
+const navbar = new Navbar(page, { searchEnabled: true, droidHash: instance.address });
 navbar.init('nav-wrapper');
 
 const droidUi = new DroidUI();
+
 droidUi.loadStructures( 'structures-list', instance.address);
 
 const searchHandler = function() {
   const searchString = document.getElementById('nav-search-input').value;
   droidUi.searchAndLoadStructures('structures-list', searchString, instance.address);
+
 };
 
 document.getElementById('nav-search-btn').addEventListener('click', searchHandler);
@@ -35,6 +37,6 @@ if (current_balance.amount == 0) {
   let api = new DroidApi('https://', 'droid.sh')
   const obj = { address: instance.address,  coins: ['1337watt']}
 
-  api.performFaucetRequest(obj)
+  droidUi.loadWattReceivedModal(await api.performFaucetRequest(obj))
 
 }

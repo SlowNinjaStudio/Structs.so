@@ -112,7 +112,8 @@ export class DroidUISchematicRDForm {
     const formWrapper = document.getElementById(id);
     formWrapper.innerHTML = this.render();
 
-    this.compute_status.init('compute_status', this.program)
+    document.getElementById('compute_status').innerHTML = this.compute_status.render();
+    this.compute_status.setProgram(this.program)
 
     this.instance = new Instance();
     await this.instance.init();
@@ -194,7 +195,9 @@ export class DroidUISchematicRDForm {
   commitConfigurationToProgram() {
 
 
+
       this.program.instance = this.instance.address;
+
 
       if (document.getElementById('form_mobility_mobile').checked) {
         this.program.is_mobile = true;

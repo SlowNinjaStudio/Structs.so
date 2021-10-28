@@ -118,10 +118,13 @@ export class ComputeProcess {
                 // entire section needs some love.
                 // But it works!
                 let new_structure_id = tx_result.data[0].data[1];
-                document.getElementById('building_dialog_view_button').href = '/structure.html?structure_id=' + new_structure_id;
-                document.getElementById('building_dialog_view_button').disabled = ""
-                document.getElementById('building_dialog_view_button').classList.remove('is-disabled')
-                document.getElementById('building_dialog_view_button').classList.add('is-success')
+
+                // Gross, move elsewhere.
+                document.getElementById('build-status-dialog-view-button').href = '/structure.html?structure_id=' + new_structure_id;
+                document.getElementById('build-status-dialog-view-button').disabled = ""
+                document.getElementById('build-status-dialog-view-button').classList.remove('is-disabled')
+                document.getElementById('build-status-dialog-view-button').classList.add('is-success')
+
               } else {
                 if (tx_result.rawLog.includes('insufficient funds')) {
                   let needed_start = tx_result.rawLog.search('[0-9]{1,}watt');

@@ -31,18 +31,11 @@
   <div class="main-container container-fluid">
     <div id="structures-list" class="row"></div>
   </div>
-  <div id="faucet_modal">
-    <dialog class="nes-dialog" id="faucet-success-dialog">
-      <p class="title">⚡️You received <span id="amount_received"></span>!⚡️</p>
-      <form method="dialog">
-        <div class="dialog-menu row text-center">
-          <div class="col">
-            <button class="nes-btn is-success" id="research_modal_done_button">Celebratory Robo-Click</button>
-          </div>
-        </div>
-      </form>
-    </dialog>
-  </div>
+
+  <!--- Might need to add this to each page for a consistent Modal fade ---->
+  <div id="modal-container"></div>
+  <div class="modal-backdrop fade show" id="backdrop" style="display: none;"></div>
+
   <script src="js/vendor/modernizr-3.11.2.min.js"></script>
   <script src="js/plugins.js"></script>
   <script src="js/indexPage.js"></script>
