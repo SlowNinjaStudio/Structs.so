@@ -16,7 +16,7 @@ export class DroidUIDroid {
       this.instance = new Instance();
       await this.instance.init();
       document.getElementById('droid_panel_battery').innerHTML = ((await this.instance.queryBalance()).amount) + 'watt';
-    }.bind(this), 600);
+    }.bind(this), 12000);
 
   }
 
