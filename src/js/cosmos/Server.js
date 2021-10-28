@@ -39,7 +39,7 @@ export class Server {
             ["/di.MsgCreateStructure", MsgCreateStructure],
         ]);
 
-        this.rpcEndpoint = "droid.sh:3000";
+        this.rpcEndpoint = "wss://droid.sh:3000";
         this.client;
     }
 
