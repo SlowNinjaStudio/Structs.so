@@ -187,7 +187,7 @@ export class DroidUISchematicRDForm {
   commitConfigurationToProgram() {
 
 
-      this.program.instance = 'battery135st4t426nc4dzk9g3r93v3pyaf5wkp9gf66np'
+      this.program.instance = 'droid1f0v3m6pfwg68ns3wvk49t84awgvyz64j35uxjl'
 
       if (document.getElementById('form_mobility_mobile').checked) {
         this.program.is_mobile = true;

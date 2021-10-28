@@ -13,6 +13,9 @@ import {StructureMobilePalette} from "../art_rendering/StructureMobilePalette";
 import {StructureStaticPalette} from "../art_rendering/StructureStaticPalette";
 import {DroidUIMessageListItem} from "./components/DroidUIMessageListItem";
 import {DroidUISchematicCondensedCTABuild} from "./components/DroidUISchematicCondensedCTABuild";
+import {Droid} from "../models/Droid";
+import {DroidUIDroid} from "./components/DroidUIDroid";
+import {DroidArtGenerator} from "../art_rendering/DroidArtGenerator";
 
 /**
  * Web App
@@ -21,23 +24,14 @@ export class DroidUI {
 
   /**
    * @param {DroidApi} droidApi
-   * @param {StructureArtGenerator} structureArtGenerator
-   * @param {StructureMobilePalette} structureMobilePalette
-   * @param {StructureStaticPalette} structureStaticPalette
-   * @param {SchematicPalette} schematicPalette
    */
-  constructor(
-    droidApi = new DroidApi('http://', 'droid.sh'),
-    structureArtGenerator = new StructureArtGenerator(),
-    structureMobilePalette = new StructureMobilePalette(),
-    structureStaticPalette = new StructureStaticPalette(),
-    schematicPalette = new SchematicPalette()
-  ) {
+  constructor(droidApi = new DroidApi('http://', 'droid.sh')) {
     this.droidApi = droidApi;
-    this.structureArtGenerator = structureArtGenerator;
-    this.structureMobilePalette = structureMobilePalette;
-    this.structureStaticPalette = structureStaticPalette;
-    this.schematicPalette = schematicPalette;
+    this.droidArtGenerator = new DroidArtGenerator();
+    this.structureArtGenerator = new StructureArtGenerator();
+    this.structureMobilePalette = new StructureMobilePalette();
+    this.structureStaticPalette = new StructureStaticPalette();
+    this.schematicPalette = new SchematicPalette();
     this.structures = [];
     this.schematics = [];
   }
@@ -339,5 +333,22 @@ export class DroidUI {
     const canvas = document.getElementById(droidUIComponent.getCanvasId());
     const palette = this.getSchematicPalette(schematic);
     new PixelArtViewer(canvas, layers, palette);
+  }
+
+  /**
+   * @param {string} targetElementId
+   * @param {string} droidHash
+   */
+  loadDroid(targetElementId, droidHash) {
+    const targetElement = document.getElementById(targetElementId);
+    const droid = new Droid(droidHash);
+    const droidUIDroid = new DroidUIDroid(droid);
+    const layers = this.droidArtGenerator.generate(droid);
+
+    targetElement.innerHTML = droidUIDroid.render();
+
+    /** @type {HTMLCanvasElement} */
+    const canvas = document.getElementById(droidUIDroid.getCanvasId());
+    new PixelArtViewer(canvas, layers, []);
   }
 }

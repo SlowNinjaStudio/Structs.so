@@ -324,6 +324,54 @@ h1 {
   padding: 20px 10px;
   max-width: 100%;
 }
+.nav-settings {
+  text-align: right;
+}
+.nav-settings a.nav-link, .nav-settings a.nav-link:link {
+  background-image: url(/img/icons/icon-settings.png);
+  background-size: 32px 32px;
+  background-repeat: no-repeat;
+  display: inline-block;
+  height: 32px;
+  margin: 0 20px;
+  width: 32px;
+  white-space: nowrap;
+}
+.nav-settings a.nav-link:hover, .nav-settings a.nav-link:active {
+  background-image: url(/img/icons/icon-settings-pressed.png);
+}
+.settings-text {
+  display: inline-block;
+  vertical-align: middle;
+}
+a:hover .settings-text {
+  text-decoration: underline;
+}
+.settings-icon {
+  display: inline-block;
+  margin-left: 7px;
+  vertical-align: text-bottom;
+  width: 16px;
+}
+
+/* Account Menu */
+#account-menu-profile-image .game-asset-wrapper {
+  margin-left: auto;
+  margin-right: auto;
+}
+.droid-details {
+  font-family: sans-serif;
+  font-size: 14px;
+}
+.droid-details .row {
+  margin-bottom: 10px;
+}
+.droid-detail-label {
+  font-weight: bold;
+}
+.droid-detail-label img {
+  vertical-align: text-bottom;;
+}
 
 /* Structure Card Styling */
 .structure-card-wrapper {
