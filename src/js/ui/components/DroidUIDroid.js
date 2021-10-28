@@ -1,3 +1,5 @@
+import {Instance} from "../../models/Instance";
+
 export class DroidUIDroid {
   /**
    *
@@ -7,6 +9,15 @@ export class DroidUIDroid {
   constructor(droid, idPrefix = '') {
     this.droid = droid;
     this.idPrefix = idPrefix;
+
+      this.instance;
+
+    setTimeout(async function() {
+      this.instance = new Instance();
+      await this.instance.init();
+      document.getElementById('droid_panel_battery').innerHTML = ((await this.instance.queryBalance()).amount) + 'watt';
+    }.bind(this), 600);
+
   }
 
   getCanvasId() {
@@ -41,8 +52,8 @@ export class DroidUIDroid {
               <div class="col-auto droid-detail-label px-0">
                 <img src="img/icons/icon-battery-charge.png" alt="Battery"> Battery:
               </div>
-              <div class="col text-break px-1">
-                1337 watt
+              <div class="col text-break px-1" id="droid_panel_battery">
+
               </div>
             </div>
           </div>
@@ -50,4 +61,7 @@ export class DroidUIDroid {
       </div>
     `;
   }
+
+
+
 }
