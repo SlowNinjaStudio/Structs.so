@@ -195,7 +195,9 @@ export class DroidUISchematicRDForm {
   commitConfigurationToProgram() {
 
 
+
       this.program.instance = this.instance.address;
+
 
       if (document.getElementById('form_mobility_mobile').checked) {
         this.program.is_mobile = true;
