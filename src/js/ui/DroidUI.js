@@ -386,5 +386,6 @@ export class DroidUI {
     /** @type {HTMLCanvasElement} */
     const canvas = document.getElementById(droidUIDroid.getCanvasId());
     new PixelArtViewer(canvas, layers, []);
+
   }
 }
