@@ -18,7 +18,7 @@ export class Droid {
    * @returns {string} hex color
    */
   getPrimaryColor() {
-    return this.hashUtil.getColor(this.hash, DROID_HASH.PRIMARY_COLOR.START);
+    return this.hashUtil.getColor(this.hashNoPrefix);
   }
 
   /**

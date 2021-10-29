@@ -63,7 +63,7 @@ export class DroidUIDroid {
             </div>
             <div class="row">
               <div class="">
-               <button type="button" class="" onclick="navigator.clipboard.writeText('${this.droid.hash}')">Copy Droid ID</button>
+               <button type="button" class="nes-btn nes-btn-fluid is-primary" onclick="navigator.clipboard.writeText('${this.droid.hash}')">Copy Droid ID</button>
               </div>
             </div>
           </div>

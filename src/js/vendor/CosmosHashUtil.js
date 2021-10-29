@@ -1,12 +1,15 @@
+import {DROID_HASH} from "../constants";
+
 export class CosmosHashUtil {
 
   /**
    * @param {string} hashBase36
-   * @param {int} charIndexStart
    * @returns {string} hex color code
    */
-  getColor(hashBase36, charIndexStart ) {
-    const hashLast5 = hashBase36.slice(charIndexStart, 5);
+  getColor(hashBase36) {
+    const start = DROID_HASH.PRIMARY_COLOR.START;
+    const end = start + DROID_HASH.PRIMARY_COLOR.LENGTH;
+    const hashLast5 = hashBase36.slice(start, end);
     return parseInt(hashLast5, 36).toString(16);
   }
 
