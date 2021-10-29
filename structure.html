@@ -1,5 +1,5 @@
 <!doctype html>
-<html class="no-js" lang="">
+<html class="no-js" lang="en">
 
 <head>
   <meta charset="utf-8">
@@ -20,56 +20,54 @@
   <link rel="stylesheet" href="/css/fonts.css">
   <link rel="stylesheet" href="/css/normalize.css">
   <link rel="stylesheet" href="/css/bootstrap.min.css">
+  <link rel="stylesheet" href="/css/bootstrap-icons.css">
   <link rel="stylesheet" href="/css/nes.min.css">
   <link rel="stylesheet" href="/css/main.css">
 </head>
+<body class="d-flex flex-column min-vh-100">
+  <div id="nav-wrapper"></div>
+  <div class="main-container container">
+    <div id="structure" class="row"></div>
 
-<body>
-<div id="nav-wrapper"></div>
-<div class="main-container container">
-  <div id="structure" class="row"></div>
+    <!--- Might need to add this to each page for a consistent Modal fade ---->
+    <div id="modal-container"></div>
+    <div class="modal-backdrop fade show" id="backdrop" style="display: none;"></div>
 
-  <!--- Might need to add this to each page for a consistent Modal fade ---->
-  <div id="modal-container"></div>
-  <div class="modal-backdrop fade show" id="backdrop" style="display: none;"></div>
-
-</div>
-
-<div class="offcanvas offcanvas-start" tabindex="-1" id="offcanvas">
-  <div class="offcanvas-header">
-    <h5 id="offcanvas-title" class="offcanvas-title"></h5>
-    <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
   </div>
-  <div class="offcanvas-search container-fluid">
-    <div class="row">
-      <div class="col">
-        <input id="offcanvas-search-input" class="nes-input" type="text">
-      </div>
-      <div class="col-auto">
-        <a href="javascript:void(0)" id="offcanvas-search-btn" class="nes-btn is-primary">Search</a>
+  <div id="footer-wrapper" class="bg-dark mt-auto"></div>
+
+  <div class="offcanvas offcanvas-start" tabindex="-1" id="offcanvas">
+    <div class="offcanvas-header">
+      <h5 id="offcanvas-title" class="offcanvas-title"></h5>
+      <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+    </div>
+    <div class="offcanvas-search container-fluid">
+      <div class="row">
+        <div class="col">
+          <input id="offcanvas-search-input" class="nes-input" type="text">
+        </div>
+        <div class="col-auto">
+          <a href="javascript:void(0)" id="offcanvas-search-btn" class="nes-btn is-primary">Search</a>
+        </div>
       </div>
     </div>
+    <div id="offcanvas-body" class="offcanvas-body"></div>
   </div>
-  <div id="offcanvas-body" class="offcanvas-body"></div>
-</div>
 
+  <script src="js/vendor/modernizr-3.11.2.min.js"></script>
+  <script src="js/plugins.js"></script>
+  <script src="js/structureViewPage.js"></script>
+  <script src="js/vendor/bootstrap.bundle.min.js"></script>
 
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-63X2N0QSHV"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
 
-
-<script src="js/vendor/modernizr-3.11.2.min.js"></script>
-<script src="js/plugins.js"></script>
-<script src="js/structureViewPage.js"></script>
-<script src="js/vendor/bootstrap.bundle.min.js"></script>
-
-<!-- Global site tag (gtag.js) - Google Analytics -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-63X2N0QSHV"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-
-  gtag('config', 'G-63X2N0QSHV');
-</script>
+    gtag('config', 'G-63X2N0QSHV');
+  </script>
 </body>
 
 </html>
