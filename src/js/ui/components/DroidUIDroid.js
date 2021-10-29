@@ -15,8 +15,8 @@ export class DroidUIDroid {
     this.updater = setTimeout(async function updateTime() {
       this.instance = new Instance();
       await this.instance.init();
-      document.getElementById('droid_panel_name').innerHTML = this.instance.name;
-      document.getElementById('droid_panel_mood').innerHTML = this.instance.mood;
+      // document.getElementById('droid_panel_name').innerHTML = this.instance.name;
+      // document.getElementById('droid_panel_mood').innerHTML = this.instance.mood;
       document.getElementById('droid_panel_battery').innerHTML = ((await this.instance.queryBalance()).amount) + 'watt';
       this.updater = setTimeout(updateTime, 120000);
     }.bind(this), 10);
@@ -43,18 +43,18 @@ export class DroidUIDroid {
           <div class="col nes-container with-title">
             <h3 class="title">Details</h3>
             <div class="droid-details">
-             <div class="row">
-              <div class="col-auto droid-detail-label px-0">
-                Name:
-              </div>
-              <div class="col text-break px-1" id="droid_panel_name"></div>
-            </div>
-            <div class="row">
-              <div class="col-auto droid-detail-label px-0">
-                Mood:
-              </div>
-              <div class="col text-break px-1" id="droid_panel_mood"></div>
-            </div>
+<!--             <div class="row">-->
+<!--              <div class="col-auto droid-detail-label px-0">-->
+<!--                Name:-->
+<!--              </div>-->
+<!--              <div class="col text-break px-1" id="droid_panel_name"></div>-->
+<!--            </div>-->
+<!--            <div class="row">-->
+<!--              <div class="col-auto droid-detail-label px-0">-->
+<!--                Mood:-->
+<!--              </div>-->
+<!--              <div class="col text-break px-1" id="droid_panel_mood"></div>-->
+<!--            </div>-->
              <div class="row">
               <div class="col-auto droid-detail-label px-0">
                 <img src="img/icons/icon-battery-charge.png" alt="Battery"> Battery:
