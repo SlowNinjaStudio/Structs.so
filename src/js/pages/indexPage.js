@@ -2,9 +2,12 @@ import {DroidUI} from "../ui/DroidUI";
 import {Navbar} from "./common/Navbar";
 import {Instance} from "../models/Instance"
 import {DroidApi} from "../api/DroidApi";
+import {Footer} from "./common/Footer";
 
 const instance = new Instance();
 await instance.init();
+
+
 
 const page = 'index';
 
@@ -14,6 +17,9 @@ navbar.init('nav-wrapper');
 const droidUi = new DroidUI();
 
 droidUi.loadStructures( 'structures-list', instance.address);
+
+const footer = new Footer();
+footer.init('footer-wrapper');
 
 const searchHandler = function() {
   const searchString = document.getElementById('nav-search-input').value;

@@ -1,7 +1,7 @@
 import {Navbar} from "./common/Navbar";
-
 import {DroidUISchematicRDForm} from "../ui/components/DroidUISchematicRDForm"
 import {Instance} from "../models/Instance";
+import {Footer} from "./common/Footer";
 
 const instance = new Instance();
 await instance.init();
@@ -16,3 +16,5 @@ await schematic_design_form.init('schematic_rd_form');
 schematic_design_form.initMainButtonEventListeners();
 schematic_design_form.initOptionsEventListeners();
 
+const footer = new Footer();
+footer.init('footer-wrapper');

@@ -1,5 +1,6 @@
 import {DroidUI} from "../ui/DroidUI";
 import {Navbar} from "./common/Navbar";
+import {Footer} from "./common/Footer";
 import {Instance} from "../models/Instance";
 
 const instance = new Instance();
@@ -16,3 +17,5 @@ const structureId = urlParams.get('structure_id');
 const droidUi = new DroidUI();
 droidUi.loadSingleStructure('structure', structureId, instance.address);
 
+const footer = new Footer();
+footer.init('footer-wrapper');

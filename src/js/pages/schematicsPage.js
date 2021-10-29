@@ -1,5 +1,6 @@
 import {DroidUI} from "../ui/DroidUI";
 import {Navbar} from "./common/Navbar";
+import {Footer} from "./common/Footer";
 
 import {Instance} from "../models/Instance";
 
@@ -14,3 +15,6 @@ navbar.init('nav-wrapper');
 const droidUi = new DroidUI();
 droidUi.loadSchematicsByCreator('schematics-list', instance.address);
 
+
+const footer = new Footer();
+footer.init('footer-wrapper');

@@ -373,6 +373,20 @@ a:hover .settings-text {
   vertical-align: text-bottom;;
 }
 
+/* Footer */
+#footer-wrapper {
+  border-top: 4px solid #000000;
+}
+footer {
+  text-align: center;
+}
+.slow-ninja-footer-link img {
+  width: 200px;
+}
+.social-links {
+  font-size: 32px;
+}
+
 /* Structure Card Styling */
 .structure-card-wrapper {
   text-align: center;
