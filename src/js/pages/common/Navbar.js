@@ -17,7 +17,7 @@ export class Navbar {
           <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
               <li class="nav-item mx-2 d-lg-none">
-                <a class="nav-link" href="#"><span class="settings-text">Settings<span><img class="settings-icon" src="/img/icons/icon-settings.png" alt="Settings Icon"></a>
+                <a class="nav-link" href="#account-menu" data-bs-toggle="offcanvas" role="button"><span class="settings-text">Settings<span><img class="settings-icon" src="/img/icons/icon-settings.png" alt="Settings Icon"></a>
               </li>
               <li class="nav-item mx-2">
                 <a class="nav-link ${ this.page === 'R&D' ? 'active' : '' }" href="/research.html">R&D</a>
