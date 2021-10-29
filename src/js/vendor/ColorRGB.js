@@ -89,6 +89,14 @@ export class ColorRGB {
   }
 
   /**
+   * @param {number} channelValue
+   * @returns {number}
+   */
+  clampChannel(channelValue) {
+    return Math.min(255, Math.max(0, Math.round(channelValue)));
+  }
+
+  /**
    * Ensures that the color is within a certain range of brightness.
    *
    * @param {number} min
@@ -107,9 +115,22 @@ export class ColorRGB {
       adjustment = max / avg;
     }
     return new ColorRGB(
-      Math.min(255, Math.max(0, Math.round(this.r * adjustment))),
-      Math.min(255, Math.max(0, Math.round(this.g * adjustment))),
-      Math.min(255, Math.max(0, Math.round(this.b * adjustment)))
+      this.clampChannel(this.r * adjustment),
+      this.clampChannel(this.g * adjustment),
+      this.clampChannel(this.b * adjustment)
+    );
+  }
+
+  /**
+   * @return {ColorRGB}
+   */
+  maxIntensity() {
+    const maxChannel = Math.max(this.r, this.g, this.b);
+    const adjustment = 255 / maxChannel;
+    return new ColorRGB(
+      this.clampChannel(this.r * adjustment),
+      this.clampChannel(this.g * adjustment),
+      this.clampChannel(this.b * adjustment),
     );
   }
 }

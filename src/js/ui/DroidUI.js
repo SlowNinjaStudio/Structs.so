@@ -16,6 +16,7 @@ import {DroidUISchematicCondensedCTABuild} from "./components/DroidUISchematicCo
 import {Droid} from "../models/Droid";
 import {DroidUIDroid} from "./components/DroidUIDroid";
 import {DroidArtGenerator} from "../art_rendering/DroidArtGenerator";
+import {DroidPalette} from "../art_rendering/DroidPalette";
 
 /**
  * Web App
@@ -28,6 +29,7 @@ export class DroidUI {
   constructor(droidApi = new DroidApi('http://', 'droid.sh')) {
     this.droidApi = droidApi;
     this.droidArtGenerator = new DroidArtGenerator();
+    this.droidPalette = new DroidPalette();
     this.structureArtGenerator = new StructureArtGenerator();
     this.structureMobilePalette = new StructureMobilePalette();
     this.structureStaticPalette = new StructureStaticPalette();
@@ -349,6 +351,7 @@ export class DroidUI {
 
     /** @type {HTMLCanvasElement} */
     const canvas = document.getElementById(droidUIDroid.getCanvasId());
-    new PixelArtViewer(canvas, layers, []);
+    const palette = this.droidPalette.generatePaletteSwap(ColorRGB.hexToRgb(droid.getPrimaryColor()));
+    new PixelArtViewer(canvas, layers, palette);
   }
 }

@@ -26,7 +26,7 @@ export const
     ACCESSORY_2: 35,
     ACCESSORY_3: 34,
     PRIMARY_COLOR: {
-      START: 34,
+      START: 0,
       LENGTH: 5
     }
   },
