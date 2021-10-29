@@ -13,10 +13,14 @@ import {StructureMobilePalette} from "../art_rendering/StructureMobilePalette";
 import {StructureStaticPalette} from "../art_rendering/StructureStaticPalette";
 import {DroidUIMessageListItem} from "./components/DroidUIMessageListItem";
 import {DroidUISchematicCondensedCTABuild} from "./components/DroidUISchematicCondensedCTABuild";
+import {DroidUIWattReceivedModal} from "./components/DroidUIWattReceivedModal";
+import {DroidUISchematicRDPatentedModal} from "./components/DroidUISchematicRDPatentedModal";
+import {DroidUIStructureBuildStatusModal} from "./components/DroidUIStructureBuildStatusModal";
 import {Droid} from "../models/Droid";
 import {DroidUIDroid} from "./components/DroidUIDroid";
 import {DroidArtGenerator} from "../art_rendering/DroidArtGenerator";
 import {DroidPalette} from "../art_rendering/DroidPalette";
+
 
 /**
  * Web App
@@ -26,7 +30,7 @@ export class DroidUI {
   /**
    * @param {DroidApi} droidApi
    */
-  constructor(droidApi = new DroidApi('http://', 'droid.sh')) {
+  constructor(droidApi = new DroidApi('https://', 'droid.sh')) {
     this.droidApi = droidApi;
     this.droidArtGenerator = new DroidArtGenerator();
     this.droidPalette = new DroidPalette();
@@ -294,7 +298,7 @@ export class DroidUI {
    * @param {Schematic} schematic
    * @param {string} targetElementId
    */
-  loadNewSchematic(schematic, targetElementId) {
+   loadNewSchematic(schematic, targetElementId) {
     const targetElement = document.getElementById(targetElementId);
 
     let schematicsHtml = '';
@@ -324,6 +328,38 @@ export class DroidUI {
     /** @type {HTMLCanvasElement} */
     const canvas = document.getElementById(this.schematics[0].droidUINewSchematic.getCanvasId());
     new PixelArtViewer(canvas, this.schematics[0].layers, this.getSchematicPalette(this.schematics[0].schematic));
+
+    droidUINewSchematic.initMainPatentEventListeners();
+  }
+
+  loadWattReceivedModal(amount) {
+     let watt_received_modal = new DroidUIWattReceivedModal(amount);
+
+     document.getElementById('modal-container').innerHTML = watt_received_modal.render();
+
+     watt_received_modal.initEventListeners();
+     watt_received_modal.showModal();
+  }
+
+  loadSchematicPatentedModal(schematic) {
+    let schematic_patented_modal = new DroidUISchematicRDPatentedModal(schematic);
+
+    document.getElementById('modal-container').innerHTML = schematic_patented_modal.render();
+
+    this.renderPixelArtSchematic(schematic, schematic_patented_modal.schematicCondensed);
+
+    schematic_patented_modal.initEventListeners();
+    schematic_patented_modal.showModal();
+  }
+
+  loadStructureBuildStatusModal(schematic, structure, program, process_id){
+    let structureBuildStatusModal = new DroidUIStructureBuildStatusModal(schematic, structure, program, process_id)
+
+    document.getElementById('modal-container').innerHTML = structureBuildStatusModal.render();
+    (new DroidUI()).renderPixelArtSchematic(schematic, structureBuildStatusModal.uiSchematic);
+
+    structureBuildStatusModal.initEventListeners();
+    structureBuildStatusModal.showModal();
   }
 
   /**
@@ -351,6 +387,7 @@ export class DroidUI {
 
     /** @type {HTMLCanvasElement} */
     const canvas = document.getElementById(droidUIDroid.getCanvasId());
+
     const palette = this.droidPalette.generatePaletteSwap(ColorRGB.hexToRgb(droid.getPrimaryColor()));
     new PixelArtViewer(canvas, layers, palette);
   }

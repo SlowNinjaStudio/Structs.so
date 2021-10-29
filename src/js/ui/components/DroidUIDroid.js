@@ -1,3 +1,5 @@
+import {Instance} from "../../models/Instance";
+
 export class DroidUIDroid {
   /**
    *
@@ -7,6 +9,18 @@ export class DroidUIDroid {
   constructor(droid, idPrefix = '') {
     this.droid = droid;
     this.idPrefix = idPrefix;
+
+    this.instance;
+
+    this.updater = setTimeout(async function updateTime() {
+      this.instance = new Instance();
+      await this.instance.init();
+      // document.getElementById('droid_panel_name').innerHTML = this.instance.name;
+      // document.getElementById('droid_panel_mood').innerHTML = this.instance.mood;
+      document.getElementById('droid_panel_battery').innerHTML = ((await this.instance.queryBalance()).amount) + 'watt';
+      this.updater = setTimeout(updateTime, 120000);
+    }.bind(this), 10);
+
   }
 
   getCanvasId() {
@@ -29,20 +43,27 @@ export class DroidUIDroid {
           <div class="col nes-container with-title">
             <h3 class="title">Details</h3>
             <div class="droid-details">
-            <div class="row">
-              <div class="col-auto droid-detail-label px-0">
-                ID:
-              </div>
-              <div class="col text-break px-1">
-                ${this.droid.hash}
-              </div>
-            </div>
-            <div class="row">
+<!--             <div class="row">-->
+<!--              <div class="col-auto droid-detail-label px-0">-->
+<!--                Name:-->
+<!--              </div>-->
+<!--              <div class="col text-break px-1" id="droid_panel_name"></div>-->
+<!--            </div>-->
+<!--            <div class="row">-->
+<!--              <div class="col-auto droid-detail-label px-0">-->
+<!--                Mood:-->
+<!--              </div>-->
+<!--              <div class="col text-break px-1" id="droid_panel_mood"></div>-->
+<!--            </div>-->
+             <div class="row">
               <div class="col-auto droid-detail-label px-0">
                 <img src="img/icons/icon-battery-charge.png" alt="Battery"> Battery:
               </div>
-              <div class="col text-break px-1">
-                1337 watt
+              <div class="col text-break px-1" id="droid_panel_battery"></div>
+            </div>
+            <div class="row">
+              <div class="">
+               <button type="button" class="nes-btn nes-btn-fluid is-primary" onclick="navigator.clipboard.writeText('${this.droid.hash}')">Copy Droid ID</button>
               </div>
             </div>
           </div>

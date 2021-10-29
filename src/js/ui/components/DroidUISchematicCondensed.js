@@ -7,6 +7,9 @@ import {DroidUIComputeStatus} from "./DroidUIComputeStatus"
 import {DroidUISchematicCondensedCTANone} from "./DroidUISchematicCondensedCTANone";
 import {DroidUI} from "../DroidUI";
 
+import {Instance} from "../../models/Instance"
+import {DroidUIStructureBuildStatusModal} from "./DroidUIStructureBuildStatusModal";
+
 export class DroidUISchematicCondensed {
 
   /**
@@ -30,11 +33,15 @@ export class DroidUISchematicCondensed {
 
     this.computer = new Computer();
 
-    this.program = new StructureBuild();
-    this.program.setSchematic(schematic);
-    this.program.setPerformingStructure(structure);
+    this.structureBuildStatusModal;
 
-    this.compute_status = computeStatus;
+    if (!(typeof structure == 'undefined' || structure == null)) {
+      this.program = new StructureBuild();
+      this.program.setSchematic(schematic);
+      this.program.setPerformingStructure(structure);
+
+      this.compute_status = computeStatus;
+    }
   }
   getCanvasId() {
     return `${this.idPrefix}schematic-list-item-${this.schematic.getId()}`;
@@ -82,7 +89,7 @@ export class DroidUISchematicCondensed {
             </div>
             <div class="row">
               <div class="col text-truncate">
-                <span class="attribute-label">Est. Time:</span> ${secondsToString(this.program.generateDifficulty() / CONFIG.INITIAL_HASHRATE)}
+                <span class="attribute-label">Est. Time:</span> ${(typeof this.program != 'undefined') ? secondsToString(this.program.generateDifficulty() / CONFIG.INITIAL_HASHRATE) : ''}
               </div>
             </div>
           </div>
@@ -175,30 +182,22 @@ export class DroidUISchematicCondensed {
   }
 
   initMainBuildEventListeners() {
-      document.getElementById('schematic_list_build_' + this.schematic.getId()).addEventListener('click', function() {
+
+      document.getElementById('schematic_list_build_' + this.schematic.getId()).addEventListener('click', async function() {
         // Hide the selector
         // Move this into the DroidUI if it's not already there.
         window.bootstrap.Offcanvas.getInstance(document.getElementById('offcanvas')).hide();
 
-        //Move this into DroidUI
-        document.getElementById('build-status-dialog').showModal();
-
-        const uiSchematic = new DroidUISchematicCondensed(
-          this.schematic,
-          this.structure,
-          new DroidUISchematicCondensedCTANone(),
-          'build-status-modal-'
-        );
-        document.getElementById('build-status-selected-schematic').innerHTML = uiSchematic.render();
-        (new DroidUI()).renderPixelArtSchematic(this.schematic, uiSchematic);
-
-        this.compute_status = new DroidUIComputeStatus(true);
-        this.compute_status.init('compute_status', this.program);
+        let instance = new Instance();
+        await instance.init();
+        this.program.instance = instance.address;
 
         let new_process_id = this.computer.add_process(this.program);
+
+        (new DroidUI()).loadStructureBuildStatusModal(this.schematic, this.structure, this.program, new_process_id)
+
         this.computer.run_process(new_process_id);
 
-        this.compute_status.setProcessID(new_process_id);
 
       }.bind(this));
 
