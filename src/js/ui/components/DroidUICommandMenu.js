@@ -2,6 +2,7 @@
  * Web UI component for structures.
  */
 import {DroidUI} from "../DroidUI";
+import {Instance} from "../../models/Instance";
 
 export class DroidUICommandMenu {
   /**
@@ -102,13 +103,18 @@ export class DroidUICommandMenu {
   initEngineeringSubmenuEventListeners() {
     const droidUi = new DroidUI();
 
-    const searchHandler = function() {
+
+
+    const searchHandler = async function() {
+      const instance = new Instance();
+      instance.init();
+
       const searchString = document.getElementById('offcanvas-search-input').value;
       droidUi.loadSchematicSelectionList(
         'offcanvas-body',
         'offcanvas-title',
         this.structure,
-        searchString
+        instance.address + ' ' + searchString
       );
     }.bind(this);
     document.getElementById('offcanvas-search-btn').addEventListener('click', searchHandler);
@@ -118,8 +124,11 @@ export class DroidUICommandMenu {
       }
     });
 
+    const instance = new Instance();
+    instance.lazyLoad();
+
     document.getElementById('build-from-schematic-command').addEventListener('click', function() {
-      droidUi.loadSchematicSelectionList('offcanvas-body', 'offcanvas-title', this.structure);
+      droidUi.loadSchematicSelectionList('offcanvas-body', 'offcanvas-title', this.structure, instance.address);
     }.bind(this));
 
     document.getElementById('main-menu-command').addEventListener('click', function() {
