@@ -10,13 +10,16 @@ export class DroidUIDroid {
     this.droid = droid;
     this.idPrefix = idPrefix;
 
-      this.instance;
+    this.instance;
 
-    setTimeout(async function() {
+    this.updater = setTimeout(async function updateTime() {
       this.instance = new Instance();
       await this.instance.init();
+      document.getElementById('droid_panel_name').innerHTML = this.instance.name;
+      document.getElementById('droid_panel_mood').innerHTML = this.instance.mood;
       document.getElementById('droid_panel_battery').innerHTML = ((await this.instance.queryBalance()).amount) + 'watt';
-    }.bind(this), 12000);
+      this.updater = setTimeout(updateTime, 120000);
+    }.bind(this), 10);
 
   }
 
@@ -40,20 +43,27 @@ export class DroidUIDroid {
           <div class="col nes-container with-title">
             <h3 class="title">Details</h3>
             <div class="droid-details">
-            <div class="row">
+             <div class="row">
               <div class="col-auto droid-detail-label px-0">
-                ID:
+                Name:
               </div>
-              <div class="col text-break px-1">
-                ${this.droid.hash}
-              </div>
+              <div class="col text-break px-1" id="droid_panel_name"></div>
             </div>
             <div class="row">
               <div class="col-auto droid-detail-label px-0">
+                Mood:
+              </div>
+              <div class="col text-break px-1" id="droid_panel_mood"></div>
+            </div>
+             <div class="row">
+              <div class="col-auto droid-detail-label px-0">
                 <img src="img/icons/icon-battery-charge.png" alt="Battery"> Battery:
               </div>
-              <div class="col text-break px-1" id="droid_panel_battery">
-
+              <div class="col text-break px-1" id="droid_panel_battery"></div>
+            </div>
+            <div class="row">
+              <div class="">
+               <button type="button" class="" onclick="navigator.clipboard.writeText('${this.droid.hash}')">Copy Droid ID</button>
               </div>
             </div>
           </div>
@@ -61,7 +71,4 @@ export class DroidUIDroid {
       </div>
     `;
   }
-
-
-
 }
