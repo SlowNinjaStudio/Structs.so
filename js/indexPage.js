@@ -200,6 +200,16 @@ eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpac
 
 /***/ }),
 
+/***/ "./src/js/pages/common/Footer.js":
+/*!***************************************!*\
+  !*** ./src/js/pages/common/Footer.js ***!
+  \***************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   \"Footer\": () => (/* binding */ Footer)\n/* harmony export */ });\nclass Footer {\n  render() {\n    return `\n      <footer class=\"container py-4\">\n        <div class=\"row\">\n          <div class=\"col\">\n            <a class=\"slow-ninja-footer-link\" href=\"https://slow.ninja\" target=\"_blank\"><img src=\"/img/SlowNinja-Logo-bw.png\" alt=\"Slow Ninja\"></a>\n          </div>\n        </div>\n        <div class=\"row social-links\">\n          <div class=\"col\">\n            <a href=\"https://discord.gg/fzDzx5DnFS\" target=\"_blank\"><i class=\"bi bi-discord\"></i></a>\n            <a href=\"https://slowninja.notion.site/Watt-s-Happening-4307131498324176bd8692593c39c892\" target=\"_blank\"><i class=\"bi bi-journal-richtext\"></i></a>\n          </div>\n        </div>\n      </footer>\n    `;\n  }\n  init(id) {\n    document.getElementById(id).innerHTML = this.render();\n  }\n}\n\n\n//# sourceURL=webpack://coindroids-v5-ui/./src/js/pages/common/Footer.js?");
+
+/***/ }),
+
 /***/ "./src/js/pages/common/Navbar.js":
 /*!***************************************!*\
   !*** ./src/js/pages/common/Navbar.js ***!
@@ -216,7 +226,7 @@ eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpac
   \***********************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
-eval("__webpack_require__.r(__webpack_exports__);\n/* harmony import */ var _ui_DroidUI__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../ui/DroidUI */ \"./src/js/ui/DroidUI.js\");\n/* harmony import */ var _common_Navbar__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./common/Navbar */ \"./src/js/pages/common/Navbar.js\");\n\n\n\nconst page = 'index';\n\nconst navbar = new _common_Navbar__WEBPACK_IMPORTED_MODULE_1__.Navbar(page, { searchEnabled: true, droidHash: 'droid1f0v3m6pfwg68ns3wvk49t84awgvyz64j35uxjl' });\nnavbar.init('nav-wrapper');\n\nconst droidUi = new _ui_DroidUI__WEBPACK_IMPORTED_MODULE_0__.DroidUI();\ndroidUi.loadStructures( 'structures-list', 'droid1f0v3m6pfwg68ns3wvk49t84awgvyz64j35uxjl');\n\nconst searchHandler = function() {\n  const searchString = document.getElementById('nav-search-input').value;\n  droidUi.searchAndLoadStructures('structures-list', searchString, 'droid1f0v3m6pfwg68ns3wvk49t84awgvyz64j35uxjl');\n};\n\ndocument.getElementById('nav-search-btn').addEventListener('click', searchHandler);\ndocument.getElementById('nav-search-input').addEventListener('keypress', (event) => {\n  if (event.key === 'Enter') {\n    searchHandler(event);\n  }\n});\n\n\n//# sourceURL=webpack://coindroids-v5-ui/./src/js/pages/indexPage.js?");
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony import */ var _ui_DroidUI__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../ui/DroidUI */ \"./src/js/ui/DroidUI.js\");\n/* harmony import */ var _common_Navbar__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./common/Navbar */ \"./src/js/pages/common/Navbar.js\");\n/* harmony import */ var _common_Footer__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./common/Footer */ \"./src/js/pages/common/Footer.js\");\n\n\n\n\nconst page = 'index';\n\nconst navbar = new _common_Navbar__WEBPACK_IMPORTED_MODULE_1__.Navbar(page, { searchEnabled: true, droidHash: 'droid1f0v3m6pfwg68ns3wvk49t84awgvyz64j35uxjl' });\nnavbar.init('nav-wrapper');\n\nconst droidUi = new _ui_DroidUI__WEBPACK_IMPORTED_MODULE_0__.DroidUI();\ndroidUi.loadStructures( 'structures-list', 'droid1f0v3m6pfwg68ns3wvk49t84awgvyz64j35uxjl');\n\nconst footer = new _common_Footer__WEBPACK_IMPORTED_MODULE_2__.Footer();\nfooter.init('footer-wrapper');\n\nconst searchHandler = function() {\n  const searchString = document.getElementById('nav-search-input').value;\n  droidUi.searchAndLoadStructures('structures-list', searchString, 'droid1f0v3m6pfwg68ns3wvk49t84awgvyz64j35uxjl');\n};\n\ndocument.getElementById('nav-search-btn').addEventListener('click', searchHandler);\ndocument.getElementById('nav-search-input').addEventListener('keypress', (event) => {\n  if (event.key === 'Enter') {\n    searchHandler(event);\n  }\n});\n\n\n//# sourceURL=webpack://coindroids-v5-ui/./src/js/pages/indexPage.js?");
 
 /***/ }),
 
