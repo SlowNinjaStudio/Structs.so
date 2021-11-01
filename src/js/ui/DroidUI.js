@@ -65,6 +65,43 @@ export class DroidUI {
   }
 
   /**
+   * @param {Array.<Schematic>}schematics
+   * @param {string} targetElementId
+   * @param {string} creator
+   * @param {DroidUIMessagePanel} emptyMessage
+   */
+  handleLoadSchematics(schematics, targetElementId, creator = '', emptyMessage = null) {
+    this.schematics = [];
+    const targetElement = document.getElementById(targetElementId);
+    let schematicsHtml = '';
+
+    for (let i = 0; i < schematics.length; i++) {
+      const droidUISchematic = new DroidUISchematic(schematics[i]);
+
+      // Batch drawing by collecting all the HTML first
+      schematicsHtml += droidUISchematic.render();
+
+      this.schematics[i] = {
+        'schematic': schematics[i],
+        'droidUISchematic': droidUISchematic,
+        'layers': this.structureArtGenerator.generate(schematics[i]),
+      }
+    }
+
+    // Update DOM
+    if (schematicsHtml === '' && emptyMessage !== null) {
+      schematicsHtml = emptyMessage.render();
+    }
+    targetElement.innerHTML = schematicsHtml;
+
+    for (let i = 0; i < this.schematics  .length; i++) {
+      /** @type {HTMLCanvasElement} */
+      const canvas = document.getElementById(this.schematics[i].droidUISchematic.getCanvasId());
+      new PixelArtViewer(canvas, this.schematics[i].layers, this.getSchematicPalette(this.schematics[i].schematic));
+    }
+  }
+
+  /**
    * @param {Array.<Structure>}structures
    * @param {string} targetElementId
    * @param {string} creator
@@ -194,6 +231,34 @@ export class DroidUI {
   searchAndLoadStructuresByCreator(targetElementId, searchString,  creator = '') {
     const searchStringWithCreator = `${searchString} ${creator}`;
     this.searchAndLoadStructures(targetElementId, searchStringWithCreator,  creator);
+  }
+
+  /**
+   * Load schematics that match the given search string and display them in the target element.
+   *
+   * @param {string} targetElementId
+   * @param {string} searchString
+   * @param {string} creator
+   */
+  searchAndLoadSchematics(targetElementId, searchString,  creator = '') {
+    this.droidApi.searchSchematics(searchString).then((schematics) => {
+      this.handleLoadSchematics(schematics, targetElementId, creator, new DroidUIMessagePanel(
+        'No Schematics Found',
+        `No schematics found matching your search terms. Try using less or different keywords.`
+      ));
+    });
+  }
+
+  /**
+   * Load schematics that match the given search string for the given creator and display them in the target element.
+   *
+   * @param {string} targetElementId
+   * @param {string} searchString
+   * @param {string} creator
+   */
+  searchAndLoadSchematicsByCreator(targetElementId, searchString,  creator = '') {
+    const searchStringWithCreator = `${searchString} ${creator}`;
+    this.searchAndLoadSchematics(targetElementId, searchStringWithCreator,  creator);
   }
 
   /**

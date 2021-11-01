@@ -76,7 +76,7 @@ export class DroidApi {
   schematicResponseHandler(data) {
     const schematicFactory = new SchematicFactory();
     const schematics = [];
-    const rawSchematics = data.Schematic;
+    const rawSchematics = Array.isArray(data.Schematic) ? data.Schematic : [data.Schematic];
 
     for (let i = 0; i < rawSchematics.length; i ++) {
       schematics[i] = schematicFactory.make(rawSchematics[i]);
@@ -91,6 +91,15 @@ export class DroidApi {
    */
   getSchematicsByCreator(creator) {
     return this.ajax.get(`${this.scheme}${this.domain}/api/di/Schematic/creator/${creator}`)
+      .then(this.schematicResponseHandler.bind(this));
+  }
+
+  /**
+   * @param searchString
+   * @returns {Promise<Schematic[]>}
+   */
+  searchSchematics(searchString) {
+    return this.ajax.get(`${this.scheme}${this.domain}/api/di/Schematic/search/${encodeURIComponent(searchString)}`)
       .then(this.schematicResponseHandler.bind(this));
   }
 
