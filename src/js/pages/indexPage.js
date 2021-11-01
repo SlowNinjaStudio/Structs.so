@@ -24,7 +24,6 @@ footer.init('footer-wrapper');
 const searchHandler = function() {
   const searchString = document.getElementById('nav-search-input').value;
   droidUi.searchAndLoadStructures('structures-list', searchString, instance.address);
-
 };
 
 document.getElementById('nav-search-btn').addEventListener('click', searchHandler);

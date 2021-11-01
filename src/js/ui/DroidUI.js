@@ -185,6 +185,18 @@ export class DroidUI {
   }
 
   /**
+   * Load structures that match the given search string for the given creator and display them in the target element.
+   *
+   * @param {string} targetElementId
+   * @param {string} searchString
+   * @param {string} creator
+   */
+  searchAndLoadStructuresByCreator(targetElementId, searchString,  creator = '') {
+    const searchStringWithCreator = `${searchString} ${creator}`;
+    this.searchAndLoadStructures(targetElementId, searchStringWithCreator,  creator);
+  }
+
+  /**
    * Load schematics by the given creator and display them in the target element.
    *
    * @param {string} targetElementId
