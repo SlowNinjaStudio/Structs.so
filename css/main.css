@@ -576,6 +576,13 @@ img.structure-card-icon {
 }
 
 /**
+ * Generic Modal
+ */
+.droid-ui-generic-modal.modal .modal-body {
+  font-family: sans-serif;
+}
+
+/**
  * Responsive Styling Page Overrides
  */
 @media screen and (max-width: 576px) {
