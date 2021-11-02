@@ -20,7 +20,7 @@ const modalBroke = new DroidUIModel(
 modalBroke.init('popup-modal-wrapper');
 
 instance.queryBalance().then(function(balance) {
-  if (balance.amount < 1000000000) {
+  if (balance.amount < 1) {
     modalBroke.show();
   }
 })
