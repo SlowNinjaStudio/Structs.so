@@ -32,6 +32,24 @@
   </div>
   <div id="footer-wrapper" class="bg-dark mt-auto"></div>
 
+  <div class="offcanvas offcanvas-start" tabindex="-1" id="offcanvas">
+    <div class="offcanvas-header">
+      <h5 id="offcanvas-title" class="offcanvas-title"></h5>
+      <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+    </div>
+    <div class="offcanvas-search container-fluid">
+      <div class="row">
+        <div class="col">
+          <input id="offcanvas-search-input" class="nes-input" type="text">
+        </div>
+        <div class="col-auto">
+          <a href="javascript:void(0)" id="offcanvas-search-btn" class="nes-btn is-primary">Search</a>
+        </div>
+      </div>
+    </div>
+    <div id="offcanvas-body" class="offcanvas-body"></div>
+  </div>
+
   <script src="js/vendor/modernizr-3.11.2.min.js"></script>
   <script src="js/plugins.js"></script>
   <script src="js/schematicsPage.js"></script>

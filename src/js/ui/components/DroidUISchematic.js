@@ -1,13 +1,29 @@
+import {DroidUI} from "../DroidUI";
+import {Instance} from "../../models/Instance";
+
 /**
  * Web UI component for schematic.
  */
 export class DroidUISchematic {
-  constructor(schematic, idPrefix = '') {
+
+  /**
+   * @param {Schematic} schematic
+   * @param {string} creator
+   * @param {string} idPrefix
+   */
+  constructor(schematic, creator = '', idPrefix = '') {
     this.schematic = schematic;
+    this.creator = creator;
     this.idPrefix = idPrefix;
   }
   getCanvasId() {
     return `${this.idPrefix}schematic-${this.schematic.getId()}`;
+  }
+  isCreator() {
+    return this.schematic.getCreator() === '' || this.schematic.getCreator() === this.creator;
+  }
+  getBuildButtonId() {
+    return `build-schematic-btn-${this.schematic.getId()}`;
   }
   render() {
     return `
@@ -18,6 +34,19 @@ export class DroidUISchematic {
               Your browser does not support the canvas element.
             </canvas>
           </div>
+          ${this.isCreator() ? `
+            <div class="row solo-action-wrapper">
+              <div class="col">
+                <a
+                  id="${this.getBuildButtonId()}"
+                  href="#offcanvas"
+                  class="nes-btn is-warning nes-btn-fluid"
+                  data-bs-toggle="offcanvas"
+                  role="button"
+                >Build</a>
+              </div>
+            </div>
+          ` : ''}
           <div class="nes-container with-title">
             <h3 class="title">Attributes</h3>
             <div class="details">
@@ -134,5 +163,44 @@ export class DroidUISchematic {
         </div>
       </div>
     `;
+  }
+
+  initBuildEventListeners() {
+    if (!this.isCreator()) {
+      return;
+    }
+    const droidUi = new DroidUI();
+
+    const searchHandler = async function() {
+      const instance = new Instance();
+      await instance.init();
+
+      const searchString = document.getElementById('offcanvas-search-input').value;
+      droidUi.loadStructureSelectionList(
+        'offcanvas-body',
+        'offcanvas-title',
+        this.schematic,
+        instance.address + ' ' + searchString
+      );
+    }.bind(this);
+
+    document.getElementById('offcanvas-search-btn').addEventListener('click', searchHandler);
+    document.getElementById('offcanvas-search-input').addEventListener('keypress', (event) => {
+      if (event.key === 'Enter') {
+        searchHandler(event);
+      }
+    });
+
+    const instance = new Instance();
+    instance.lazyLoad();
+
+    document.getElementById(this.getBuildButtonId()).addEventListener('click', function() {
+      droidUi.loadStructureSelectionList(
+        'offcanvas-body',
+        'offcanvas-title',
+        this.schematic,
+        instance.address
+      );
+    }.bind(this));
   }
 }

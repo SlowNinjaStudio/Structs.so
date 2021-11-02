@@ -54,6 +54,9 @@ export class Schematic {
   getDescription() {
     return this.description;
   }
+  getCreator() {
+    return this.creator;
+  }
   getEnergyToBuildAmount() {
     return this.energy_to_build.amount;
   }
