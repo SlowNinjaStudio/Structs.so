@@ -1,4 +1,5 @@
 import {Instance} from "../../models/Instance";
+import {StringToFile} from "../../vendor/StringToFile";
 
 export class DroidUIDroid {
   /**
@@ -18,6 +19,22 @@ export class DroidUIDroid {
       // document.getElementById('droid_panel_name').innerHTML = this.instance.name;
       // document.getElementById('droid_panel_mood').innerHTML = this.instance.mood;
       document.getElementById('droid_panel_battery').innerHTML = ((await this.instance.queryBalance()).amount) + 'watt';
+
+      // Create the download link on the fly so that the mnemonic isn't crawl-able.
+      const mnemonic = this.instance.mnemonic;
+      const seedPhraseFileName = this.getSeedPhraseFileName();
+      document.getElementById('save-account-btn').addEventListener('click', function() {
+        const element = document.createElement('a');
+        element.setAttribute('href', StringToFile.convert(mnemonic));
+        element.setAttribute('download', seedPhraseFileName);
+        element.style.display = 'none';
+        document.body.appendChild(element);
+
+        element.click();
+
+        document.body.removeChild(element);
+      });
+
       this.updater = setTimeout(updateTime, 120000);
     }.bind(this), 10);
 
@@ -25,6 +42,15 @@ export class DroidUIDroid {
 
   getCanvasId() {
     return `${this.idPrefix}droid`;
+  }
+
+  getSeedPhraseFileName() {
+    return StringToFile.makeFileNameFromId(
+      this.droid.hash,
+      '.txt',
+      'seed-phrase-',
+      32
+    );
   }
 
   render() {
@@ -39,7 +65,7 @@ export class DroidUIDroid {
             </div>
           </div>
         </div>
-        <div class="row">
+        <div class="row account-menu-section">
           <div class="col nes-container with-title">
             <h3 class="title">Details</h3>
             <div class="droid-details">
@@ -64,6 +90,27 @@ export class DroidUIDroid {
             <div class="row">
               <div class="col">
                <a href="javascript: void(0)" class="nes-btn nes-btn-fluid is-primary" onclick="navigator.clipboard.writeText('${this.droid.hash}')">Copy Droid ID</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row account-menu-section">
+        <div class="col nes-container with-title">
+          <h3 class="title">Save</h3>
+          <div class="droid-details">
+            <div class="row droid-detail">
+              <div class="col">
+                Save your account by downloading your seed phrase.
+              </div>
+            </div>
+            <div class="row">
+              <div class="col">
+                <a
+                  id="save-account-btn"
+                  href="javascript: void(0);"
+                  class="nes-btn nes-btn-fluid is-primary"
+                >Save Account</a>
               </div>
             </div>
           </div>
