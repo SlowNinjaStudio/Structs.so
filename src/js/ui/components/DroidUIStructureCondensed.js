@@ -49,7 +49,7 @@ export class DroidUIStructureCondensed {
       <div class="structure-condensed container text-center p-2">
         <div class="row gx-2 mb-2">
           <div class="col-auto">
-            <div class="game-asset-wrapper">
+            <div class="structure-asset game-asset-wrapper">
               <canvas id="${this.getCanvasId()}" class="pixel-art-viewer" width="64" height="64">
                 Your browser does not support the canvas element.
               </canvas>
