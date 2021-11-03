@@ -55,15 +55,15 @@ export class DroidUIDroid {
 <!--              </div>-->
 <!--              <div class="col text-break px-1" id="droid_panel_mood"></div>-->
 <!--            </div>-->
-             <div class="row">
-              <div class="col-auto droid-detail-label px-0">
+             <div class="row droid-detail">
+              <div class="col-auto droid-detail-label">
                 <img src="img/icons/icon-battery-charge.png" alt="Battery"> Battery:
               </div>
               <div class="col text-break px-1" id="droid_panel_battery"></div>
             </div>
             <div class="row">
-              <div class="">
-               <button type="button" class="nes-btn nes-btn-fluid is-primary" onclick="navigator.clipboard.writeText('${this.droid.hash}')">Copy Droid ID</button>
+              <div class="col">
+               <a href="javascript: void(0)" class="nes-btn nes-btn-fluid is-primary" onclick="navigator.clipboard.writeText('${this.droid.hash}')">Copy Droid ID</a>
               </div>
             </div>
           </div>
