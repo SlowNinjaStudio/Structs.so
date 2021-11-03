@@ -114,6 +114,18 @@ export class DroidApi {
   }
 
   /**
+   * @param {string} schematicId
+   * @param {string} searchString
+   * @returns {Promise<Structure[]>}
+   */
+  searchStructuresBySchematic(schematicId, searchString, creator) {
+    // TODO: Add real endpoint call once created
+    const searchWithCreator = `${searchString} ${creator}`;
+    return this.ajax.get(`${this.scheme}${this.domain}/api/di/Structure/search/${encodeURIComponent(searchWithCreator)}`)
+      .then(this.structureResponseHandler.bind(this));
+  }
+
+  /**
    * @param {obj} request
    * @returns {Promise<string>}
    */
