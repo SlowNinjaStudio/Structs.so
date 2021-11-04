@@ -116,6 +116,32 @@ export class DroidUIDroid {
           </div>
         </div>
       </div>
+      <div class="row account-menu-section">
+        <div class="col nes-container with-title">
+          <h3 class="title">Load</h3>
+          <div class="droid-details">
+            <div class="row droid-detail">
+              <div class="col">
+                Load an existing account by entering your 12 or 24 word seed phrase.
+              </div>
+            </div>
+            <div class="row">
+              <div class="col">
+                <textarea class="custom-nes-text-area" placeholder="taco fish hover pelican math snake grouchy banana smooth cactus yellow zebra ..."></textarea>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col">
+                <a
+                  id="save-account-btn"
+                  href="javascript: void(0);"
+                  class="nes-btn nes-btn-fluid is-primary"
+                >Load Account</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     `;
   }
 }

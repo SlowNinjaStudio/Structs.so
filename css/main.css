@@ -353,6 +353,17 @@ a:hover .settings-text {
   vertical-align: text-bottom;
   width: 16px;
 }
+textarea.custom-nes-text-area {
+  border: 4px solid #000000;
+  font-family: sans-serif;
+  max-width: 100%;
+  min-height: 150px;
+  padding: 10px 20px;
+  width: 100%;
+}
+textarea.custom-nes-text-area.is-invalid {
+  border-color: #dc3545;
+}
 
 /* Account Menu */
 #account-menu-profile-image .game-asset-wrapper {
