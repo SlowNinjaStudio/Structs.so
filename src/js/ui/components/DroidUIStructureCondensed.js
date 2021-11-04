@@ -8,35 +8,46 @@ import {DroidUIStructureCondensedCTANone} from "./DroidUIStructureCondensedCTANo
 import {DroidUI} from "../DroidUI";
 
 import {Instance} from "../../models/Instance"
+import {DroidUIStructureCondensedCTAAttack} from "./DroidUIStructureCondensedCTAAttack";
+import {StructureAttack} from "../../compute/StructureAttack";
+import {DroidUIStructureCondensedCTABuild} from "./DroidUIStructureCondensedCTABuild";
 
 
 export class DroidUIStructureCondensed {
 
   /**
    * @param {Structure} structure
-   * @param {Schematic} schematic
-   * @param {DroidUIStructureCondensedCTANone|DroidUIStructureCondensedCTABuild} callToAction
+   * @param {Schematic|Structure} baseObject
+   * @param {DroidUIStructureCondensedCTANone|DroidUIStructureCondensedCTABuild|DroidUIStructureCondensedCTAAttack} callToAction
    * @param {string} idPrefix
    * @param {DroidUIComputeStatus} computeStatus
    */
   constructor(
     structure,
-    schematic,
+    baseObject,
     callToAction = new DroidUIStructureCondensedCTANone(),
     idPrefix = '',
     computeStatus = null
   ) {
     this.structure = structure;
-    this.schematic = schematic;
+
     this.idPrefix = idPrefix;
     this.callToAction = callToAction;
 
     this.computer = new Computer();
 
-    if (!(typeof schematic == 'undefined' || schematic == null)) {
+    if (callToAction instanceof DroidUIStructureCondensedCTABuild) {
+      this.schematic = baseObject;
       this.program = new StructureBuild();
-      this.program.setSchematic(schematic);
+      this.program.setSchematic(baseObject);
       this.program.setPerformingStructure(structure);
+
+      this.compute_status = computeStatus;
+
+    } else if  (callToAction instanceof DroidUIStructureCondensedCTAAttack) {
+      this.program = new StructureAttack();
+      this.program.setPerformingStructure(baseObject);
+      this.program.setTargetStructure(structure)
 
       this.compute_status = computeStatus;
     }
@@ -192,6 +203,27 @@ export class DroidUIStructureCondensed {
         this.computer.run_process(new_process_id);
 
       }.bind(this));
+
+  }
+
+  initMainAttackEventListeners() {
+
+    document.getElementById('structure_list_attack_' + this.structure.getId()).addEventListener('click', async function() {
+      // Hide the selector
+      // Move this into the DroidUI if it's not already there.
+      window.bootstrap.Offcanvas.getInstance(document.getElementById('offcanvas')).hide();
+
+      let instance = new Instance();
+      await instance.init();
+      this.program.instance = instance.address;
+
+      let new_process_id = this.computer.add_process(this.program);
+
+
+      (new DroidUI()).loadStructureAttackStatusModal(this.program, new_process_id)
+      this.computer.run_process(new_process_id);
+
+    }.bind(this));
 
   }
 }

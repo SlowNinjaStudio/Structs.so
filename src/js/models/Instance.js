@@ -219,6 +219,34 @@ export class Instance {
 
     }
 
+  async performAttack(compute_result, fee) {
+    let server = new Server();
+    await server.init(await this.getWallet());
+
+    console.log(compute_result)
+
+    const msgAttackStructure = {
+      typeUrl: "/di.MsgAttackStructure",
+      value: {
+        creator: this.address,
+        aimCalculationHash:compute_result.hash,
+        aimCalculationInput:compute_result.input,
+        targetStructure: compute_result.compute_process.program.target_structure.id,
+        performingStructure: compute_result.compute_process.program.performing_structure.id
+      }
+    };
+
+    console.log(msgAttackStructure)
+
+    let result = await server.client.signAndBroadcast(this.address, [msgAttackStructure], fee);
+    console.log(result)
+
+    //assertIsBroadcastTxSuccess(result);
+
+    return result;
+
+  }
+
     /*
      *
      */
