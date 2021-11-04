@@ -364,6 +364,10 @@ textarea.custom-nes-text-area {
 textarea.custom-nes-text-area.is-invalid {
   border-color: #dc3545;
 }
+.error-text {
+  color: #dc3545 !important;
+  font-family: sans-serif;
+}
 
 /* Account Menu */
 #account-menu-profile-image .game-asset-wrapper {

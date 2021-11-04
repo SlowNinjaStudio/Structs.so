@@ -44,7 +44,7 @@ export class BIP39SeedPhraseValidator {
    * @param {string} phrase
    * @throws {BIP39SeedPhraseValidationError}
    */
-  validatePhrase(phrase) {
+  sanitizeAndValidatePhrase(phrase) {
     const parsedPhrase = this.parsePhrase(phrase);
     this.validatePhraseWordCount(parsedPhrase);
     const invalidWords = parsedPhrase.reduce((invalid, word) =>
@@ -53,7 +53,7 @@ export class BIP39SeedPhraseValidator {
     if (invalidWords.length > 0) {
       throw new BIP39SeedPhraseValidationError(`Invalid seed phrase words: ${invalidWords.join(', ')}`);
     }
-    return true;
+    return parsedPhrase.join(' ');
   }
 
 }

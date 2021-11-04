@@ -1,5 +1,6 @@
 import {Instance} from "../../models/Instance";
 import {StringToFile} from "../../vendor/StringToFile";
+import {BIP39SeedPhraseValidator} from "../../vendor/BIP39/BIP39SeedPhraseValidator";
 
 export class DroidUIDroid {
   /**
@@ -35,6 +36,10 @@ export class DroidUIDroid {
         document.body.removeChild(element);
       });
 
+      document.getElementById('load-account-btn').addEventListener('click', function () {
+        this.loadAccount('seed-phrase-input', 'seed-phrase-input-error');
+      }.bind(this));
+
       this.updater = setTimeout(updateTime, 120000);
     }.bind(this), 10);
 
@@ -51,6 +56,30 @@ export class DroidUIDroid {
       'seed-phrase-',
       32
     );
+  }
+
+  loadAccount(seedPhraseInputId, errorContainerId) {
+    const seedPhraseInput = document.getElementById(seedPhraseInputId);
+    const seedPhraseErrorContainer = document.getElementById(errorContainerId);
+
+    try {
+      const seedPhrase = (new BIP39SeedPhraseValidator()).sanitizeAndValidatePhrase(seedPhraseInput.value);
+      (new Instance()).init(seedPhrase, true).then(function () {
+        window.location.reload();
+      });
+    } catch (error) {
+      // Show error
+      seedPhraseInput.classList.add('is-invalid');
+      seedPhraseErrorContainer.innerHTML = error.message;
+      seedPhraseErrorContainer.classList.remove('d-none');
+
+      // Remove error indicators once phrase modified
+      seedPhraseInput.addEventListener('keypress', function() {
+        seedPhraseInput.classList.remove('is-invalid');
+        seedPhraseErrorContainer.innerHTML = '';
+        seedPhraseErrorContainer.classList.add('d-none');
+      })
+    }
   }
 
   render() {
@@ -127,13 +156,22 @@ export class DroidUIDroid {
             </div>
             <div class="row">
               <div class="col">
-                <textarea class="custom-nes-text-area" placeholder="taco fish hover pelican math snake grouchy banana smooth cactus yellow zebra ..."></textarea>
+                <textarea
+                  id="seed-phrase-input"
+                  class="custom-nes-text-area"
+                  placeholder="taco fish hover pelican math snake grouchy banana smooth cactus yellow zebra ..."
+                ></textarea>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col">
+                <div id="seed-phrase-input-error" class="error-text d-none"></div>
               </div>
             </div>
             <div class="row">
               <div class="col">
                 <a
-                  id="save-account-btn"
+                  id="load-account-btn"
                   href="javascript: void(0);"
                   class="nes-btn nes-btn-fluid is-primary"
                 >Load Account</a>
