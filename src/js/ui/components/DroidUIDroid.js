@@ -19,7 +19,7 @@ export class DroidUIDroid {
       await this.instance.init();
       // document.getElementById('droid_panel_name').innerHTML = this.instance.name;
       // document.getElementById('droid_panel_mood').innerHTML = this.instance.mood;
-      document.getElementById('droid_panel_battery').innerHTML = ((await this.instance.queryBalance()).amount) + 'watt';
+      document.getElementById('droid_panel_battery').innerHTML = ((await this.instance.queryBalance()).amount) + ' watt';
 
       // Create the download link on the fly so that the mnemonic isn't crawl-able.
       const mnemonic = this.instance.mnemonic;
@@ -96,6 +96,18 @@ export class DroidUIDroid {
         </div>
         <div class="row account-menu-section">
           <div class="col nes-container with-title">
+            <h3 class="title">Battery</h3>
+            <div class="row">
+              <div class="col nes-container battery-container">
+                <div class="row">
+                  <div id="droid_panel_battery" class="col battery-text-container"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row account-menu-section">
+          <div class="col nes-container with-title">
             <h3 class="title">Details</h3>
             <div class="droid-details">
 <!--             <div class="row">-->
@@ -110,12 +122,6 @@ export class DroidUIDroid {
 <!--              </div>-->
 <!--              <div class="col text-break px-1" id="droid_panel_mood"></div>-->
 <!--            </div>-->
-             <div class="row droid-detail">
-              <div class="col-auto droid-detail-label">
-                <img src="img/icons/icon-battery-charge.png" alt="Battery"> Battery:
-              </div>
-              <div class="col text-break px-1" id="droid_panel_battery"></div>
-            </div>
             <div class="row">
               <div class="col">
                <a href="javascript: void(0)" class="nes-btn nes-btn-fluid is-primary" onclick="navigator.clipboard.writeText('${this.droid.hash}')">Copy Droid ID</a>

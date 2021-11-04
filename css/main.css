@@ -390,6 +390,18 @@ textarea.custom-nes-text-area.is-invalid {
 .account-menu-section {
   margin-bottom: 40px;
 }
+.battery-container {
+  background: url(/img/background/power-background.gif);
+  background-size: 512px 16px;
+  padding: 4px 16px;
+}
+.battery-text-container {
+  background: #000000;
+  border: 4px solid #000000;
+  color: #ffffff;
+  font-size: 14px;
+  text-align: center;
+}
 
 /* Footer */
 #footer-wrapper {
