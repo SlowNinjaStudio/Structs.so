@@ -169,9 +169,6 @@ export class ComputeProcess {
                 console.log(JSON.parse(tx_result.rawLog))
                 console.log(tx_result)
                 let tx_result_parsed = JSON.parse(tx_result.rawLog)
-                // I don't fully understand how consistent this is yet.
-                // entire section needs some love.
-                // But it works!
 
                 console.log(result)
                 document.getElementById('attack-status-dialog-view-button').href = '/structure.html?structure_id=' + result.data[1].compute_process.program.target_structure.id;
