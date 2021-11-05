@@ -97,7 +97,7 @@ export class DroidUIDroid {
         <div class="row account-menu-section">
           <div class="col nes-container with-title">
             <h3 class="title">Battery</h3>
-            <div class="row">
+            <div class="row justify-content-center">
               <div class="col nes-container battery-container">
                 <div class="row">
                   <div id="droid_panel_battery" class="col battery-text-container"></div>
