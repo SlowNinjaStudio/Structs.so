@@ -50,7 +50,7 @@ export class StructureAttack {
     if (typeof this.target_structure != 'undefined' && this.target_structure != null){
       if (!structure.sharesAmbit(this.target_structure.ambits)){
         // TODO some sort of better error handling
-        alert('No shared ambit');
+        // alert('No shared ambit');
         return;
       }
     }
@@ -79,7 +79,7 @@ export class StructureAttack {
     if (typeof this.performing_structure != 'undefined' && this.performing_structure != null){
       if (!structure.sharesAmbit(this.performing_structure.ambits)){
         // TODO some sort of better error handling
-        alert('No shared ambit');
+        // alert('No shared ambit');
         return;
       }
     }
