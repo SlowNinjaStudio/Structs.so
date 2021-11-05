@@ -2,7 +2,7 @@ import { stringToPath, Random, Bip39 } from "@cosmjs/crypto";
 import {DirectSecp256k1HdWallet} from "@cosmjs/proto-signing";
 
 import {Server} from "../cosmos/Server"
-import {assertIsBroadcastTxSuccess, BankExtension} from "@cosmjs/stargate";
+import {assertIsBroadcastTxSuccess} from "@cosmjs/stargate";
 
 /**
  * Instance Model
@@ -58,7 +58,7 @@ export class Instance {
 
     async createIdentity(mnemonic) {
 
-        if ( mnemonic == '') {
+        if ( mnemonic === '') {
             console.log('Generating new mnemonic because none was provided.');
 
             // Add this constant (16) to the constants.js file
