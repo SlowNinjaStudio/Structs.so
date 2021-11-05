@@ -14,6 +14,8 @@ export class DroidUIDroid {
 
     this.instance;
 
+    const seedPhraseFileName = this.getSeedPhraseFileName();
+
     this.updater = setTimeout(async function updateTime() {
       this.instance = new Instance();
       await this.instance.init();
@@ -23,7 +25,6 @@ export class DroidUIDroid {
 
       // Create the download link on the fly so that the mnemonic isn't crawl-able.
       const mnemonic = this.instance.mnemonic;
-      const seedPhraseFileName = this.getSeedPhraseFileName();
       document.getElementById('save-account-btn').addEventListener('click', function() {
         const element = document.createElement('a');
         element.setAttribute('href', StringToFile.convert(mnemonic));
