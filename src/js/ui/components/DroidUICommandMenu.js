@@ -18,8 +18,10 @@ export class DroidUICommandMenu {
         <div class="col">
             <a
               id="attack-command"
-              href="javascript:void(0)"
-              class="nes-btn ${this.structure.hasFeatureAttack() ? 'is-disabled' : 'is-disabled' } nes-btn-fluid"
+              href="#offcanvas"
+              data-bs-toggle="offcanvas"
+              role="button"
+              class="nes-btn ${this.structure.hasFeatureAttack() ? 'is-warning' : 'is-disabled' } nes-btn-fluid"
             >
               Attack
             </a>
@@ -98,6 +100,36 @@ export class DroidUICommandMenu {
         commandMenu.initEngineeringSubmenuEventListeners();
       }.bind(this));
     }
+
+    if (this.structure.hasFeatureAttack()) {
+      document.getElementById('attack-command').addEventListener('click', function() {
+        const droidUi = new DroidUI();
+
+        const searchHandler = async function() {
+          const instance = new Instance();
+          await instance.init();
+
+          const searchString = document.getElementById('offcanvas-search-input').value;
+          droidUi.loadStructureSelectionList(
+            'offcanvas-body',
+            'offcanvas-title',
+            this.structure,
+            searchString
+          );
+        }.bind(this);
+        document.getElementById('offcanvas-search-btn').addEventListener('click', searchHandler);
+        document.getElementById('offcanvas-search-input').addEventListener('keypress', (event) => {
+          if (event.key === 'Enter') {
+            searchHandler(event);
+          }
+        });
+
+
+        droidUi.loadStructureSelectionList('offcanvas-body', 'offcanvas-title', this.structure);
+
+      }.bind(this));
+    }
+
   }
 
   initEngineeringSubmenuEventListeners() {
@@ -107,7 +139,7 @@ export class DroidUICommandMenu {
 
     const searchHandler = async function() {
       const instance = new Instance();
-      instance.init();
+      await instance.init();
 
       const searchString = document.getElementById('offcanvas-search-input').value;
       droidUi.loadSchematicSelectionList(
