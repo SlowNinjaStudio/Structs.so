@@ -120,7 +120,7 @@ export class DroidApi {
    */
   searchStructuresBySchematic(schematicId, searchString, creator) {
     // TODO: Add real endpoint call once created
-    const searchWithCreator = `${searchString} ${creator}`;
+    const searchWithCreator = `${searchString} ${creator} engineering`;
     return this.ajax.get(`${this.scheme}${this.domain}/api/di/Structure/search/${encodeURIComponent(searchWithCreator)}`)
       .then(this.structureResponseHandler.bind(this));
   }
