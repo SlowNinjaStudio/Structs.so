@@ -7,6 +7,7 @@ import {DroidUISchematicCondensed} from "./DroidUISchematicCondensed";
 import {DroidUIComputeStatus} from "./DroidUIComputeStatus";
 import {Computer} from "../../compute/Computer";
 import {DroidUIStructureCondensed} from "./DroidUIStructureCondensed";
+import {DroidUIStructureHealthProgress} from "./DroidUIStructureHealthProgress";
 
 export class DroidUIStructureAttackStatusModal {
   /**
@@ -28,6 +29,9 @@ export class DroidUIStructureAttackStatusModal {
     );
 
     this.computeStatus = new DroidUIComputeStatus(true);
+
+    this.healthStatus = new DroidUIStructureHealthProgress();
+
   }
 
   render() {
@@ -40,6 +44,7 @@ export class DroidUIStructureAttackStatusModal {
             </div>
             <div class="modal-body">
               ${this.uiStructure.render()}
+              <div id="health_status" class="row">${this.healthStatus.render()}</div>
               <div id="compute_status" class="row">${this.computeStatus.render()}</div>
             </div>
             <div class="modal-footer">
@@ -62,6 +67,8 @@ export class DroidUIStructureAttackStatusModal {
   showModal() {
     this.computeStatus.setProgram(this.program);
     this.computeStatus.setProcessID(this.process_id);
+
+    this.healthStatus.init(this.program);
 
     document.getElementById("backdrop").style.display = "block"
     document.getElementById("attack-status-dialog").style.display = "block"

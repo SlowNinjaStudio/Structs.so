@@ -9,6 +9,7 @@ import {StructureAttack} from "./StructureAttack";
 
 import {Instance} from "../models/Instance"
 import {parseRawLog} from "@cosmjs/stargate";
+import {DroidUIStructureHealthProgress} from "../ui/components/DroidUIStructureHealthProgress";
 
 /*
  * ComputeProcess
@@ -168,7 +169,12 @@ export class ComputeProcess {
                 //Maybe move this parser into its program
                 console.log(JSON.parse(tx_result.rawLog))
                 console.log(tx_result)
-                let tx_result_parsed = JSON.parse(tx_result.rawLog)
+                let tx_result_parsed = JSON.parse(tx_result.rawLog);
+
+
+                let tx_result_processed = (new StructureAttack()).processResult(tx_result_parsed[0]);
+                (new DroidUIStructureHealthProgress()).decrementHealth(tx_result_processed.targetDamageAmount);
+
 
                 console.log(result)
                 document.getElementById('attack-status-dialog-view-button').href = '/structure.html?structure_id=' + result.data[1].compute_process.program.target_structure.id;

@@ -51,7 +51,6 @@ export class StructureAttack {
       if (!structure.sharesAmbit(this.target_structure.ambits)){
         // TODO some sort of better error handling
         // alert('No shared ambit');
-        return;
       }
     }
 
@@ -80,7 +79,6 @@ export class StructureAttack {
       if (!structure.sharesAmbit(this.performing_structure.ambits)){
         // TODO some sort of better error handling
         // alert('No shared ambit');
-        return;
       }
     }
 
@@ -99,6 +97,29 @@ export class StructureAttack {
     let difficulty = 1;
 
     return difficulty;
+  }
+
+
+  processResult(result) {
+    let processedResult = {
+      targetDamageAmount: 0,
+      targetDestroyed: false
+    };
+
+    for (let i = 0; i < result.events.length; i++ ) {
+      for (let x = 0; x < result.events[i].attributes.length; x++) {
+        switch(result.events[i].attributes[x].key) {
+          case "target_damage_amount":
+            processedResult.targetDamageAmount = result.events[i].attributes[x].value;
+            break;
+          case "target_destroyed":
+            processedResult.targetDestroyed = result.events[i].attributes[x].value;
+            break;
+        }
+      }
+    }
+
+    return processedResult;
   }
 
 }
