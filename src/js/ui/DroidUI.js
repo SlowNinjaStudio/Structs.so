@@ -26,6 +26,9 @@ import {Schematic} from "../models/Schematic";
 import {Structure} from "../models/Structure";
 import {DroidUIStructureCondensedCTAAttack} from "./components/DroidUIStructureCondensedCTAAttack";
 import {DroidUIStructureAttackStatusModal} from "./components/DroidUIStructureAttackStatusModal";
+import {DroidUIStructureCondensedCTANone} from "./components/DroidUIStructureCondensedCTANone";
+import {DroidUIStructureCondensedCTARepair} from "./components/DroidUIStructureCondensedCTARepair";
+import {DroidUIStructureRepairStatusModal} from "./components/DroidUIStructureRepairStatusModal";
 
 
 /**
@@ -375,7 +378,7 @@ export class DroidUI {
    * @param {object} baseObject
    * @param {string} searchString
    */
-  loadStructureSelectionList(targetElementId, targetElementTitleId, baseObject, searchString = '') {
+  loadStructureSelectionList(targetElementId, targetElementTitleId, baseObject, callToActionType, searchString = '') {
     const targetElement = document.getElementById(targetElementId);
     const targetElementTitle = document.getElementById(`${targetElementTitleId}`);
     targetElementTitle.innerHTML = 'Select Structure';
@@ -387,6 +390,7 @@ export class DroidUI {
         .then(structures => {
             const structuresList = [];
             for (let i = 0; i < structures.length; i++) {
+
               const droidUIStructureCondensed = new DroidUIStructureCondensed(
                 structures[i],
                 baseObject,
@@ -420,10 +424,21 @@ export class DroidUI {
         .then(structures => {
             const structuresList = [];
             for (let i = 0; i < structures.length; i++) {
+
+              let cta = new DroidUIStructureCondensedCTANone();
+              switch (callToActionType){
+                case 'attack':
+                  cta = new DroidUIStructureCondensedCTAAttack(structures[i])
+                  break;
+                case 'repair':
+                  cta = new DroidUIStructureCondensedCTARepair(structures[i])
+                  break;
+              }
+
               const droidUIStructureCondensed = new DroidUIStructureCondensed(
                 structures[i],
                 baseObject,
-                new DroidUIStructureCondensedCTAAttack(structures[i])
+                cta
               );
 
               // Batch drawing by collecting all the HTML first
@@ -444,7 +459,15 @@ export class DroidUI {
               const canvas = document.getElementById(structuresList[i].droidUIStructureCondensed.getCanvasId());
               new PixelArtViewer(canvas, structuresList[i].layers, this.getStructurePalette(structuresList[i].structure));
 
-              structuresList[i].droidUIStructureCondensed.initMainAttackEventListeners();
+              switch (callToActionType){
+                case 'attack':
+                  structuresList[i].droidUIStructureCondensed.initMainAttackEventListeners();
+                  break;
+                case 'repair':
+                  structuresList[i].droidUIStructureCondensed.initMainRepairEventListeners();
+                  break;
+              }
+
             }
           }
         );
@@ -529,6 +552,16 @@ export class DroidUI {
 
     structureAttackStatusModal.initEventListeners();
     structureAttackStatusModal.showModal();
+  }
+
+  loadStructureRepairStatusModal(program){
+    let structureRepairStatusModal = new DroidUIStructureRepairStatusModal(program)
+
+    document.getElementById('modal-container').innerHTML = structureRepairStatusModal.render();
+    (new DroidUI()).renderPixelArtStructure(program.target_structure, structureRepairStatusModal.uiStructure);
+
+    structureRepairStatusModal.initEventListeners();
+    structureRepairStatusModal.showModal();
   }
 
   /**

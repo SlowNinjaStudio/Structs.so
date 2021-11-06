@@ -246,7 +246,29 @@ export class Instance {
     return result;
 
   }
+  async performRepair(program, fee) {
+    let server = new Server();
+    await server.init(await this.getWallet());
 
+    const msgRepairStructure = {
+      typeUrl: "/di.MsgRepairStructure",
+      value: {
+        creator: this.address,
+        targetStructure: program.target_structure.id,
+        performingStructure: program.performing_structure.id
+      }
+    };
+
+    console.log(msgRepairStructure)
+
+    let result = await server.client.signAndBroadcast(this.address, [msgRepairStructure], fee);
+    console.log(result)
+
+    //assertIsBroadcastTxSuccess(result);
+
+    return result;
+
+  }
     /*
      *
      */

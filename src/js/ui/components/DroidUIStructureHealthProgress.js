@@ -40,6 +40,13 @@ export class DroidUIStructureHealthProgress {
     this.setCurrentHealth(new_health);
   }
 
+  incrementHealth(amount){
+    let new_health = document.getElementById('health_status_progress_bar_cpu').value + amount
+    if (new_health > document.getElementById('health_status_progress_bar_cpu').max) { new_health = document.getElementById('health_status_progress_bar_cpu').max; }
+
+    this.setCurrentHealth(new_health);
+  }
+
   setCurrentHealth(new_health) {
     document.getElementById('health_status_progress_bar_cpu').value = new_health;
 

@@ -199,6 +199,7 @@ export class DroidUISchematic {
         'offcanvas-body',
         'offcanvas-title',
         this.schematic,
+        'build',
         instance.address
       );
     }.bind(this));
