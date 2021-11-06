@@ -393,6 +393,7 @@ textarea.custom-nes-text-area.is-invalid {
 .battery-container {
   background: url(/img/background/power-background.gif);
   background-size: 512px 16px;
+  max-width: 320px;
   padding: 4px 16px;
 }
 .battery-text-container {
