@@ -28,8 +28,7 @@ export class DroidUIStructureCondensed {
     structure,
     baseObject,
     callToAction = new DroidUIStructureCondensedCTANone(),
-    idPrefix = '',
-    computeStatus = null
+    idPrefix = ''
   ) {
     this.structure = structure;
     this.baseObject = baseObject;
@@ -42,9 +41,6 @@ export class DroidUIStructureCondensed {
     this.program = this.callToAction.initProgram();
     this.program.setPerformingStructure(structure);
     this.program.setTargetObject(baseObject);
-
-    this.compute_status = computeStatus;
-
 
   }
   getCanvasId() {

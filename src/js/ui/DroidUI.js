@@ -372,106 +372,120 @@ export class DroidUI {
     });
   }
 
+
   /**
    * @param {string} targetElementId
    * @param {string} targetElementTitleId
-   * @param {object} baseObject
+   * @param {Schematic} schematic
    * @param {string} searchString
    */
-  loadStructureSelectionList(targetElementId, targetElementTitleId, baseObject, callToActionType, searchString = '') {
+  loadStructureSelectionListFromSchematic(targetElementId, targetElementTitleId, schematic, searchString = '') {
     const targetElement = document.getElementById(targetElementId);
     const targetElementTitle = document.getElementById(`${targetElementTitleId}`);
     targetElementTitle.innerHTML = 'Select Structure';
 
     let structuresHtml = '';
 
-    if (baseObject instanceof Schematic) {
-      this.droidApi.searchStructuresBySchematic(baseObject.getId(), searchString, baseObject.getCreator())
-        .then(structures => {
-            const structuresList = [];
-            for (let i = 0; i < structures.length; i++) {
+    this.droidApi.searchStructuresBySchematic(schematic.getId(), searchString, schematic.getCreator())
+      .then(structures => {
+          const structuresList = [];
+          for (let i = 0; i < structures.length; i++) {
 
-              const droidUIStructureCondensed = new DroidUIStructureCondensed(
-                structures[i],
-                baseObject,
-                new DroidUIStructureCondensedCTABuild(structures[i])
-              );
+            const droidUIStructureCondensed = new DroidUIStructureCondensed(
+              structures[i],
+              schematic,
+              new DroidUIStructureCondensedCTABuild(structures[i])
+            );
 
-              // Batch drawing by collecting all the HTML first
-              structuresHtml += droidUIStructureCondensed.render();
+            // Batch drawing by collecting all the HTML first
+            structuresHtml += droidUIStructureCondensed.render();
 
-              structuresList[i] = {
-                'structure': structures[i],
-                'droidUIStructureCondensed': droidUIStructureCondensed,
-                'layers': this.structureArtGenerator.generate(structures[i]),
-              }
-            }
-
-            // Update DOM
-            targetElement.innerHTML = this.structureSelectionListOutputHelper(structuresHtml, searchString);
-
-            for (let i = 0; i < structuresList.length; i++) {
-              /** @type {HTMLCanvasElement} */
-              const canvas = document.getElementById(structuresList[i].droidUIStructureCondensed.getCanvasId());
-              new PixelArtViewer(canvas, structuresList[i].layers, this.getStructurePalette(structuresList[i].structure));
-
-              structuresList[i].droidUIStructureCondensed.initMainBuildEventListeners();
+            structuresList[i] = {
+              'structure': structures[i],
+              'droidUIStructureCondensed': droidUIStructureCondensed,
+              'layers': this.structureArtGenerator.generate(structures[i]),
             }
           }
-        );
-    } else if (baseObject instanceof Structure){
-      this.droidApi.searchStructures(searchString)
-        .then(structures => {
-            const structuresList = [];
-            for (let i = 0; i < structures.length; i++) {
 
-              let cta = new DroidUIStructureCondensedCTANone();
-              switch (callToActionType){
-                case 'attack':
-                  cta = new DroidUIStructureCondensedCTAAttack(structures[i])
-                  break;
-                case 'repair':
-                  cta = new DroidUIStructureCondensedCTARepair(structures[i])
-                  break;
-              }
+          // Update DOM
+          targetElement.innerHTML = this.structureSelectionListOutputHelper(structuresHtml, searchString);
 
-              const droidUIStructureCondensed = new DroidUIStructureCondensed(
-                structures[i],
-                baseObject,
-                cta
-              );
+          for (let i = 0; i < structuresList.length; i++) {
+            /** @type {HTMLCanvasElement} */
+            const canvas = document.getElementById(structuresList[i].droidUIStructureCondensed.getCanvasId());
+            new PixelArtViewer(canvas, structuresList[i].layers, this.getStructurePalette(structuresList[i].structure));
 
-              // Batch drawing by collecting all the HTML first
-              structuresHtml += droidUIStructureCondensed.render();
+            structuresList[i].droidUIStructureCondensed.initMainBuildEventListeners();
+          }
+        }
+      );
+  }
 
-              structuresList[i] = {
-                'structure': structures[i],
-                'droidUIStructureCondensed': droidUIStructureCondensed,
-                'layers': this.structureArtGenerator.generate(structures[i]),
-              }
+
+  /**
+   * @param {string} targetElementId
+   * @param {string} targetElementTitleId
+   * @param {Structure} structure
+   * @param {string} searchString
+   */
+  loadStructureSelectionListFromStructure(targetElementId, targetElementTitleId, structure, callToActionType, searchString = '') {
+    const targetElement = document.getElementById(targetElementId);
+    const targetElementTitle = document.getElementById(`${targetElementTitleId}`);
+    targetElementTitle.innerHTML = 'Select Structure';
+
+    let structuresHtml = '';
+
+    this.droidApi.searchStructures(searchString)
+      .then(structures => {
+          const structuresList = [];
+          for (let i = 0; i < structures.length; i++) {
+
+            let cta = new DroidUIStructureCondensedCTANone();
+            switch (callToActionType){
+              case 'attack':
+                cta = new DroidUIStructureCondensedCTAAttack(structures[i])
+                break;
+              case 'repair':
+                cta = new DroidUIStructureCondensedCTARepair(structures[i])
+                break;
             }
 
-            // Update DOM
-            targetElement.innerHTML = this.structureSelectionListOutputHelper(structuresHtml, searchString);
+            const droidUIStructureCondensed = new DroidUIStructureCondensed(
+              structures[i],
+              structure,
+              cta
+            );
 
-            for (let i = 0; i < structuresList.length; i++) {
-              /** @type {HTMLCanvasElement} */
-              const canvas = document.getElementById(structuresList[i].droidUIStructureCondensed.getCanvasId());
-              new PixelArtViewer(canvas, structuresList[i].layers, this.getStructurePalette(structuresList[i].structure));
+            // Batch drawing by collecting all the HTML first
+            structuresHtml += droidUIStructureCondensed.render();
 
-              switch (callToActionType){
-                case 'attack':
-                  structuresList[i].droidUIStructureCondensed.initMainAttackEventListeners();
-                  break;
-                case 'repair':
-                  structuresList[i].droidUIStructureCondensed.initMainRepairEventListeners();
-                  break;
-              }
-
+            structuresList[i] = {
+              'structure': structures[i],
+              'droidUIStructureCondensed': droidUIStructureCondensed,
+              'layers': this.structureArtGenerator.generate(structures[i]),
             }
           }
-        );
-    }
+
+          // Update DOM
+          targetElement.innerHTML = this.structureSelectionListOutputHelper(structuresHtml, searchString);
+
+          for (let i = 0; i < structuresList.length; i++) {
+            /** @type {HTMLCanvasElement} */
+            const canvas = document.getElementById(structuresList[i].droidUIStructureCondensed.getCanvasId());
+            new PixelArtViewer(canvas, structuresList[i].layers, this.getStructurePalette(structuresList[i].structure));
+
+            switch (callToActionType){
+              case 'attack':
+                structuresList[i].droidUIStructureCondensed.initMainAttackEventListeners();
+                break;
+              case 'repair':
+                structuresList[i].droidUIStructureCondensed.initMainRepairEventListeners();
+                break;
+            }
+
+          }
+        }
+      );
   }
 
   /**

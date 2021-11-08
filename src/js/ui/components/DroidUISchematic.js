@@ -176,12 +176,7 @@ export class DroidUISchematic {
       await instance.init();
 
       const searchString = document.getElementById('offcanvas-search-input').value;
-      droidUi.loadStructureSelectionList(
-        'offcanvas-body',
-        'offcanvas-title',
-        this.schematic,
-        instance.address + ' ' + searchString
-      );
+      droidUi.loadStructureSelectionListFromSchematic('offcanvas-body', 'offcanvas-title', this.schematic);
     }.bind(this);
 
     document.getElementById('offcanvas-search-btn').addEventListener('click', searchHandler);
@@ -195,13 +190,7 @@ export class DroidUISchematic {
     instance.lazyLoad();
 
     document.getElementById(this.getBuildButtonId()).addEventListener('click', function() {
-      droidUi.loadStructureSelectionList(
-        'offcanvas-body',
-        'offcanvas-title',
-        this.schematic,
-        'build',
-        instance.address
-      );
+      droidUi.loadStructureSelectionListFromSchematic('offcanvas-body', 'offcanvas-title', this.schematic, instance.address);
     }.bind(this));
   }
 }
