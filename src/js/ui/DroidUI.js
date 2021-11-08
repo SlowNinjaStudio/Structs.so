@@ -29,6 +29,7 @@ import {DroidUIStructureAttackStatusModal} from "./components/DroidUIStructureAt
 import {DroidUIStructureCondensedCTANone} from "./components/DroidUIStructureCondensedCTANone";
 import {DroidUIStructureCondensedCTARepair} from "./components/DroidUIStructureCondensedCTARepair";
 import {DroidUIStructureRepairStatusModal} from "./components/DroidUIStructureRepairStatusModal";
+import {DroidUIStructureCTAFactory} from "./components/DroidUIStructureCTAFactory";
 
 
 /**
@@ -440,20 +441,10 @@ export class DroidUI {
           const structuresList = [];
           for (let i = 0; i < structures.length; i++) {
 
-            let cta = new DroidUIStructureCondensedCTANone();
-            switch (callToActionType){
-              case 'attack':
-                cta = new DroidUIStructureCondensedCTAAttack(structures[i])
-                break;
-              case 'repair':
-                cta = new DroidUIStructureCondensedCTARepair(structures[i])
-                break;
-            }
-
             const droidUIStructureCondensed = new DroidUIStructureCondensed(
               structures[i],
               structure,
-              cta
+              (new DroidUIStructureCTAFactory()).make(callToActionType, structures[i])
             );
 
             // Batch drawing by collecting all the HTML first
@@ -474,15 +465,7 @@ export class DroidUI {
             const canvas = document.getElementById(structuresList[i].droidUIStructureCondensed.getCanvasId());
             new PixelArtViewer(canvas, structuresList[i].layers, this.getStructurePalette(structuresList[i].structure));
 
-            switch (callToActionType){
-              case 'attack':
-                structuresList[i].droidUIStructureCondensed.initMainAttackEventListeners();
-                break;
-              case 'repair':
-                structuresList[i].droidUIStructureCondensed.initMainRepairEventListeners();
-                break;
-            }
-
+            structuresList[i].droidUIStructureCondensed.initSubEventListeners(callToActionType);
           }
         }
       );

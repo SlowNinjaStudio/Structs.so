@@ -197,6 +197,23 @@ export class DroidUIStructureCondensed {
 
   }
 
+  /**
+   * This can likely be refactored deeper into the CTAs but there is
+   * some state that needs to be moved around.
+   *
+   * @param callToActionType
+   */
+  initSubEventListeners(callToActionType){
+    switch (callToActionType){
+      case 'attack':
+        this.initMainAttackEventListeners();
+        break;
+      case 'repair':
+        this.initMainRepairEventListeners();
+        break;
+    }
+  }
+
   initMainAttackEventListeners() {
 
     document.getElementById('structure_list_attack_' + this.structure.getId()).addEventListener('click', async function() {
