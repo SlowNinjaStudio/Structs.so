@@ -256,17 +256,8 @@ export class DroidUIStructureCondensed {
       document.getElementById('repair-status-dialog-view-button').href = '/structure.html?structure_id=' + this.program.target_structure.id;
 
 
-      const fee = {
-        amount: [
-          {
-            denom: "watt",
-            amount: "1",
-          },
-        ],
-        gas: "180000",
-      };
 
-      instance.performRepair(this.program, fee).then((result) => {
+      instance.performRepair(this.program).then((result) => {
         let tx_result_parsed = JSON.parse(result.rawLog);
 
         let tx_result_processed = (new StructureRepair()).processResult(tx_result_parsed[0]);

@@ -11,7 +11,7 @@ import {DroidUIStructureHealthProgress} from "./DroidUIStructureHealthProgress";
 
 export class DroidUIStructureRepairStatusModal {
   /**
-   * @param {number} amount
+   * @param {StructureRepair} program
    */
   constructor(program) {
 
@@ -32,6 +32,8 @@ export class DroidUIStructureRepairStatusModal {
     this.computeStatus = new DroidUIComputeStatus(true);
 
     this.healthStatus = new DroidUIStructureHealthProgress();
+
+    this.backdrop = document.getElementById("backdrop");
 
   }
 
@@ -69,15 +71,19 @@ export class DroidUIStructureRepairStatusModal {
 
     this.healthStatus.init(this.program);
 
-    document.getElementById("backdrop").style.display = "block"
-    document.getElementById("repair-status-dialog").style.display = "block"
-    document.getElementById("repair-status-dialog").classList.add("show")
+    this.backdrop.style.display = "block"
+
+    const repairStatusDialog = document.getElementById("repair-status-dialog")
+    repairStatusDialog.style.display = "block"
+    repairStatusDialog.classList.add("show")
   }
 
   destroyModal() {
-    document.getElementById("backdrop").style.display = "none"
-    document.getElementById("repair-status-dialog").style.display = "none"
-    document.getElementById("repair-status-dialog").classList.remove("show")
+    this.backdrop.style.display = "none"
+
+    const repairStatusDialog = document.getElementById("repair-status-dialog")
+    repairStatusDialog.style.display = "none"
+    repairStatusDialog.classList.remove("show")
 
     document.getElementById("modal-container").innerHTML  = ""
   }

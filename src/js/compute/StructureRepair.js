@@ -34,7 +34,9 @@ export class StructureRepair {
     // return this.instance + 'structure' + this.performing_structure.id + 'schematic' + this.schematic.hash + this.hashing_node + this.nonsense;
   }
 
-
+  /**
+   * @param {Structure} structure
+   */
   setPerformingStructure(structure) {
     if (typeof structure == 'undefined') {
       // TODO better error handling
@@ -63,6 +65,9 @@ export class StructureRepair {
     this.performing_structure = structure;
   }
 
+  /**
+   * @param {Structure} structure
+   */
   setTargetStructure(structure) {
     if (typeof structure == 'undefined') {
       // TODO better error handling
@@ -99,7 +104,9 @@ export class StructureRepair {
     return difficulty;
   }
 
-
+  /**
+   * @param {Object} result
+   */
   processResult(result) {
     let processedResult = {
       targetRepairAmount: 0

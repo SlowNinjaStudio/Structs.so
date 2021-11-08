@@ -10,8 +10,13 @@
  */
 
 export class ComputeProcessDetails {
-  constructor(process_id, type, program) {
-    this.id = process_id;
+  /**
+   * @param {number} processId
+   * @param {string} type
+   * @param {SchematicRD|StructureAttack|StructureBuild} program
+   */
+  constructor(processId, type, program) {
+    this.id = processId;
     this.type = type;
 
     this.program = program;

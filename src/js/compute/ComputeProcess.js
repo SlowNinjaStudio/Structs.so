@@ -21,11 +21,16 @@ import {DroidUIStructureHealthProgress} from "../ui/components/DroidUIStructureH
  *
  */
 export class ComputeProcess {
-  constructor(process_id, program) {
+
+  /**
+   * @param {number} processId
+   * @param {SchematicRD|StructureAttack|StructureBuild} program
+   */
+  constructor(processId, program) {
     this.worker;
     this.results = [];
 
-    this.id   = process_id;
+    this.id   = processId;
     this.name = '';
 
     if (program instanceof SchematicRD) {
@@ -38,7 +43,7 @@ export class ComputeProcess {
       this.type = 'Unknown Program';
     }
 
-    this.compute_process_details = new ComputeProcessDetails(process_id, this.type, program);
+    this.compute_process_details = new ComputeProcessDetails(processId, this.type, program);
 
     this.hashes_per_second = 0;
     this.difficulty = program.generateDifficulty();
@@ -92,16 +97,6 @@ export class ComputeProcess {
             // TODO: Call an action that enables the View button on the modal and adds the correct link to the new structure
             // ex call) document.getElementById('build-status-dialog').close();
 
-            const fee = {
-              amount: [
-                {
-                  denom: "watt",
-                  amount: "1",
-                },
-              ],
-              gas: "180000",
-            };
-
             let instance = new Instance();
             await instance.init();
 
@@ -109,7 +104,7 @@ export class ComputeProcess {
               let tx_result = await instance.performBuild(result.data[1], {
                 name: result.data[1].compute_process.program.schematic.name,
                 description: result.data[1].compute_process.program.schematic.description
-              }, fee)
+              })
 
 
 
@@ -149,21 +144,12 @@ export class ComputeProcess {
             // TODO: Call an action that enables the View button on the modal and adds the correct link to the new structure
             // ex call) document.getElementById('build-status-dialog').close();
 
-            const fee = {
-              amount: [
-                {
-                  denom: "watt",
-                  amount: "1",
-                },
-              ],
-              gas: "180000",
-            };
 
             let instance = new Instance();
             await instance.init();
 
             try {
-              let tx_result = await instance.performAttack(result.data[1], fee)
+              let tx_result = await instance.performAttack(result.data[1])
 
               if (typeof tx_result.data !='undefined') {
                 //Maybe move this parser into its program

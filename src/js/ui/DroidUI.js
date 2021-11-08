@@ -514,6 +514,11 @@ export class DroidUI {
     droidUINewSchematic.initMainPatentEventListeners();
   }
 
+  /**
+   * Load and display the watt received message
+   *
+   * @param{number} amount
+   */
   loadWattReceivedModal(amount) {
      let watt_received_modal = new DroidUIWattReceivedModal(amount);
 
@@ -523,6 +528,11 @@ export class DroidUI {
      watt_received_modal.showModal();
   }
 
+  /**
+   * Load and display the Patented Success modal after confirmed Schematic creation on chain
+   *
+   * @param {Schematic} schematic
+   */
   loadSchematicPatentedModal(schematic) {
     let schematic_patented_modal = new DroidUISchematicRDPatentedModal(schematic);
 
@@ -534,8 +544,16 @@ export class DroidUI {
     schematic_patented_modal.showModal();
   }
 
-  loadStructureBuildStatusModal(schematic, structure, program, process_id){
-    let structureBuildStatusModal = new DroidUIStructureBuildStatusModal(schematic, structure, program, process_id)
+  /**
+   * Load and display the Schematic Build modal while the build process is ongoing
+   *
+   * @param {Schematic} schematic
+   * @param {Structure} structure
+   * @param {StructureBuild} program
+   * @param {number} processId
+   */
+  loadStructureBuildStatusModal(schematic, structure, program, processId){
+    let structureBuildStatusModal = new DroidUIStructureBuildStatusModal(schematic, structure, program, processId)
 
     document.getElementById('modal-container').innerHTML = structureBuildStatusModal.render();
     (new DroidUI()).renderPixelArtSchematic(schematic, structureBuildStatusModal.uiSchematic);
@@ -544,8 +562,14 @@ export class DroidUI {
     structureBuildStatusModal.showModal();
   }
 
-  loadStructureAttackStatusModal(program, process_id){
-    let structureAttackStatusModal = new DroidUIStructureAttackStatusModal(program, process_id)
+  /**
+   * Load and display the Structure Attack modal while the attack process is ongoing
+   *
+   * @param {StructureAttack} program
+   * @param {number} processId
+   */
+  loadStructureAttackStatusModal(program, processId){
+    let structureAttackStatusModal = new DroidUIStructureAttackStatusModal(program, processId)
 
     document.getElementById('modal-container').innerHTML = structureAttackStatusModal.render();
     (new DroidUI()).renderPixelArtStructure(program.target_structure, structureAttackStatusModal.uiStructure);
@@ -554,6 +578,11 @@ export class DroidUI {
     structureAttackStatusModal.showModal();
   }
 
+  /**
+   * Load and display the Structure Repair modal while process is ongoing
+   *
+   * @param {StructureRepair} program
+   */
   loadStructureRepairStatusModal(program){
     let structureRepairStatusModal = new DroidUIStructureRepairStatusModal(program)
 

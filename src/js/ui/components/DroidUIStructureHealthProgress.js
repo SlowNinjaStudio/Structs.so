@@ -6,6 +6,10 @@ import {secondsToString} from "../../vendor/SecondsToString"
  * Web UI component for schematic.
  */
 export class DroidUIStructureHealthProgress {
+
+  /**
+   *
+   */
   constructor() {
     this.program;
   }
@@ -25,6 +29,9 @@ export class DroidUIStructureHealthProgress {
     `;
   }
 
+  /**
+   * @param {StructureAttack|StructureRepair} program
+   */
   init(program){
     this.program = program;
 
@@ -32,44 +39,57 @@ export class DroidUIStructureHealthProgress {
     this.setCurrentHealth(this.program.target_structure.health_current);
   }
 
+  /**
+   * @param {number} amount
+   */
   decrementHealth(amount) {
+    const progressBar = document.getElementById('health_status_progress_bar_cpu');
+    const new_health = Math.max(0, progress_bar.value - amount)
 
-    let new_health = document.getElementById('health_status_progress_bar_cpu').value - amount
-    if (new_health < 0) { new_health = 0; }
-
-    this.setCurrentHealth(new_health);
+    this.setCurrentHealth(new_health, progressBar);
   }
 
+  /**
+   * @param {number} amount
+   */
   incrementHealth(amount){
-    let new_health = document.getElementById('health_status_progress_bar_cpu').value + amount
-    if (new_health > document.getElementById('health_status_progress_bar_cpu').max) { new_health = document.getElementById('health_status_progress_bar_cpu').max; }
+    const progressBar = document.getElementById('health_status_progress_bar_cpu');
+    const new_health = Math.min(progress_bar.value + amount, progress_bar.max );
 
-    this.setCurrentHealth(new_health);
+    this.setCurrentHealth(new_health, progressBar);
   }
 
-  setCurrentHealth(new_health) {
-    document.getElementById('health_status_progress_bar_cpu').value = new_health;
+  /**
+   * @param {number} newAmount
+   * @param {Element} progressBar
+   */
+  setCurrentHealth(newAmount, progressBar = document.getElementById('health_status_progress_bar_cpu')) {
+    progressBar.value = newAmount;
 
-    let health_percent = Math.round(( new_health / document.getElementById('health_status_progress_bar_cpu').max) * 100)
+    const health_percent = Math.round(( newAmount / progressBar.max) * 100)
     document.getElementById('health_status_progress_cpu_value').innerHTML = health_percent
 
     if (health_percent < 25) {
-      this.setHealthBoxColour('is-error');
+      this.setHealthBoxColour('is-error', progressBar);
     } else if (health_percent < 50 ) {
-      this.setHealthBoxColour('is-warning');
+      this.setHealthBoxColour('is-warning', progressBar);
     } else {
-      this.setHealthBoxColour('is-success');
+      this.setHealthBoxColour('is-success', progressBar);
     }
   }
 
-  setHealthBoxColour(color_class) {
+  /**
+   * @param {string} colorClass
+   * @param {Element} progressBar
+   */
+  setHealthBoxColour(colorClass, progressBar = document.getElementById('health_status_progress_bar_cpu')) {
     // Clear all the possible colour classes
-    document.getElementById('health_status_progress_bar_cpu').classList.remove('is-error');
-    document.getElementById('health_status_progress_bar_cpu').classList.remove('is-warning');
-    document.getElementById('health_status_progress_bar_cpu').classList.remove('is-success');
+    progressBar.classList.remove('is-error');
+    progressBar.classList.remove('is-warning');
+    progressBar.classList.remove('is-success');
 
     // Apply the new one
-    document.getElementById('health_status_progress_bar_cpu').classList.add(color_class);
+    progressBar.classList.add(colorClass);
   }
 
 }

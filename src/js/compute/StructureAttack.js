@@ -4,8 +4,8 @@ import {decimalToHex} from "../vendor/DecimalToHex";
 import {Schematic} from "../models/Schematic";
 import {Structure} from "../models/Structure";
 
-/* StructureBuild
- * Used for retooling a structure to build a new schematic
+/* StructureAttack
+ * Used for attacking structures from structures
  *
  * Prepares the details for passing
  * into a ComputeProcess object.
@@ -34,7 +34,9 @@ export class StructureAttack {
     // return this.instance + 'structure' + this.performing_structure.id + 'schematic' + this.schematic.hash + this.hashing_node + this.nonsense;
   }
 
-
+  /**
+   * @param {Structure} structure
+   */
   setPerformingStructure(structure) {
     if (typeof structure == 'undefined') {
       // TODO better error handling
@@ -63,6 +65,9 @@ export class StructureAttack {
     this.performing_structure = structure;
   }
 
+  /**
+   * @param {Structure} structure
+   */
   setTargetStructure(structure) {
     if (typeof structure == 'undefined') {
       // TODO better error handling
@@ -99,7 +104,9 @@ export class StructureAttack {
     return difficulty;
   }
 
-
+  /**
+   * @param {Object} result
+   */
   processResult(result) {
     let processedResult = {
       targetDamageAmount: 0,
