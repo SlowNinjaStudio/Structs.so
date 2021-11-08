@@ -10,6 +10,7 @@ import {DroidUIStructureCondensed} from "./DroidUIStructureCondensed";
 import {DroidUIStructureHealthProgress} from "./DroidUIStructureHealthProgress";
 import {DroidUIStructureCondensedCTAAttack} from "./DroidUIStructureCondensedCTAAttack";
 import {DroidUIStructureCondensedCTARepair} from "./DroidUIStructureCondensedCTARepair";
+import {DroidUIStructureCondensedCTANone} from "./DroidUIStructureCondensedCTANone";
 
 export class DroidUIStructureRepairStatusModal {
   /**
