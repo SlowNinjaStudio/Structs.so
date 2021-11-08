@@ -1,3 +1,5 @@
+import {StructureAttack} from "../../compute/StructureAttack";
+
 export class DroidUIStructureCondensedCTAAttack {
 
   /**
@@ -5,6 +7,10 @@ export class DroidUIStructureCondensedCTAAttack {
    */
   constructor(structure) {
     this.structure = structure;
+  }
+
+  initProgram() {
+    return (new StructureAttack())
   }
 
   render() {

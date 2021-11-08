@@ -32,34 +32,20 @@ export class DroidUIStructureCondensed {
     computeStatus = null
   ) {
     this.structure = structure;
+    this.baseObject = baseObject;
 
     this.idPrefix = idPrefix;
     this.callToAction = callToAction;
 
     this.computer = new Computer();
 
-    if (callToAction instanceof DroidUIStructureCondensedCTABuild) {
-      this.schematic = baseObject;
-      this.program = new StructureBuild();
-      this.program.setSchematic(baseObject);
-      this.program.setPerformingStructure(structure);
+    this.program = this.callToAction.initProgram();
+    this.program.setPerformingStructure(structure);
+    this.program.setTargetObject(baseObject);
 
-      this.compute_status = computeStatus;
+    this.compute_status = computeStatus;
 
-    } else if  (callToAction instanceof DroidUIStructureCondensedCTAAttack) {
-      this.program = new StructureAttack();
-      this.program.setPerformingStructure(baseObject);
-      this.program.setTargetStructure(structure)
 
-      this.compute_status = computeStatus;
-
-    } else if  (callToAction instanceof DroidUIStructureCondensedCTARepair) {
-      this.program = new StructureRepair();
-      this.program.setPerformingStructure(baseObject);
-      this.program.setTargetStructure(structure)
-
-      this.compute_status = computeStatus;
-    }
   }
   getCanvasId() {
     return `${this.idPrefix}structure-condensed-${this.structure.getId()}`;
@@ -207,7 +193,7 @@ export class DroidUIStructureCondensed {
 
         let new_process_id = this.computer.add_process(this.program);
 
-        (new DroidUI()).loadStructureBuildStatusModal(this.schematic, this.structure, this.program, new_process_id)
+        (new DroidUI()).loadStructureBuildStatusModal(this.baseObject, this.structure, this.program, new_process_id)
 
         this.computer.run_process(new_process_id);
 
@@ -266,9 +252,10 @@ export class DroidUIStructureCondensed {
         let compute_status = new DroidUIComputeStatus();
         compute_status.setComplete();
 
-        document.getElementById('repair-status-dialog-view-button').disabled = ""
-        document.getElementById('repair-status-dialog-view-button').classList.remove('is-disabled')
-        document.getElementById('repair-status-dialog-view-button').classList.add('is-success')
+        const repairStatusDialogViewButton = document.getElementById('repair-status-dialog-view-button')
+        repairStatusDialogViewButton.disabled = ""
+        repairStatusDialogViewButton.classList.remove('is-disabled')
+        repairStatusDialogViewButton.classList.add('is-success')
 
 
       });

@@ -1,3 +1,5 @@
+import {StructureRepair} from "../../compute/StructureRepair";
+
 export class DroidUIStructureCondensedCTARepair {
 
   /**
@@ -5,6 +7,10 @@ export class DroidUIStructureCondensedCTARepair {
    */
   constructor(structure) {
     this.structure = structure;
+  }
+
+  initProgram() {
+    return (new StructureRepair())
   }
 
   render() {

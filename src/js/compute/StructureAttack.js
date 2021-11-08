@@ -66,6 +66,14 @@ export class StructureAttack {
   }
 
   /**
+   *
+   * @param {Structure} structure
+   */
+  setTargetObject(structure){
+    this.setTargetStructure(structure)
+  }
+
+  /**
    * @param {Structure} structure
    */
   setTargetStructure(structure) {

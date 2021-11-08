@@ -52,6 +52,14 @@ export class StructureBuild {
   }
 
   /**
+   *
+   * @param {Schematic} schematic
+   */
+  setTargetObject(schematic){
+    this.setSchematic(schematic)
+  }
+
+  /**
    * @param {Schematic} newSchematic
    */
   setSchematic(newSchematic) {
