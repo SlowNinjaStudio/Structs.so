@@ -3,7 +3,7 @@ import {DroidUIStructureCondensedCTAAttack} from "./DroidUIStructureCondensedCTA
 import {DroidUIStructureCondensedCTARepair} from "./DroidUIStructureCondensedCTARepair";
 
 export class DroidUIStructureCTAFactory {
-  
+
   constructor() {
   }
 
@@ -23,5 +23,6 @@ export class DroidUIStructureCTAFactory {
         cta = new DroidUIStructureCondensedCTARepair(targetStructure)
         break;
     }
+    return cta;
   }
 }

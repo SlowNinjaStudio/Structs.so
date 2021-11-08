@@ -39,8 +39,9 @@ export class DroidUIStructureCondensed {
     this.computer = new Computer();
 
     this.program = this.callToAction.initProgram();
-    this.program.setPerformingStructure(structure);
-    this.program.setTargetObject(baseObject);
+
+      this.program.setPerformingStructure(baseObject);
+      this.program.setTargetObject(structure);
 
   }
   getCanvasId() {

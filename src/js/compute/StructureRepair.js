@@ -17,6 +17,7 @@ import {Structure} from "../models/Structure";
 
 export class StructureRepair {
   constructor() {
+    this.type = 'Structure Repairing';
 
     // Details for building the hash prefix.
     this.instance = '';

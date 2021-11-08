@@ -1,9 +1,11 @@
+import {EmptyProgram} from "../../compute/EmptyProgram";
+
 export class DroidUISchematicCondensedCTANone {
   render() {
     return '';
   }
 
   initProgram() {
-    return null;
+    return (new EmptyProgram());
   }
 }

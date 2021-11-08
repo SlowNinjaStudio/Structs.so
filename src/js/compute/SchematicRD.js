@@ -1,18 +1,24 @@
 import {AMBITS, FEATURES} from "../constants";
 import {decimalToHex} from "../vendor/DecimalToHex";
+import {DroidUIComputeStatus} from "../ui/components/DroidUIComputeStatus";
+import {processes} from "./Computer";
+import {Schematic} from "../models/Schematic";
+import {DroidUI} from "../ui/DroidUI";
 
 /* SchematicRD
- * Used for designing new schematics. 
- * 
- * Prepares the details for passing 
+ * Used for designing new schematics.
+ *
+ * Prepares the details for passing
  * into a ComputeProcess object.
  *
  *  generatePattern()
  *  generateDifficulty()
- * 
+ *
  */
 export class SchematicRD {
   constructor() {
+
+    this.type = 'Schematic R&D';
 
     // Details for building the hash prefix.
     this.instance = '';
@@ -43,13 +49,13 @@ export class SchematicRD {
     this.accuracy = false;
     this.accuracy_min = 0;
     this.accuracy_max = 255;
-    
+
   }
 
   getInputPrefix(){
     return this.instance + this.hashing_node + this.nonsense;
   }
-  
+
   isMobile() {
     return this.is_mobile;
   }
@@ -88,27 +94,27 @@ export class SchematicRD {
   hasFeatureStorage() {
     return this.hasFeature(FEATURES.STORAGE);
   }
-  
+
   patternPieceFeatureEngineering() {
     return this.hasFeatureEngineering() ? '111' : '...'
   }
-  
+
   patternPieceFeatureStorage() {
     return this.hasFeatureStorage() ? '11' : '..'
   }
-  
+
   patternPieceFeatureDefensive() {
     return this.hasFeatureDefensive() ? '1' : '.'
   }
-  
+
   patternPieceFeatureAttack() {
     return this.hasFeatureAttack() ? '1' : '.'
   }
-  
+
   patternPieceFeaturePower() {
     return this.hasFeaturePower() ? '1' : '.'
   }
-  
+
   patternPieceAmbitSpace() {
     return this.hasAmbitSpace() ? '111' : '...'
   }
@@ -124,7 +130,7 @@ export class SchematicRD {
   patternPieceAmbitLand() {
     return this.hasAmbitLand() ? '1' : '.'
   }
-  
+
   patternPieceMobility() {
     let pattern = ''
 
@@ -146,7 +152,7 @@ export class SchematicRD {
       }
       pattern = series.join('|');
     }
-    
+
     return this.energy_efficiency ? '(' + pattern + ')': '..'
   }
 
@@ -160,7 +166,7 @@ export class SchematicRD {
       }
       pattern = series.join('|');
     }
-    
+
     return this.mass ? '(' + pattern + ')': '..'
   }
 
@@ -174,7 +180,7 @@ export class SchematicRD {
       }
       pattern = series.join('|');
     }
-    
+
     return this.strength ? '(' + pattern + ')': '..'
   }
 
@@ -188,7 +194,7 @@ export class SchematicRD {
       }
       pattern = series.join('|');
     }
-    
+
     return this.speed ? '(' + pattern + ')': '..'
   }
 
@@ -201,21 +207,21 @@ export class SchematicRD {
         series.push(decimalToHex(i, 2));
       }
       pattern = series.join('|');
-    } 
+    }
 
     return this.accuracy ? '(' + pattern + ')': '..'
   }
 
-  /* 
-    Creates a regular expression pattern that can be sent to 
-    the hash worker. 
+  /*
+    Creates a regular expression pattern that can be sent to
+    the hash worker.
 
-    The order of the below patternPiece function calls is critical. 
+    The order of the below patternPiece function calls is critical.
 
 
     Example Usage
     rd = new SchematicRD();
-    
+
     rd.features.push(FEATURES.ENGINEERING)
     rd.features.push(FEATURES.POWER)
     rd.ambits.push(AMBITS.LAND)
@@ -230,21 +236,21 @@ export class SchematicRD {
   */
   generatePattern() {
     var patternString = '';
-    
+
     // Features
     patternString += this.patternPieceFeatureEngineering();
     patternString += this.patternPieceFeatureStorage();
     patternString += this.patternPieceFeatureDefensive();
     patternString += this.patternPieceFeatureAttack();
     patternString += this.patternPieceFeaturePower();
-    
+
     // Ambits
     patternString += this.patternPieceAmbitSpace();
     patternString += this.patternPieceAmbitSky();
     patternString += this.patternPieceAmbitWater();
     patternString += this.patternPieceAmbitLand();
-    
-    // Mobility 
+
+    // Mobility
     patternString += this.patternPieceMobility();
 
     //Attributes
@@ -253,34 +259,34 @@ export class SchematicRD {
     patternString += this.patternPieceStrength();
     patternString += this.patternPieceSpeed();
     patternString += this.patternPieceAccuracy();
-    
+
     console.log(patternString)
-    
+
     let buildPattern = new RegExp('^' + patternString + '.*' );
     return buildPattern;
   }
-  
+
 
   difficultyFeatureEngineering() {
     return Math.pow(16, this.hasFeatureEngineering() ? 3 : 0)
   }
-  
+
   difficultyFeatureStorage() {
     return Math.pow(16, this.hasFeatureStorage() ? 2 : 0)
   }
-  
+
   difficultyFeatureDefensive() {
     return Math.pow(16, this.hasFeatureDefensive() ? 1 : 0)
   }
-  
+
   difficultyFeatureAttack() {
     return Math.pow(16, this.hasFeatureAttack() ? 1 : 0)
   }
-  
+
   difficultyFeaturePower() {
     return Math.pow(16, this.hasFeaturePower() ? 1 : 0)
   }
-  
+
   difficultyAmbitSpace() {
     return Math.pow(16, this.hasAmbitSpace() ? 3 : 0)
   }
@@ -296,13 +302,13 @@ export class SchematicRD {
   difficultyAmbitLand() {
     return Math.pow(16, this.hasAmbitLand() ? 1 : 0)
   }
-  
+
   difficultyMobility() {
     let difficulty = 0
 
     if (this.isMobile() == null) {
       difficulty = Math.pow(16, 0)
-    
+
     } else if (this.isMobile()) {
       difficulty = Math.pow(16, 1)
 
@@ -321,7 +327,7 @@ export class SchematicRD {
        let difference = this.energy_efficiency_max - this.energy_efficiency_min;
        difficulty = 256 - difference;
     }
-    
+
     return difficulty;
   }
 
@@ -332,7 +338,7 @@ export class SchematicRD {
        let difference = this.mass_max - this.mass_min;
        difficulty = 256 - difference;
     }
-    
+
     return difficulty;
   }
 
@@ -343,7 +349,7 @@ export class SchematicRD {
        let difference = this.strength_max - this.strength_min;
        difficulty = 256 - difference;
     }
-    
+
     return difficulty;
   }
 
@@ -354,7 +360,7 @@ export class SchematicRD {
        let difference = this.speed_max - this.speed_min;
        difficulty = 256 - difference;
     }
-    
+
     return difficulty;
   }
 
@@ -364,7 +370,7 @@ export class SchematicRD {
     if (this.accuracy) {
        let difference = this.accuracy_max - this.accuracy_min;
        difficulty = 256 - difference;
-    } 
+    }
 
     return difficulty;
   }
@@ -394,5 +400,55 @@ export class SchematicRD {
 
     return difficulty;
   }
-  
+
+  /**
+   * Result payload from Compute Worker engine
+   *
+   * @param {ComputeProcess} processState
+   * @param {object} result
+   */
+  async handleResult(processState, result) {
+    let compute_status = new DroidUIComputeStatus();
+
+    let current_time = Date.now()
+    processState.hashes_per_second = result.data[0].rounds_total / (((current_time - processState.start) / 1000.0) + 1)
+
+    if (typeof result.data[1] != 'undefined') {
+
+      processState.results.push(result.data[1]);
+      processState.stop();
+
+      compute_status.setComplete();
+
+      console.log(result.data[1].hash);
+      console.log(result.data[1].input);
+
+      /*
+       * Generate the result rectangle
+       */
+
+      /*
+         Attempt at new format
+
+
+        processes[result.data[0].id].compute_process_details.handleResults(processes[result.data[0].id], result)
+
+       */
+
+
+      let schematic = new Schematic();
+      schematic.schematicFromHash(result.data[1].hash, result.data[1].input)
+
+      let droid_ui = new DroidUI();
+      droid_ui.loadNewSchematic(schematic, 'found_schematic_list');
+
+
+    } else {
+      compute_status.updateStatus(result.data[0].rounds_total, processState.hashes_per_second, processState.difficulty);
+    }
+
+    console.log('[Process ID #' + result.data[0].id + '] Started ' + processState.start + ' Current ' + current_time);
+    console.log('[Process ID #' + result.data[0].id + '] Rounds of hashing since last check-in: ' + result.data[0].rounds_total + ' ' + '(' + (100.0 * (result.data[0].rounds_total / processState.difficulty)) + '%)');
+    console.log('[Process ID #' + result.data[0].id + '] Hashes per second ' + processState.hashes_per_second);
+  }
 }

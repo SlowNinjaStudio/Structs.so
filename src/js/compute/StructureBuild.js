@@ -17,6 +17,7 @@ import {Structure} from "../models/Structure";
 
 export class StructureBuild {
   constructor() {
+    this.type = 'Structure Retooling';
 
     // Details for building the hash prefix.
     this.instance = '';

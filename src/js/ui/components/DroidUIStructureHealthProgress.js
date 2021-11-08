@@ -54,7 +54,7 @@ export class DroidUIStructureHealthProgress {
    */
   incrementHealth(amount){
     const progressBar = document.getElementById('health_status_progress_bar_cpu');
-    const new_health = Math.min(progress_bar.value + amount, progress_bar.max );
+    const new_health = Math.min(progressBar.value + amount, progress_bar.max );
 
     this.setCurrentHealth(new_health, progressBar);
   }

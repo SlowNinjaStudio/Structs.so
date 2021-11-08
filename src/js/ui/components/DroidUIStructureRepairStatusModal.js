@@ -8,6 +8,8 @@ import {DroidUIComputeStatus} from "./DroidUIComputeStatus";
 import {Computer} from "../../compute/Computer";
 import {DroidUIStructureCondensed} from "./DroidUIStructureCondensed";
 import {DroidUIStructureHealthProgress} from "./DroidUIStructureHealthProgress";
+import {DroidUIStructureCondensedCTAAttack} from "./DroidUIStructureCondensedCTAAttack";
+import {DroidUIStructureCondensedCTARepair} from "./DroidUIStructureCondensedCTARepair";
 
 export class DroidUIStructureRepairStatusModal {
   /**
@@ -25,7 +27,7 @@ export class DroidUIStructureRepairStatusModal {
     this.uiStructure = new DroidUIStructureCondensed(
       this.target_structure,
       this.performing_structure,
-      new DroidUISchematicCondensedCTANone(),
+      new DroidUIStructureCondensedCTANone(),
       'repair-status-modal-'
     );
 
