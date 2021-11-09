@@ -1,15 +1,13 @@
 /**
  * Assembles the art for a structure or schematic using images and layers.
  */
-import {StructureArtGeneratorStaticCity} from "./StructureArtGeneratorStaticCity";
-import {StructureArtGeneratorMobileCar} from "./StructureArtGeneratorMobileCar";
+import {StructureArtGeneratorFactory} from "./StructureArtGeneratorFactory";
 
 export class StructureArtGenerator {
   constructor() {
     this.imgDir = 'img/structures/';
     this.backgroundsDir = 'backgrounds/';
-    this.mobileDir = 'mobile/';
-    this.staticDir = 'static/';
+    this.structureArtGeneratorFactory = new StructureArtGeneratorFactory();
   }
 
   /* Backgrounds */
@@ -41,20 +39,6 @@ export class StructureArtGenerator {
   }
 
   /**
-   * @param {Structure|Schematic} structure
-   * @returns {StructureArtGeneratorStaticCity|StructureArtGeneratorMobileCar}
-   */
-  getStructureSpecificGenerator(structure) {
-    let generator;
-    if (structure.isMobile()) {
-      generator = new StructureArtGeneratorMobileCar();
-    } else {
-      generator = new StructureArtGeneratorStaticCity();
-    }
-    return generator;
-  }
-
-  /**
    * Generate the art for a given structure or schematic.
    * @param {Structure|Schematic} structure
    */
@@ -67,7 +51,7 @@ export class StructureArtGenerator {
     this.backgroundWater(layers, structure);
     this.backgroundLayerFilter(layers);
 
-    const generator = this.getStructureSpecificGenerator(structure);
+    const generator = this.structureArtGeneratorFactory.make(structure);
     generator.generate(layers, structure);
 
     return layers;

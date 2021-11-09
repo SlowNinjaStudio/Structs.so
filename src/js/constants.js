@@ -34,5 +34,11 @@ export const
     BLOCKY: 'BLOCKY',
     HUMANOID: 'HUMANOID',
     SCREEN: 'SCREEN',
+  },
+  STRUCTURE_TYPES = {
+    CAR: 'CAR',
+    CITY: 'CITY',
+    MECH: 'MECH',
+    STATION: 'STATION'
   }
 ;
