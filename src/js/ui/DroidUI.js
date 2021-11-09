@@ -9,8 +9,6 @@ import {DroidUIStructureCommandView} from "./components/DroidUIStructureCommandV
 import {PixelArtViewer} from "../vendor/PixelArtViewer";
 import {SchematicPalette} from "../art_rendering/SchematicPalette";
 import {StructureArtGenerator} from "../art_rendering/StructureArtGenerator";
-import {StructureMobilePalette} from "../art_rendering/StructureMobilePalette";
-import {StructureStaticPalette} from "../art_rendering/StructureStaticPalette";
 import {DroidUIMessageListItem} from "./components/DroidUIMessageListItem";
 import {DroidUISchematicCondensedCTABuild} from "./components/DroidUISchematicCondensedCTABuild";
 import {DroidUIWattReceivedModal} from "./components/DroidUIWattReceivedModal";
@@ -24,12 +22,12 @@ import {DroidUIStructureCondensed} from "./components/DroidUIStructureCondensed"
 import {DroidUIStructureCondensedCTABuild} from "./components/DroidUIStructureCondensedCTABuild";
 import {Schematic} from "../models/Schematic";
 import {Structure} from "../models/Structure";
-import {DroidUIStructureCondensedCTAAttack} from "./components/DroidUIStructureCondensedCTAAttack";
 import {DroidUIStructureAttackStatusModal} from "./components/DroidUIStructureAttackStatusModal";
-import {DroidUIStructureCondensedCTANone} from "./components/DroidUIStructureCondensedCTANone";
-import {DroidUIStructureCondensedCTARepair} from "./components/DroidUIStructureCondensedCTARepair";
 import {DroidUIStructureRepairStatusModal} from "./components/DroidUIStructureRepairStatusModal";
 import {DroidUIStructureCTAFactory} from "./components/DroidUIStructureCTAFactory";
+
+import {StructurePaletteFactory} from "../art_rendering/StructurePaletteFactory";
+
 
 
 /**
@@ -45,8 +43,7 @@ export class DroidUI {
     this.droidArtGenerator = new DroidArtGenerator();
     this.droidPalette = new DroidPalette();
     this.structureArtGenerator = new StructureArtGenerator();
-    this.structureMobilePalette = new StructureMobilePalette();
-    this.structureStaticPalette = new StructureStaticPalette();
+    this.structurePaletteFactory = new StructurePaletteFactory();
     this.schematicPalette = new SchematicPalette();
     this.structures = [];
     this.schematics = [];
@@ -56,14 +53,9 @@ export class DroidUI {
    * @param {Structure} structure
    */
   getStructurePalette(structure) {
-    let palette;
     const primaryColor = ColorRGB.hexToRgb(structure.getPrimaryColor());
-    if (structure.isMobile() === true) {
-      palette = this.structureMobilePalette.generatePaletteSwap(primaryColor, structure);
-    } else {
-      palette = this.structureStaticPalette.generatePaletteSwap(primaryColor, structure);
-    }
-    return palette;
+    const paletteGenerator = this.structurePaletteFactory.make(structure);
+    return paletteGenerator.generatePaletteSwap(primaryColor, structure);
   }
 
   /**

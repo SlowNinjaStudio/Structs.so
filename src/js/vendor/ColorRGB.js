@@ -50,6 +50,21 @@ export class ColorRGB {
   }
 
   /**
+   * Mix a color into the current color at different ratios.
+   *
+   * @param {number} numShades
+   * @param {ColorRGB} otherColor
+   */
+  getMixedColorShades(numShades, otherColor) {
+    const shades = [];
+    for (let i = 0; i <= numShades; i++) {
+      const ratio = i / numShades;
+      shades.push(this.mixColors(otherColor, ratio));
+    }
+    return shades;
+  }
+
+  /**
    * Get darker shades of the current color.
    *
    * @param {number} numShades the number of shades to generate
