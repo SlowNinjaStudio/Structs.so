@@ -3,6 +3,8 @@ import {decimalToHex} from "../vendor/DecimalToHex";
 
 import {Schematic} from "../models/Schematic";
 import {Structure} from "../models/Structure";
+import {DroidUIComputeStatus} from "../ui/components/DroidUIComputeStatus";
+import {Instance} from "../models/Instance";
 
 /* StructureBuild
  * Used for retooling a structure to build a new schematic
@@ -402,6 +404,79 @@ export class StructureBuild {
 
 
     return difficulty;
+  }
+
+  /**
+   * Result payload from Compute Worker engine
+   *
+   * @param {ComputeProcess} processState
+   * @param {object} result
+   */
+  async handleResult(processState, result){
+
+    let compute_status = new DroidUIComputeStatus();
+
+    let current_time = Date.now()
+    processState.hashes_per_second = result.data[0].rounds_total / (((current_time - processState.start) / 1000.0) + 1)
+
+    if (typeof result.data[1] != 'undefined') {
+
+      processState.results.push(result.data[1]);
+      processState.stop();
+
+      compute_status.setComplete();
+
+      console.log(result.data[1].hash);
+      console.log(result.data[1].input);
+
+      let instance = new Instance();
+      await instance.init();
+
+      try {
+        let tx_result = await instance.performBuild(result.data[1], {
+          name: result.data[1].compute_process.program.schematic.name,
+          description: result.data[1].compute_process.program.schematic.description
+        })
+
+        if (typeof tx_result.data !='undefined') {
+          //Maybe move this parser into its program
+          console.log(JSON.parse(tx_result.rawLog))
+          console.log(tx_result)
+          let tx_result_parsed = JSON.parse(tx_result.rawLog)
+          let new_structure_id = tx_result.data[0].data[1];
+
+          // Gross, move elsewhere.
+          document.getElementById('build-status-dialog-view-button').href = '/structure.html?structure_id=' + new_structure_id;
+          document.getElementById('build-status-dialog-view-button').disabled = ""
+          document.getElementById('build-status-dialog-view-button').classList.remove('is-disabled')
+          document.getElementById('build-status-dialog-view-button').classList.add('is-success')
+
+        } else {
+          if (tx_result.rawLog.includes('insufficient funds')) {
+            let needed_start = tx_result.rawLog.search('[0-9]{1,}watt');
+            let needed_end = tx_result.rawLog.search('watt:') + 3 - tx_result.rawLog.search('/[0-9]{1,}watt:/i')
+            let needed = tx_result.rawLog.substring(needed_start, needed_end)
+            console.log(needed_start, needed_end)
+            compute_status.setError('Insufficient Funds (' + needed + ')')
+          } else {
+            compute_status.setError('IDK: Paste to Discord (' + tx_result.rawLog + ')')
+          }
+
+        }
+
+      }
+      catch(err){
+        console.log(err)
+        compute_status.setError('IDK: Paste to Discord ' + err)
+      }
+
+    } else {
+      compute_status.updateStatus(result.data[0].rounds_total, processState.hashes_per_second, processState.difficulty);
+    }
+
+    console.log('[Process ID #' + result.data[0].id + '] Started ' + processState.start + ' Current ' + current_time);
+    console.log('[Process ID #' + result.data[0].id + '] Rounds of hashing since last check-in: ' + result.data[0].rounds_total + ' ' + '(' + (100.0 * (result.data[0].rounds_total / processState.difficulty)) + '%)');
+    console.log('[Process ID #' + result.data[0].id + '] Hashes per second ' + processState.hashes_per_second);
   }
 
 }

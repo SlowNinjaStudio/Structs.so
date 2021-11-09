@@ -44,7 +44,7 @@ export class DroidUIStructureHealthProgress {
    */
   decrementHealth(amount) {
     const progressBar = document.getElementById('health_status_progress_bar_cpu');
-    const new_health = Math.max(0, progress_bar.value - amount)
+    const new_health = Math.max(0, progressBar.value - amount)
 
     this.setCurrentHealth(new_health, progressBar);
   }
@@ -54,7 +54,7 @@ export class DroidUIStructureHealthProgress {
    */
   incrementHealth(amount){
     const progressBar = document.getElementById('health_status_progress_bar_cpu');
-    const new_health = Math.min(progressBar.value + amount, progress_bar.max );
+    const new_health = Math.min(progressBar.value + amount, progressBar.max );
 
     this.setCurrentHealth(new_health, progressBar);
   }

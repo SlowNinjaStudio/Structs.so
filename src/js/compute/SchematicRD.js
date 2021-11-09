@@ -423,25 +423,11 @@ export class SchematicRD {
       console.log(result.data[1].hash);
       console.log(result.data[1].input);
 
-      /*
-       * Generate the result rectangle
-       */
-
-      /*
-         Attempt at new format
-
-
-        processes[result.data[0].id].compute_process_details.handleResults(processes[result.data[0].id], result)
-
-       */
-
-
       let schematic = new Schematic();
       schematic.schematicFromHash(result.data[1].hash, result.data[1].input)
 
       let droid_ui = new DroidUI();
       droid_ui.loadNewSchematic(schematic, 'found_schematic_list');
-
 
     } else {
       compute_status.updateStatus(result.data[0].rounds_total, processState.hashes_per_second, processState.difficulty);

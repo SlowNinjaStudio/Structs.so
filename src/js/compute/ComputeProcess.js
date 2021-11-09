@@ -50,9 +50,7 @@ export class ComputeProcess {
 
       this.worker.onmessage = async function (result) {
         console.log('Received from action worker [Process ID #' + result.data[0].id + ']...');
-
-        processes[result.data[0].id].compute_process_details.program.handleResult(processes[result.data[0].id], result);
-
+        await processes[result.data[0].id].compute_process_details.program.handleResult(processes[result.data[0].id], result);
       }
 
       this.worker.postMessage([this.compute_process_details]);
