@@ -70,9 +70,11 @@ export class DroidUICommandMenu {
       <div class="row">
         <div class="col">
             <a
-              id="build-from-schematic-command"
-              href="javascript:void(0)"
-              class="nes-btn is-disabled nes-btn-fluid"
+              id="repair-structure-command"
+              href="#offcanvas"
+              data-bs-toggle="offcanvas"
+              role="button"
+              class="nes-btn is-warning nes-btn-fluid"
             >
               Repair Target
             </a>
@@ -110,10 +112,11 @@ export class DroidUICommandMenu {
           await instance.init();
 
           const searchString = document.getElementById('offcanvas-search-input').value;
-          droidUi.loadStructureSelectionList(
+          droidUi.loadStructureSelectionListFromStructure(
             'offcanvas-body',
             'offcanvas-title',
             this.structure,
+            'attack',
             searchString
           );
         }.bind(this);
@@ -125,7 +128,7 @@ export class DroidUICommandMenu {
         });
 
 
-        droidUi.loadStructureSelectionList('offcanvas-body', 'offcanvas-title', this.structure);
+        droidUi.loadStructureSelectionListFromStructure('offcanvas-body', 'offcanvas-title', this.structure, 'attack');
 
       }.bind(this));
     }
@@ -167,6 +170,35 @@ export class DroidUICommandMenu {
       const commandMenu = new DroidUICommandMenu(this.structure);
       document.getElementById('command-container').innerHTML = commandMenu.renderMainMenu();
       commandMenu.initMainMenuEventListeners();
+    }.bind(this));
+
+
+    document.getElementById('repair-structure-command').addEventListener('click', function() {
+      const droidUi = new DroidUI();
+
+      const searchHandler = async function() {
+        const instance = new Instance();
+        await instance.init();
+
+        const searchString = document.getElementById('offcanvas-search-input').value;
+        droidUi.loadStructureSelectionListFromStructure(
+          'offcanvas-body',
+          'offcanvas-title',
+          this.structure,
+          'repair',
+          searchString
+        );
+      }.bind(this);
+      document.getElementById('offcanvas-search-btn').addEventListener('click', searchHandler);
+      document.getElementById('offcanvas-search-input').addEventListener('keypress', (event) => {
+        if (event.key === 'Enter') {
+          searchHandler(event);
+        }
+      });
+
+
+      droidUi.loadStructureSelectionListFromStructure('offcanvas-body', 'offcanvas-title', this.structure, 'repair');
+
     }.bind(this));
   }
 }
