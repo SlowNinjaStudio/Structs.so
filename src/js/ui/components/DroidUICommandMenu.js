@@ -43,7 +43,7 @@ export class DroidUICommandMenu {
             <a
               id="power-command"
               href="javascript:void(0)"
-              class="nes-btn ${ this.structure.hasFeaturePower() ? 'is-disabled' : 'is-disabled' } nes-btn-fluid"
+              class="nes-btn ${ this.structure.hasFeaturePower() ? 'is-warning' : 'is-disabled' } nes-btn-fluid"
             >
               Power
             </a>
@@ -94,12 +94,63 @@ export class DroidUICommandMenu {
     `;
   }
 
+
+  renderPowerSubmenu() {
+    return `
+      <div class="row">
+        <div class="col">
+            <a
+              id="drain-structure-command"
+              href="#offcanvas"
+              class="nes-btn is-warning nes-btn-fluid"
+              data-bs-toggle="offcanvas"
+              role="button"
+            >
+              Drain Target
+            </a>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col">
+            <a
+              id="charge-command"
+              href="#offcanvas"
+              data-bs-toggle="offcanvas"
+              role="button"
+              class="nes-btn is-warning nes-btn-fluid"
+            >
+              Charging Ports
+            </a>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col">
+            <a
+              id="main-menu-command"
+              href="javascript:void(0)"
+              class="nes-btn nes-btn-fluid"
+            >
+              Back
+            </a>
+        </div>
+      </div>
+    `;
+  }
+
   initMainMenuEventListeners() {
     if (this.structure.hasFeatureEngineering()) {
       document.getElementById('engineering-command').addEventListener('click', function() {
         const commandMenu = new DroidUICommandMenu(this.structure);
         document.getElementById('command-container').innerHTML = commandMenu.renderEngineeringSubmenu();
         commandMenu.initEngineeringSubmenuEventListeners();
+      }.bind(this));
+    }
+
+    if (this.structure.hasFeaturePower()) {
+      document.getElementById('power-command').addEventListener('click', function() {
+        const commandMenu = new DroidUICommandMenu(this.structure);
+        document.getElementById('command-container').innerHTML = commandMenu.renderPowerSubmenu();
+        commandMenu.initPowerSubmenuEventListeners();
       }.bind(this));
     }
 
@@ -137,8 +188,6 @@ export class DroidUICommandMenu {
 
   initEngineeringSubmenuEventListeners() {
     const droidUi = new DroidUI();
-
-
 
     const searchHandler = async function() {
       const instance = new Instance();
@@ -201,4 +250,72 @@ export class DroidUICommandMenu {
 
     }.bind(this));
   }
+
+
+  initPowerSubmenuEventListeners() {
+    const droidUi = new DroidUI();
+
+    const searchHandler = async function() {
+      const instance = new Instance();
+      await instance.init();
+
+      const searchString = document.getElementById('offcanvas-search-input').value;
+      droidUi.loadStructureSelectionListFromStructure(
+        'offcanvas-body',
+        'offcanvas-title',
+        this.structure,
+        'drain',
+        searchString
+      );
+    }.bind(this);
+    document.getElementById('offcanvas-search-btn').addEventListener('click', searchHandler);
+    document.getElementById('offcanvas-search-input').addEventListener('keypress', (event) => {
+      if (event.key === 'Enter') {
+        searchHandler(event);
+      }
+    });
+
+    const instance = new Instance();
+    instance.lazyLoad();
+
+    document.getElementById('charge-command').addEventListener('click', function() {
+      droidUi.loadSchematicSelectionList('offcanvas-body', 'offcanvas-title', this.structure, instance.address);
+    }.bind(this));
+
+    document.getElementById('main-menu-command').addEventListener('click', function() {
+      const commandMenu = new DroidUICommandMenu(this.structure);
+      document.getElementById('command-container').innerHTML = commandMenu.renderMainMenu();
+      commandMenu.initMainMenuEventListeners();
+    }.bind(this));
+
+
+    document.getElementById('drain-structure-command').addEventListener('click', function() {
+      const droidUi = new DroidUI();
+
+      const searchHandler = async function() {
+        const instance = new Instance();
+        await instance.init();
+
+        const searchString = document.getElementById('offcanvas-search-input').value;
+        droidUi.loadStructureSelectionListFromStructure(
+          'offcanvas-body',
+          'offcanvas-title',
+          this.structure,
+          'drain',
+          searchString
+        );
+      }.bind(this);
+      document.getElementById('offcanvas-search-btn').addEventListener('click', searchHandler);
+      document.getElementById('offcanvas-search-input').addEventListener('keypress', (event) => {
+        if (event.key === 'Enter') {
+          searchHandler(event);
+        }
+      });
+
+
+      droidUi.loadStructureSelectionListFromStructure('offcanvas-body', 'offcanvas-title', this.structure, 'drain');
+
+    }.bind(this));
+  }
+
 }

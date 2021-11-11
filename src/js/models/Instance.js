@@ -304,6 +304,35 @@ export class Instance {
     return result;
 
   }
+
+  /**
+   * @param {StructureDrain} program
+   */
+  async performDrain(program) {
+    let server = new Server();
+    await server.init(await this.getWallet());
+
+    const msgDrainStructure = {
+      typeUrl: "/di.MsgDrainStructure",
+      value: {
+        creator: this.address,
+        targetStructure: program.target_structure.id,
+        performingStructure: program.performing_structure.id
+      }
+    };
+
+    console.log(msgDrainStructure)
+
+    let result = await server.client.signAndBroadcast(this.address, [msgDrainStructure], this.fee);
+    console.log(result)
+
+    //assertIsBroadcastTxSuccess(result);
+
+    return result;
+
+  }
+
+
     /*
      *
      */

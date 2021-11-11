@@ -27,6 +27,7 @@ import {DroidUIStructureRepairStatusModal} from "./components/DroidUIStructureRe
 import {DroidUIStructureCTAFactory} from "./components/DroidUIStructureCTAFactory";
 
 import {StructurePaletteFactory} from "../art_rendering/StructurePaletteFactory";
+import {DroidUIStructureDrainStatusModal} from "./components/DroidUIStructureDrainStatusModal";
 
 
 
@@ -580,6 +581,21 @@ export class DroidUI {
 
     structureRepairStatusModal.initEventListeners();
     structureRepairStatusModal.showModal();
+  }
+
+  /**
+   * Load and display the Structure Drain modal while process is ongoing
+   *
+   * @param {StructureDrain} program
+   */
+  loadStructureDrainStatusModal(program){
+    let structureDrainStatusModal = new DroidUIStructureDrainStatusModal(program)
+
+    document.getElementById('modal-container').innerHTML = structureDrainStatusModal.render();
+    (new DroidUI()).renderPixelArtStructure(program.target_structure, structureDrainStatusModal.uiStructure);
+
+    structureDrainStatusModal.initEventListeners();
+    structureDrainStatusModal.showModal();
   }
 
   /**
