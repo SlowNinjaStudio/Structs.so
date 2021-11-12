@@ -1,10 +1,13 @@
 import {AnimatedImage} from "../vendor/animation/AnimatedImage";
 import {AnimatedEffect} from "../vendor/animation/AnimatedEffect";
 import {StructureArtGeneratorFactory} from "../art_rendering/StructureArtGeneratorFactory";
+import {CanvasUtil} from "../vendor/CanvasUtil";
+import {StructurePaletteFactory} from "../art_rendering/StructurePaletteFactory";
 
 export class MechShootingAnimator {
   constructor() {
     this.structureArtGeneratorFactory = new StructureArtGeneratorFactory();
+    this.structurePaletteFactory = new StructurePaletteFactory();
   }
 
   cannonFireScript() {
@@ -25,7 +28,8 @@ export class MechShootingAnimator {
     };
   }
 
-  mechKickBackScript() {
+  mechKickBackScript(palette) {
+
     return function() {
       this.context.drawImage(this.img, this.x, this.y);
       if (this.frameCount === 6) {
@@ -37,6 +41,8 @@ export class MechShootingAnimator {
       if (this.frameCount === 30) {
         this.resetFrameCount();
       }
+      const canvasUtil = new CanvasUtil(this.canvas, this.context);
+      canvasUtil.swapColors(palette);
     }
   }
 
@@ -96,15 +102,18 @@ export class MechShootingAnimator {
   }
 
   /**
-   * @param {Structure} mechStructure
+   * @param {Structure} structure
    * @return {*[]}
    */
-  animate(mechStructure) {
-    const artGenerator = this.structureArtGeneratorFactory.make(mechStructure);
+  animate(structure) {
+    const artGenerator = this.structureArtGeneratorFactory.make(structure);
     const mechConfiguration = [];
-    artGenerator.generate(mechConfiguration, mechStructure);
+    artGenerator.generate(mechConfiguration, structure);
 
-    const mechKickBack = AnimatedImage.bulkAnimate(mechConfiguration, this.mechKickBackScript(), 0, 0);
+    const paletteGenerator = this.structurePaletteFactory.make(structure);
+    const palette = paletteGenerator.generatePaletteSwap(structure.getPrimaryColorRGB(), structure);
+
+    const mechKickBack = AnimatedImage.bulkAnimate(mechConfiguration, this.mechKickBackScript(palette), 0, 0);
 
     return mechKickBack.concat([
       new AnimatedImage(

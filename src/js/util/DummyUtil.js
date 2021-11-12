@@ -53,7 +53,7 @@ export class DummyUtil {
     dummy.name = 'Dummy Struct';
     dummy.owner = 'droid1kmwlh69n4mkx2ekg8ju55l0sss5jvum7caxgej';
     dummy.parent_id = '';
-    dummy.primary_color = color === '' ? color : this.getRandomColor();
+    dummy.primary_color = color !== '' ? color : this.getRandomColor();
     dummy.range_attack = this.getRandomInt(255);
     dummy.range_defense = this.getRandomInt(255);
     dummy.restoration_rate = this.getRandomInt(255);
