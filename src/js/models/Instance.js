@@ -16,14 +16,27 @@ export class Instance {
         this.address = '';
 
         this.mnemonic;
+
+        this.fee = {
+          amount: [
+            {
+              denom: "watt",
+              amount: "1",
+            },
+          ],
+          gas: "180000",
+        };
     }
 
-    /*
-     * force = true //destroys old account!
-     *
-     * Should probably create some sort of account
-     * graveyard instead of just saving over the old one
-     */
+  /**
+   * force = true //destroys old account!
+   *
+   * Should probably create some sort of account
+   * graveyard instead of just saving over the old one
+   *
+   * @param {string} mnemonic
+   * @param {boolean} force
+   */
    async init(mnemonic = '', force = false) {
        let identity = JSON.parse(localStorage.getItem('identity'));
 
@@ -56,6 +69,9 @@ export class Instance {
       }
     }
 
+  /**
+   * @param {string} mnemonic
+   */
     async createIdentity(mnemonic) {
 
         if ( mnemonic === '') {
@@ -96,7 +112,10 @@ export class Instance {
         return this.wallet;
     }
 
-    async setName(new_name, fee) {
+  /**
+   * @param {string} newName
+   */
+    async setName(newName) {
         let server = new Server();
         await server.init(await this.getWallet());
 
@@ -104,18 +123,21 @@ export class Instance {
             typeUrl: "/di.MsgUpdateInstanceName",
             value: {
                 creator: this.address,
-                name: new_name
+                name: newName
             }
         };
 
-        let result = await server.client.signAndBroadcast(this.address, [msgRename], fee);
+        let result = await server.client.signAndBroadcast(this.address, [msgRename], this.fee);
         assertIsBroadcastTxSuccess(result);
 
-        this.name = new_name;
+        this.name = newName;
         this.saveLocalInstance();
     }
 
-    async setMood(new_mood, fee) {
+  /**
+   * @param {string} newMood
+   */
+    async setMood(newMood) {
         let server = new Server();
         await server.init(await this.getWallet());
 
@@ -123,14 +145,14 @@ export class Instance {
             typeUrl: "/di.MsgUpdateInstanceMood",
             value: {
                 creator: this.address,
-                mood: new_mood
+                mood: newMood
             }
         };
 
-        let result = await server.client.signAndBroadcast(this.address, [msgRemood], fee);
+        let result = await server.client.signAndBroadcast(this.address, [msgRemood], this.fee);
         assertIsBroadcastTxSuccess(result);
 
-        this.mood = new_mood;
+        this.mood = newMood;
         this.saveLocalInstance();
     }
 
@@ -161,8 +183,11 @@ export class Instance {
         return this.wallet.getAccounts();
     }
 
-
-    async performPatent(compute_result, personalization, fee) {
+  /**
+   * @param {Object} computeResult
+   * @param {Object} personalization
+   */
+    async performPatent(computeResult, personalization) {
        console.log("Patenting")
         let server = new Server();
         await server.init(await this.getWallet());
@@ -173,14 +198,14 @@ export class Instance {
                 creator: this.address,
                 name:personalization.name,
                 description:personalization.description,
-                hash:compute_result.hash,
-                input:compute_result.input,
+                hash:computeResult.hash,
+                input:computeResult.input,
                 owner: this.address
             }
         };
 
 
-        let result = await server.client.signAndBroadcast(this.address, [msgCreateSchematic], fee);
+        let result = await server.client.signAndBroadcast(this.address, [msgCreateSchematic], this.fee);
         console.log(result)
         //assertIsBroadcastTxSuccess(result);
 
@@ -188,11 +213,15 @@ export class Instance {
 
     }
 
-    async performBuild(compute_result, personalization, fee) {
+  /**
+   * @param {Object} computeResult
+   * @param {Object} personalization
+   */
+    async performBuild(computeResult, personalization) {
         let server = new Server();
         await server.init(await this.getWallet());
 
-        console.log(compute_result)
+        console.log(computeResult)
 
         const msgCreateStructure = {
             typeUrl: "/di.MsgCreateStructure",
@@ -200,17 +229,17 @@ export class Instance {
                 creator: this.address,
                 name:personalization.name,
                 description:personalization.description,
-                hash:compute_result.hash,
-                input:compute_result.input,
-                schematic: compute_result.compute_process.program.schematic.hash,
-                performingStructure: compute_result.compute_process.program.performing_structure.id,
+                hash:computeResult.hash,
+                input:computeResult.input,
+                schematic: computeResult.compute_process.program.schematic.hash,
+                performingStructure: computeResult.compute_process.program.performing_structure.id,
                 owner: this.address
             }
         };
 
         console.log(msgCreateStructure)
 
-        let result = await server.client.signAndBroadcast(this.address, [msgCreateStructure], fee);
+        let result = await server.client.signAndBroadcast(this.address, [msgCreateStructure], this.fee);
         console.log(result)
 
         //assertIsBroadcastTxSuccess(result);
@@ -218,27 +247,29 @@ export class Instance {
         return result;
 
     }
-
-  async performAttack(compute_result, fee) {
+  /**
+   * @param {Object} computeResult
+   */
+  async performAttack(computeResult) {
     let server = new Server();
     await server.init(await this.getWallet());
 
-    console.log(compute_result)
+    console.log(computeResult)
 
     const msgAttackStructure = {
       typeUrl: "/di.MsgAttackStructure",
       value: {
         creator: this.address,
-        aimCalculationHash:compute_result.hash,
-        aimCalculationInput:compute_result.input,
-        targetStructure: compute_result.compute_process.program.target_structure.id,
-        performingStructure: compute_result.compute_process.program.performing_structure.id
+        aimCalculationHash:computeResult.hash,
+        aimCalculationInput:computeResult.input,
+        targetStructure: computeResult.compute_process.program.target_structure.id,
+        performingStructure: computeResult.compute_process.program.performing_structure.id
       }
     };
 
     console.log(msgAttackStructure)
 
-    let result = await server.client.signAndBroadcast(this.address, [msgAttackStructure], fee);
+    let result = await server.client.signAndBroadcast(this.address, [msgAttackStructure], this.fee);
     console.log(result)
 
     //assertIsBroadcastTxSuccess(result);
@@ -247,6 +278,32 @@ export class Instance {
 
   }
 
+  /**
+   * @param {StructureRepair} program
+   */
+  async performRepair(program) {
+    let server = new Server();
+    await server.init(await this.getWallet());
+
+    const msgRepairStructure = {
+      typeUrl: "/di.MsgRepairStructure",
+      value: {
+        creator: this.address,
+        targetStructure: program.target_structure.id,
+        performingStructure: program.performing_structure.id
+      }
+    };
+
+    console.log(msgRepairStructure)
+
+    let result = await server.client.signAndBroadcast(this.address, [msgRepairStructure], this.fee);
+    console.log(result)
+
+    //assertIsBroadcastTxSuccess(result);
+
+    return result;
+
+  }
     /*
      *
      */

@@ -7,27 +7,37 @@ import {DroidUISchematicCondensed} from "./DroidUISchematicCondensed";
 import {DroidUIComputeStatus} from "./DroidUIComputeStatus";
 import {Computer} from "../../compute/Computer";
 import {DroidUIStructureCondensed} from "./DroidUIStructureCondensed";
+import {DroidUIStructureHealthProgress} from "./DroidUIStructureHealthProgress";
+import {DroidUIStructureCondensedCTAAttack} from "./DroidUIStructureCondensedCTAAttack";
+import {DroidUIStructureCondensedCTANone} from "./DroidUIStructureCondensedCTANone";
 
 export class DroidUIStructureAttackStatusModal {
+
   /**
-   * @param {number} amount
+   * @param {StructureAttack} program
+   * @param {number} processId
    */
-  constructor(program, process_id) {
+  constructor(program, processId) {
 
     this.performing_structure = program.performing_structure;
     this.structure = program.target_structure;
     this.target_structure = program.target_structure;
     this.program = program;
-    this.process_id = process_id;
+    this.process_id = processId;
 
     this.uiStructure = new DroidUIStructureCondensed(
       this.target_structure,
       this.performing_structure,
-      new DroidUISchematicCondensedCTANone(),
+      new DroidUIStructureCondensedCTANone(),
       'build-status-modal-'
     );
 
     this.computeStatus = new DroidUIComputeStatus(true);
+
+    this.healthStatus = new DroidUIStructureHealthProgress();
+
+    this.backdrop = document.getElementById("backdrop");
+
   }
 
   render() {
@@ -40,6 +50,7 @@ export class DroidUIStructureAttackStatusModal {
             </div>
             <div class="modal-body">
               ${this.uiStructure.render()}
+              <div id="health_status" class="row">${this.healthStatus.render()}</div>
               <div id="compute_status" class="row">${this.computeStatus.render()}</div>
             </div>
             <div class="modal-footer">
@@ -63,15 +74,21 @@ export class DroidUIStructureAttackStatusModal {
     this.computeStatus.setProgram(this.program);
     this.computeStatus.setProcessID(this.process_id);
 
-    document.getElementById("backdrop").style.display = "block"
-    document.getElementById("attack-status-dialog").style.display = "block"
-    document.getElementById("attack-status-dialog").classList.add("show")
+    this.healthStatus.init(this.program);
+
+    this.backdrop.style.display = "block"
+
+    const attackStatusDialog = document.getElementById("attack-status-dialog")
+    attackStatusDialog.style.display = "block"
+    attackStatusDialog.classList.add("show")
   }
 
   destroyModal() {
-    document.getElementById("backdrop").style.display = "none"
-    document.getElementById("attack-status-dialog").style.display = "none"
-    document.getElementById("attack-status-dialog").classList.remove("show")
+    this.backdrop.style.display = "none"
+
+    const attackStatusDialog = document.getElementById("attack-status-dialog")
+    attackStatusDialog.style.display = "none"
+    attackStatusDialog.classList.remove("show")
 
     document.getElementById("modal-container").innerHTML  = ""
   }

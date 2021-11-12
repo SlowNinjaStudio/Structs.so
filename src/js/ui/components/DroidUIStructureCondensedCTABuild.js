@@ -1,3 +1,5 @@
+import {StructureBuild} from "../../compute/StructureBuild";
+
 export class DroidUIStructureCondensedCTABuild {
 
   /**
@@ -5,6 +7,10 @@ export class DroidUIStructureCondensedCTABuild {
    */
   constructor(structure) {
     this.structure = structure;
+  }
+
+  initProgram() {
+    return (new StructureBuild())
   }
 
   render() {
