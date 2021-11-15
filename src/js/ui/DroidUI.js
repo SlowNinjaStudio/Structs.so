@@ -2,10 +2,8 @@ import {ColorRGB} from "../vendor/ColorRGB";
 import {DroidApi} from "../api/DroidApi";
 import {DroidUIMessagePanel} from "./components/DroidUIMessagePanel";
 import {DroidUINewSchematic} from "./components/DroidUINewSchematic";
-import {DroidUISchematicCondensed} from "./components/DroidUISchematicCondensed";
 import {PixelArtViewer} from "../vendor/PixelArtViewer";
 import {DroidUIMessageListItem} from "./components/DroidUIMessageListItem";
-import {DroidUISchematicCondensedCTABuild} from "./components/DroidUISchematicCondensedCTABuild";
 import {DroidUIWattReceivedModal} from "./components/DroidUIWattReceivedModal";
 import {DroidUISchematicRDPatentedModal} from "./components/DroidUISchematicRDPatentedModal";
 import {DroidUIStructureBuildStatusModal} from "./components/DroidUIStructureBuildStatusModal";
@@ -26,6 +24,8 @@ import {DroidUIComponentFactory} from "./components/DroidUIComponentFactory";
 import {DroidUIEmptyListHelper} from "./components/DroidUIEmptyListHelper";
 import {DroidUISchematicBuildListener} from "./listeners/DroidUISchematicBuildListener";
 import {DroidUIStructureCommandViewListener} from "./listeners/DroidUIStructueCommandViewListener";
+import {DroidUIEmptyListHelperSchematicSelection} from "./components/DroidUIEmptyListHelperSchematicSelection";
+import {DroidUISchematicCondensedBuildListener} from "./listeners/DroidUISchematicCondensedBuildListener";
 
 /**
  * Web App
@@ -250,27 +250,6 @@ export class DroidUI {
   }
 
   /**
-   * @param {string} schematicsHtml
-   * @param {string} searchString
-   * @returns {string}
-   */
-  schematicSelectionListOutputHelper(schematicsHtml, searchString) {
-    if (schematicsHtml === '' && searchString === '') {
-      const emptyMessage = new DroidUIMessageListItem(
-        `There are no compatible schematics for this structure.`
-        + ` A compatible schematic must have one ambit (water, land, sky, or space) in common with the current structure.`
-      );
-      schematicsHtml = emptyMessage.render();
-    } else if (schematicsHtml === '' && searchString !== '') {
-      const emptyMessage = new DroidUIMessageListItem(
-        `No compatible schematics found matching your search terms. Try using less or different keywords.`
-      );
-      schematicsHtml = emptyMessage.render();
-    }
-    return schematicsHtml;
-  }
-
-  /**
    * @param {string} structuresHtml
    * @param {string} searchString
    * @returns {string}
@@ -298,37 +277,18 @@ export class DroidUI {
    * @param {string} searchString
    */
   loadSchematicSelectionList(targetElementId, targetElementTitleId, structure, searchString = '') {
-    const targetElement = document.getElementById(targetElementId);
     const targetElementTitle = document.getElementById(`${targetElementTitleId}`);
     targetElementTitle.innerHTML = 'Select Schematic';
 
-    let schematicsHtml = '';
-
     this.droidApi.searchSchematicsByStructure(structure.getId(), searchString).then(schematics => {
-      const schematicElements = [];
-
-      // Batch drawing by collecting all the HTML first
-      for (let i = 0; i < schematics.length; i++) {
-        const droidUISchematicCondensed = new DroidUISchematicCondensed(
-          schematics[i],
-          structure,
-          new DroidUISchematicCondensedCTABuild(schematics[i])
-        );
-        schematicsHtml += droidUISchematicCondensed.render();
-        schematicElements[i] = droidUISchematicCondensed;
-      }
-
-      // Update DOM
-      targetElement.innerHTML = this.schematicSelectionListOutputHelper(schematicsHtml, searchString);
-
-      // Render Pixel Art
-      for (let i = 0; i < schematicElements.length; i++) {
-        /** @type {HTMLCanvasElement} */
-        const canvas = document.getElementById(schematicElements[i].getCanvasId());
-        const artSet = new StructureArtSet(schematicElements[i].schematic);
-        new PixelArtViewer(canvas, artSet.getLayers(), artSet.getPalette());
-        schematicElements[i].initMainBuildEventListeners();
-      }
+      this.handleLoadList(
+        schematics,
+        targetElementId,
+        'SchematicCondensed',
+        [structure],
+        new DroidUIEmptyListHelperSchematicSelection(searchString),
+        DroidUISchematicCondensedBuildListener
+      );
     });
   }
 

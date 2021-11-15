@@ -10,7 +10,7 @@ export class DroidUIEmptyListHelper extends DroidUIEmptyListHelperInterface{
     this.emptyMessageComponent = emptyMessageComponent;
   }
 
-  process(html, params = []) {
+  process(html) {
     if (html === '' && this.emptyMessageComponent) {
       return this.emptyMessageComponent.render();
     }

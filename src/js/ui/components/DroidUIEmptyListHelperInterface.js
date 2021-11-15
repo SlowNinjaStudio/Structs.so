@@ -1,7 +1,7 @@
 import {NotImplementedError} from "../../vendor/NotImplementedError";
 
 export class DroidUIEmptyListHelperInterface {
-  process(html, params = []) {
+  process(html) {
     throw new NotImplementedError();
   }
 }

@@ -1,14 +1,3 @@
-import {Computer} from "../../compute/Computer";
-import {StructureBuild} from "../../compute/StructureBuild";
-import {CONFIG} from "../../constants";
-import {secondsToString} from "../../vendor/SecondsToString"
-
-import {DroidUIComputeStatus} from "./DroidUIComputeStatus"
-import {DroidUISchematicCondensedCTANone} from "./DroidUISchematicCondensedCTANone";
-import {DroidUI} from "../DroidUI";
-
-import {Instance} from "../../models/Instance"
-
 export class DroidUINewSchematicCondensed {
 
   /**
