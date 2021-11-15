@@ -3,7 +3,6 @@ import {DroidApi} from "../api/DroidApi";
 import {DroidUIMessagePanel} from "./components/DroidUIMessagePanel";
 import {DroidUINewSchematic} from "./components/DroidUINewSchematic";
 import {DroidUISchematicCondensed} from "./components/DroidUISchematicCondensed";
-import {DroidUIStructureCommandView} from "./components/DroidUIStructureCommandView";
 import {PixelArtViewer} from "../vendor/PixelArtViewer";
 import {DroidUIMessageListItem} from "./components/DroidUIMessageListItem";
 import {DroidUISchematicCondensedCTABuild} from "./components/DroidUISchematicCondensedCTABuild";
@@ -26,6 +25,7 @@ import {DroidUIStructureCondensed} from "./components/DroidUIStructureCondensed"
 import {DroidUIComponentFactory} from "./components/DroidUIComponentFactory";
 import {DroidUIEmptyListHelper} from "./components/DroidUIEmptyListHelper";
 import {DroidUISchematicBuildListener} from "./listeners/DroidUISchematicBuildListener";
+import {DroidUIStructureCommandViewListener} from "./listeners/DroidUIStructueCommandViewListener";
 
 /**
  * Web App
@@ -125,16 +125,14 @@ export class DroidUI {
    * @param {string} creator
    */
   handleLoadSingleStructure(structure, targetElementId, creator = '') {
-    const targetElement = document.getElementById(targetElementId);
-    const droidUIStructureCommandView = new DroidUIStructureCommandView(structure, creator);
-    const artSet = new StructureArtSet(structure)
-
-    targetElement.innerHTML = droidUIStructureCommandView.render();
-    droidUIStructureCommandView.initMainMenuEventListeners();
-
-    /** @type {HTMLCanvasElement} */
-    const canvas = document.getElementById(droidUIStructureCommandView.getCanvasId());
-    new PixelArtViewer(canvas, artSet.getLayers(), artSet.getPalette());
+    this.handleLoadList(
+      [structure],
+      targetElementId,
+      'StructureCommandView',
+      [creator],
+      new DroidUIEmptyListHelper(),
+      DroidUIStructureCommandViewListener
+    );
   }
 
   /**
