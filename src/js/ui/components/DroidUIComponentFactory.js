@@ -3,6 +3,9 @@ import {DroidUISchematic} from "./DroidUISchematic";
 import {DroidUIStructureCommandView} from "./DroidUIStructureCommandView";
 import {DroidUISchematicCondensed} from "./DroidUISchematicCondensed";
 import {DroidUISchematicCondensedCTABuild} from "./DroidUISchematicCondensedCTABuild";
+import {DroidUIStructureCondensed} from "./DroidUIStructureCondensed";
+import {DroidUIStructureCondensedCTABuild} from "./DroidUIStructureCondensedCTABuild";
+import {DroidUIStructureCTAFactory} from "./DroidUIStructureCTAFactory";
 
 export class DroidUIComponentFactoryError extends Error {
   constructor(message) {
@@ -26,6 +29,22 @@ export class DroidUIComponentFactory {
         break;
       case 'Structure':
         component = new DroidUIStructure(structure, ...params);
+        break;
+      case 'StructureCondensedBuild':
+        component = new DroidUIStructureCondensed(
+          structure,
+          structure,
+          params[0],
+          new DroidUIStructureCondensedCTABuild(structure)
+        );
+        break;
+      case 'StructureCondensedFactory':
+        component = new DroidUIStructureCondensed(
+          structure,
+          params[0],
+          params[1],
+          (new DroidUIStructureCTAFactory()).make(params[2], structure)
+        );
         break;
       case 'StructureCommandView':
         component = new DroidUIStructureCommandView(structure, ...params);

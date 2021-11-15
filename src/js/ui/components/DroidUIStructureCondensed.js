@@ -45,6 +45,14 @@ export class DroidUIStructureCondensed {
     this.program.setTargetObject(targetObject);
 
   }
+
+  /**
+   * @return {Schematic|Structure}
+   */
+  getDisplayObject() {
+    return this.structure;
+  }
+
   getCanvasId() {
     return `${this.idPrefix}structure-condensed-${this.structure.getId()}`;
   }
