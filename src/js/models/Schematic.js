@@ -1,4 +1,5 @@
 import {AMBITS, FEATURES} from "../constants";
+import {ColorRGB} from "../vendor/ColorRGB";
 
 /**
  * Schematic Model
@@ -86,6 +87,9 @@ export class Schematic {
   }
   getPrimaryColor() {
     return this.primary_color;
+  }
+  getPrimaryColorRGB() {
+    return ColorRGB.hexToRgb(this.getPrimaryColor());
   }
 
   isMobile() {

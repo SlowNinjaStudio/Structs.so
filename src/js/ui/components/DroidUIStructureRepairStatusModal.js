@@ -6,7 +6,7 @@ import {DroidUISchematicCondensedCTANone} from "./DroidUISchematicCondensedCTANo
 import {DroidUISchematicCondensed} from "./DroidUISchematicCondensed";
 import {DroidUIComputeStatus} from "./DroidUIComputeStatus";
 import {Computer} from "../../compute/Computer";
-import {DroidUIStructureCondensed} from "./DroidUIStructureCondensed";
+import {DroidUIStructureCondensedTarget} from "./DroidUIStructureCondensedTarget";
 import {DroidUIStructureHealthProgress} from "./DroidUIStructureHealthProgress";
 import {DroidUIStructureCondensedCTAAttack} from "./DroidUIStructureCondensedCTAAttack";
 import {DroidUIStructureCondensedCTARepair} from "./DroidUIStructureCondensedCTARepair";
@@ -25,7 +25,7 @@ export class DroidUIStructureRepairStatusModal {
     this.program = program;
 
 
-    this.uiStructure = new DroidUIStructureCondensed(
+    this.uiStructure = new DroidUIStructureCondensedTarget(
       this.target_structure,
       this.performing_structure,
       new DroidUIStructureCondensedCTANone(),

@@ -117,7 +117,7 @@ export class DroidUICommandMenu {
               href="#offcanvas"
               data-bs-toggle="offcanvas"
               role="button"
-              class="nes-btn is-warning nes-btn-fluid"
+              class="nes-btn is-disabled nes-btn-fluid"
             >
               Charging Ports
             </a>
