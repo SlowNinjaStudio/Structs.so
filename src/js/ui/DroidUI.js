@@ -25,6 +25,7 @@ import {StructureArtSet} from "../art_rendering/StructureArtSet";
 import {DroidUIStructureCondensed} from "./components/DroidUIStructureCondensed";
 import {DroidUIComponentFactory} from "./components/DroidUIComponentFactory";
 import {DroidUIEmptyListHelper} from "./components/DroidUIEmptyListHelper";
+import {DroidUISchematicBuildListener} from "./listeners/DroidUISchematicBuildListener";
 
 /**
  * Web App
@@ -49,13 +50,16 @@ export class DroidUI {
    * @param {string} listType
    * @param {array} componentParams
    * @param {DroidUIEmptyListHelperInterface} emptyListHelper
+   * @param {Class<DroidUIListenerInterface>} listenerClass
    */
   handleLoadList(
     structures,
     targetElementId,
     listType,
-    componentParams = [],
-    emptyListHelper) {
+    componentParams,
+    emptyListHelper,
+    listenerClass = null
+  ) {
     const targetElement = document.getElementById(targetElementId);
     const components = [];
     let html = '';
@@ -76,7 +80,9 @@ export class DroidUI {
       const canvas = document.getElementById(components[i].getCanvasId());
       const artSet = new StructureArtSet(components[i].getDisplayObject());
       new PixelArtViewer(canvas, artSet.getLayers(), artSet.getPalette());
-      components[i].initListeners();
+      if (listenerClass) {
+        (new listenerClass(components[i])).init();
+      }
     }
   }
 
@@ -92,7 +98,8 @@ export class DroidUI {
       targetElementId,
       'Schematic',
       [creator],
-      new DroidUIEmptyListHelper(emptyMessage)
+      new DroidUIEmptyListHelper(emptyMessage),
+      DroidUISchematicBuildListener
     );
   }
 
