@@ -57,9 +57,9 @@ export class StructureRepair {
       }
     }
 
-    if (!structure.hasFeatureAttack()) {
+    if (!structure.hasFeatureEngineering()) {
       // TODO some sort of better error handling
-      alert('No offensive capabilities');
+      alert('No engineering capabilities');
       return;
     }
 

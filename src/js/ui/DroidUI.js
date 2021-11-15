@@ -17,16 +17,17 @@ import {Droid} from "../models/Droid";
 import {DroidUIDroid} from "./components/DroidUIDroid";
 import {DroidArtGenerator} from "../art_rendering/DroidArtGenerator";
 import {DroidPalette} from "../art_rendering/DroidPalette";
-import {DroidUIStructureCondensed} from "./components/DroidUIStructureCondensed";
 import {DroidUIStructureCondensedCTABuild} from "./components/DroidUIStructureCondensedCTABuild";
 import {Schematic} from "../models/Schematic";
 import {Structure} from "../models/Structure";
 import {DroidUIStructureAttackStatusModal} from "./components/DroidUIStructureAttackStatusModal";
 import {DroidUIStructureRepairStatusModal} from "./components/DroidUIStructureRepairStatusModal";
 import {DroidUIStructureCTAFactory} from "./components/DroidUIStructureCTAFactory";
-
 import {StructurePaletteFactory} from "../art_rendering/StructurePaletteFactory";
+import {DroidUIStructureDrainStatusModal} from "./components/DroidUIStructureDrainStatusModal";
 import {StructureArtSet} from "../art_rendering/StructureArtSet";
+import {DroidUIStructureCondensed} from "./components/DroidUIStructureCondensed";
+
 
 
 
@@ -349,6 +350,7 @@ export class DroidUI {
 
             const droidUIStructureCondensed = new DroidUIStructureCondensed(
               structures[i],
+              structures[i],
               schematic,
               new DroidUIStructureCondensedCTABuild(structures[i])
             );
@@ -399,6 +401,7 @@ export class DroidUI {
             const droidUIStructureCondensed = new DroidUIStructureCondensed(
               structures[i],
               structure,
+              structures[i],
               (new DroidUIStructureCTAFactory()).make(callToActionType, structures[i])
             );
 
@@ -547,6 +550,21 @@ export class DroidUI {
 
     structureRepairStatusModal.initEventListeners();
     structureRepairStatusModal.showModal();
+  }
+
+  /**
+   * Load and display the Structure Drain modal while process is ongoing
+   *
+   * @param {StructureDrain} program
+   */
+  loadStructureDrainStatusModal(program){
+    let structureDrainStatusModal = new DroidUIStructureDrainStatusModal(program)
+
+    document.getElementById('modal-container').innerHTML = structureDrainStatusModal.render();
+    (new DroidUI()).renderPixelArtStructure(program.target_structure, structureDrainStatusModal.uiStructure);
+
+    structureDrainStatusModal.initEventListeners();
+    structureDrainStatusModal.showModal();
   }
 
   /**

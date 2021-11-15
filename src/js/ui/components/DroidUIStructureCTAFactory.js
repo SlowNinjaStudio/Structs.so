@@ -1,6 +1,7 @@
 import {DroidUIStructureCondensedCTANone} from "./DroidUIStructureCondensedCTANone";
 import {DroidUIStructureCondensedCTAAttack} from "./DroidUIStructureCondensedCTAAttack";
 import {DroidUIStructureCondensedCTARepair} from "./DroidUIStructureCondensedCTARepair";
+import {DroidUIStructureCondensedCTADrain} from "./DroidUIStructureCondensedCTADrain";
 
 export class DroidUIStructureCTAFactory {
 
@@ -21,6 +22,9 @@ export class DroidUIStructureCTAFactory {
         break;
       case 'repair':
         cta = new DroidUIStructureCondensedCTARepair(targetStructure)
+        break;
+      case 'drain':
+        cta = new DroidUIStructureCondensedCTADrain(targetStructure)
         break;
     }
     return cta;

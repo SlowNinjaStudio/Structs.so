@@ -18,20 +18,21 @@ import {DroidUIStructureHealthProgress} from "./DroidUIStructureHealthProgress";
 export class DroidUIStructureCondensed {
 
   /**
-   * @param {Structure} structure
-   * @param {Schematic|Structure} baseObject
-   * @param {DroidUIStructureCondensedCTANone|DroidUIStructureCondensedCTABuild|DroidUIStructureCondensedCTAAttack|DroidUIStructureCondensedCTARepair} callToAction
+   * @param {Structure} displayStructure
+   * @param {Structure} performingStructure
+   * @param {Schematic|Structure} targetObject
+   * @param {DroidUIStructureCondensedCTANone|DroidUIStructureCondensedCTABuild|DroidUIStructureCondensedCTAAttack|DroidUIStructureCondensedCTARepair|DroidUIStructureCondensedCTADrain} callToAction
    * @param {string} idPrefix
-   * @param {DroidUIComputeStatus} computeStatus
    */
   constructor(
-    structure,
-    baseObject,
+    displayStructure,
+    performingStructure,
+    targetObject,
     callToAction = new DroidUIStructureCondensedCTANone(),
     idPrefix = ''
   ) {
-    this.structure = structure;
-    this.baseObject = baseObject;
+    this.structure = displayStructure;
+    this.baseObject = targetObject;
 
     this.idPrefix = idPrefix;
     this.callToAction = callToAction;
@@ -40,8 +41,8 @@ export class DroidUIStructureCondensed {
 
     this.program = this.callToAction.initProgram();
 
-      this.program.setPerformingStructure(baseObject);
-      this.program.setTargetObject(structure);
+    this.program.setPerformingStructure(performingStructure);
+    this.program.setTargetObject(targetObject);
 
   }
   getCanvasId() {
@@ -212,6 +213,9 @@ export class DroidUIStructureCondensed {
       case 'repair':
         this.initMainRepairEventListeners();
         break;
+      case 'drain':
+        this.initMainDrainEventListeners();
+        break;
     }
   }
 
@@ -270,6 +274,40 @@ export class DroidUIStructureCondensed {
         repairStatusDialogViewButton.disabled = ""
         repairStatusDialogViewButton.classList.remove('is-disabled')
         repairStatusDialogViewButton.classList.add('is-success')
+
+
+      });
+
+    }.bind(this));
+  }
+
+  initMainDrainEventListeners() {
+
+    document.getElementById('structure_list_drain_' + this.structure.getId()).addEventListener('click', async function() {
+      // Hide the selector
+      // Move this into the DroidUI if it's not already there.
+      window.bootstrap.Offcanvas.getInstance(document.getElementById('offcanvas')).hide();
+
+
+      let instance = new Instance();
+      await instance.init();
+      this.program.instance = instance.address;
+
+
+      (new DroidUI()).loadStructureDrainStatusModal(this.program)
+
+      let compute_status = new DroidUIComputeStatus();
+      compute_status.updateStatus(50, 1, 100)
+
+
+      instance.performDrain(this.program).then((result) => {
+        let tx_result_parsed = JSON.parse(result.rawLog);
+
+        let tx_result_processed = (new StructureRepair()).processResult(tx_result_parsed[0]);
+        (new DroidUIStructureHealthProgress()).incrementHealth(tx_result_processed.targetRepairAmount);
+        console.log(tx_result_parsed)
+        let compute_status = new DroidUIComputeStatus();
+        compute_status.setComplete();
 
 
       });
