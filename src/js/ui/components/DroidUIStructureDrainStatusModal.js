@@ -6,7 +6,6 @@ import {DroidUISchematicCondensedCTANone} from "./DroidUISchematicCondensedCTANo
 import {DroidUISchematicCondensed} from "./DroidUISchematicCondensed";
 import {DroidUIComputeStatus} from "./DroidUIComputeStatus";
 import {Computer} from "../../compute/Computer";
-import {DroidUIStructureCondensedTarget} from "./DroidUIStructureCondensedTarget";
 import {DroidUIStructureHealthProgress} from "./DroidUIStructureHealthProgress";
 import {DroidUIStructureCondensedCTAAttack} from "./DroidUIStructureCondensedCTAAttack";
 import {DroidUIStructureCondensedCTARepair} from "./DroidUIStructureCondensedCTARepair";
@@ -25,9 +24,10 @@ export class DroidUIStructureDrainStatusModal {
     this.program = program;
 
 
-    this.uiStructure = new DroidUIStructureCondensedTarget(
+    this.uiStructure = new DroidUIStructureCondensed(
       this.target_structure,
       this.performing_structure,
+      this.target_structure,
       new DroidUIStructureCondensedCTANone(),
       'drain-status-modal-'
     );

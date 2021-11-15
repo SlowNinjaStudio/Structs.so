@@ -15,22 +15,24 @@ import {DroidUIStructureCondensedCTABuild} from "./DroidUIStructureCondensedCTAB
 import {DroidUIStructureCondensedCTARepair} from "./DroidUIStructureCondensedCTARepair";
 import {DroidUIStructureHealthProgress} from "./DroidUIStructureHealthProgress";
 
-export class DroidUIStructureCondensedTarget {
+export class DroidUIStructureCondensed {
 
   /**
-   * @param {Structure} structure
-   * @param {Schematic|Structure} baseObject
+   * @param {Structure} displayStructure
+   * @param {Structure} performingStructure
+   * @param {Schematic|Structure} targetObject
    * @param {DroidUIStructureCondensedCTANone|DroidUIStructureCondensedCTABuild|DroidUIStructureCondensedCTAAttack|DroidUIStructureCondensedCTARepair|DroidUIStructureCondensedCTADrain} callToAction
    * @param {string} idPrefix
    */
   constructor(
-    structure,
-    baseObject,
+    displayStructure,
+    performingStructure,
+    targetObject,
     callToAction = new DroidUIStructureCondensedCTANone(),
     idPrefix = ''
   ) {
-    this.structure = structure;
-    this.baseObject = baseObject;
+    this.structure = displayStructure;
+    this.baseObject = targetObject;
 
     this.idPrefix = idPrefix;
     this.callToAction = callToAction;
@@ -39,8 +41,8 @@ export class DroidUIStructureCondensedTarget {
 
     this.program = this.callToAction.initProgram();
 
-    this.program.setPerformingStructure(baseObject);
-    this.program.setTargetObject(structure);
+    this.program.setPerformingStructure(performingStructure);
+    this.program.setTargetObject(targetObject);
 
   }
   getCanvasId() {
@@ -299,17 +301,14 @@ export class DroidUIStructureCondensedTarget {
 
 
       instance.performDrain(this.program).then((result) => {
-        try {
-          let tx_result_parsed = JSON.parse(result.rawLog);
+        let tx_result_parsed = JSON.parse(result.rawLog);
 
-          let tx_result_processed = (new StructureRepair()).processResult(tx_result_parsed[0]);
-          (new DroidUIStructureHealthProgress()).incrementHealth(tx_result_processed.targetRepairAmount);
-          console.log(tx_result_parsed)
-          let compute_status = new DroidUIComputeStatus();
-          compute_status.setComplete();
-        } catch (error) {
-          console.log(error);
-        }
+        let tx_result_processed = (new StructureRepair()).processResult(tx_result_parsed[0]);
+        (new DroidUIStructureHealthProgress()).incrementHealth(tx_result_processed.targetRepairAmount);
+        console.log(tx_result_parsed)
+        let compute_status = new DroidUIComputeStatus();
+        compute_status.setComplete();
+
 
       });
 

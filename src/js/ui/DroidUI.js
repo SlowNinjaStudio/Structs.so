@@ -17,7 +17,6 @@ import {Droid} from "../models/Droid";
 import {DroidUIDroid} from "./components/DroidUIDroid";
 import {DroidArtGenerator} from "../art_rendering/DroidArtGenerator";
 import {DroidPalette} from "../art_rendering/DroidPalette";
-import {DroidUIStructureCondensedTarget} from "./components/DroidUIStructureCondensedTarget";
 import {DroidUIStructureCondensedCTABuild} from "./components/DroidUIStructureCondensedCTABuild";
 import {Schematic} from "../models/Schematic";
 import {Structure} from "../models/Structure";
@@ -27,7 +26,7 @@ import {DroidUIStructureCTAFactory} from "./components/DroidUIStructureCTAFactor
 import {StructurePaletteFactory} from "../art_rendering/StructurePaletteFactory";
 import {DroidUIStructureDrainStatusModal} from "./components/DroidUIStructureDrainStatusModal";
 import {StructureArtSet} from "../art_rendering/StructureArtSet";
-import {DroidUIStructureCondensedPerforming} from "./components/DroidUIStructureCondensedPerforming";
+import {DroidUIStructureCondensed} from "./components/DroidUIStructureCondensed";
 
 
 
@@ -349,7 +348,8 @@ export class DroidUI {
           const structuresList = [];
           for (let i = 0; i < structures.length; i++) {
 
-            const droidUIStructureCondensed = new DroidUIStructureCondensedPerforming(
+            const droidUIStructureCondensed = new DroidUIStructureCondensed(
+              structures[i],
               structures[i],
               schematic,
               new DroidUIStructureCondensedCTABuild(structures[i])
@@ -398,9 +398,10 @@ export class DroidUI {
           const structuresList = [];
           for (let i = 0; i < structures.length; i++) {
 
-            const droidUIStructureCondensed = new DroidUIStructureCondensedTarget(
+            const droidUIStructureCondensed = new DroidUIStructureCondensed(
               structures[i],
               structure,
+              structures[i],
               (new DroidUIStructureCTAFactory()).make(callToActionType, structures[i])
             );
 
@@ -564,19 +565,6 @@ export class DroidUI {
 
     structureDrainStatusModal.initEventListeners();
     structureDrainStatusModal.showModal();
-  }
-
-  /**
-   * @param {Schematic} schematic
-   * @param droidUIComponent
-   *
-   * TODO Looks like this might be removed and merged into the below function.
-   */
-  renderPixelArtSchematic(schematic, droidUIComponent) {
-    const layers = this.structureArtGenerator.generate(schematic);
-    const canvas = document.getElementById(droidUIComponent.getCanvasId());
-    const palette = this.getSchematicPalette(schematic);
-    new PixelArtViewer(canvas, layers, palette);
   }
 
   /**
