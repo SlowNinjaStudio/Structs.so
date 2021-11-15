@@ -42,8 +42,8 @@ export class DroidUIComponentFactory {
         component = new DroidUIStructureCondensed(
           structure,
           params[0],
-          params[1],
-          (new DroidUIStructureCTAFactory()).make(params[2], structure)
+          structure,
+          (new DroidUIStructureCTAFactory()).make(params[1], structure)
         );
         break;
       case 'StructureCommandView':

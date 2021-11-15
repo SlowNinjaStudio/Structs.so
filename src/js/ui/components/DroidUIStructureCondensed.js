@@ -1,19 +1,10 @@
 import {Computer} from "../../compute/Computer";
-import {StructureBuild} from "../../compute/StructureBuild";
 import {CONFIG} from "../../constants";
 import {secondsToString} from "../../vendor/SecondsToString"
-
-import {DroidUIComputeStatus} from "./DroidUIComputeStatus"
 import {DroidUIStructureCondensedCTANone} from "./DroidUIStructureCondensedCTANone";
-import {DroidUI} from "../DroidUI";
-
-import {Instance} from "../../models/Instance"
 import {DroidUIStructureCondensedCTAAttack} from "./DroidUIStructureCondensedCTAAttack";
-import {StructureAttack} from "../../compute/StructureAttack";
-import {StructureRepair} from "../../compute/StructureRepair"
 import {DroidUIStructureCondensedCTABuild} from "./DroidUIStructureCondensedCTABuild";
 import {DroidUIStructureCondensedCTARepair} from "./DroidUIStructureCondensedCTARepair";
-import {DroidUIStructureHealthProgress} from "./DroidUIStructureHealthProgress";
 
 export class DroidUIStructureCondensed {
 
@@ -184,142 +175,5 @@ export class DroidUIStructureCondensed {
         ${this.callToAction.render()}
       </div>
     `;
-  }
-
-  initMainBuildEventListeners() {
-
-      document.getElementById('structure_list_build_' + this.structure.getId()).addEventListener('click', async function() {
-        // Hide the selector
-        // Move this into the DroidUI if it's not already there.
-        window.bootstrap.Offcanvas.getInstance(document.getElementById('offcanvas')).hide();
-
-        let instance = new Instance();
-        await instance.init();
-        this.program.instance = instance.address;
-
-        let new_process_id = this.computer.add_process(this.program);
-
-        (new DroidUI()).loadStructureBuildStatusModal(this.baseObject, this.structure, this.program, new_process_id)
-
-        this.computer.run_process(new_process_id);
-
-      }.bind(this));
-
-  }
-
-  /**
-   * This can likely be refactored deeper into the CTAs but there is
-   * some state that needs to be moved around.
-   *
-   * @param callToActionType
-   */
-  initSubEventListeners(callToActionType){
-    switch (callToActionType){
-      case 'attack':
-        this.initMainAttackEventListeners();
-        break;
-      case 'repair':
-        this.initMainRepairEventListeners();
-        break;
-      case 'drain':
-        this.initMainDrainEventListeners();
-        break;
-    }
-  }
-
-  initMainAttackEventListeners() {
-
-    document.getElementById('structure_list_attack_' + this.structure.getId()).addEventListener('click', async function() {
-      // Hide the selector
-      // Move this into the DroidUI if it's not already there.
-      window.bootstrap.Offcanvas.getInstance(document.getElementById('offcanvas')).hide();
-
-      let instance = new Instance();
-      await instance.init();
-      this.program.instance = instance.address;
-
-      let new_process_id = this.computer.add_process(this.program);
-
-
-      (new DroidUI()).loadStructureAttackStatusModal(this.program, new_process_id)
-      this.computer.run_process(new_process_id);
-
-    }.bind(this));
-  }
-
-  initMainRepairEventListeners() {
-
-    document.getElementById('structure_list_repair_' + this.structure.getId()).addEventListener('click', async function() {
-      // Hide the selector
-      // Move this into the DroidUI if it's not already there.
-      window.bootstrap.Offcanvas.getInstance(document.getElementById('offcanvas')).hide();
-
-
-      let instance = new Instance();
-      await instance.init();
-      this.program.instance = instance.address;
-
-
-      (new DroidUI()).loadStructureRepairStatusModal(this.program)
-
-      let compute_status = new DroidUIComputeStatus();
-      compute_status.updateStatus(50, 1, 100)
-
-      document.getElementById('repair-status-dialog-view-button').href = '/structure.html?structure_id=' + this.program.target_structure.id;
-
-
-
-      instance.performRepair(this.program).then((result) => {
-        let tx_result_parsed = JSON.parse(result.rawLog);
-
-        let tx_result_processed = (new StructureRepair()).processResult(tx_result_parsed[0]);
-        (new DroidUIStructureHealthProgress()).incrementHealth(tx_result_processed.targetRepairAmount);
-        console.log(tx_result_parsed)
-        let compute_status = new DroidUIComputeStatus();
-        compute_status.setComplete();
-
-        const repairStatusDialogViewButton = document.getElementById('repair-status-dialog-view-button')
-        repairStatusDialogViewButton.disabled = ""
-        repairStatusDialogViewButton.classList.remove('is-disabled')
-        repairStatusDialogViewButton.classList.add('is-success')
-
-
-      });
-
-    }.bind(this));
-  }
-
-  initMainDrainEventListeners() {
-
-    document.getElementById('structure_list_drain_' + this.structure.getId()).addEventListener('click', async function() {
-      // Hide the selector
-      // Move this into the DroidUI if it's not already there.
-      window.bootstrap.Offcanvas.getInstance(document.getElementById('offcanvas')).hide();
-
-
-      let instance = new Instance();
-      await instance.init();
-      this.program.instance = instance.address;
-
-
-      (new DroidUI()).loadStructureDrainStatusModal(this.program)
-
-      let compute_status = new DroidUIComputeStatus();
-      compute_status.updateStatus(50, 1, 100)
-
-
-      instance.performDrain(this.program).then((result) => {
-        let tx_result_parsed = JSON.parse(result.rawLog);
-
-        let tx_result_processed = (new StructureRepair()).processResult(tx_result_parsed[0]);
-        (new DroidUIStructureHealthProgress()).incrementHealth(tx_result_processed.targetRepairAmount);
-        console.log(tx_result_parsed)
-        let compute_status = new DroidUIComputeStatus();
-        compute_status.setComplete();
-
-
-      });
-
-    }.bind(this));
   }
 }
