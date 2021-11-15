@@ -1,10 +1,8 @@
 import {ColorRGB} from "../vendor/ColorRGB";
 import {DroidApi} from "../api/DroidApi";
 import {DroidUIMessagePanel} from "./components/DroidUIMessagePanel";
-import {DroidUISchematic} from "./components/DroidUISchematic";
 import {DroidUINewSchematic} from "./components/DroidUINewSchematic";
 import {DroidUISchematicCondensed} from "./components/DroidUISchematicCondensed";
-import {DroidUIStructure} from "./components/DroidUIStructure";
 import {DroidUIStructureCommandView} from "./components/DroidUIStructureCommandView";
 import {PixelArtViewer} from "../vendor/PixelArtViewer";
 import {DroidUIMessageListItem} from "./components/DroidUIMessageListItem";
@@ -25,9 +23,8 @@ import {DroidUIStructureCTAFactory} from "./components/DroidUIStructureCTAFactor
 import {DroidUIStructureDrainStatusModal} from "./components/DroidUIStructureDrainStatusModal";
 import {StructureArtSet} from "../art_rendering/StructureArtSet";
 import {DroidUIStructureCondensed} from "./components/DroidUIStructureCondensed";
-
-
-
+import {DroidUIComponentFactory} from "./components/DroidUIComponentFactory";
+import {DroidUIEmptyListHelper} from "./components/DroidUIEmptyListHelper";
 
 /**
  * Web App
@@ -41,7 +38,46 @@ export class DroidUI {
     this.droidApi = droidApi;
     this.droidArtGenerator = new DroidArtGenerator();
     this.droidPalette = new DroidPalette();
+    this.droidUIComponentFactory = new DroidUIComponentFactory();
     this.schematics = [];
+  }
+
+  /**
+   *
+   * @param {Structure[]|Schematic[]}structures
+   * @param {string} targetElementId
+   * @param {string} listType
+   * @param {array} componentParams
+   * @param {DroidUIEmptyListHelperInterface} emptyListHelper
+   */
+  handleLoadList(
+    structures,
+    targetElementId,
+    listType,
+    componentParams = [],
+    emptyListHelper) {
+    const targetElement = document.getElementById(targetElementId);
+    const components = [];
+    let html = '';
+
+    // Batch drawing by collecting all the HTML first
+    for (let i = 0; i < structures.length; i++) {
+      const component = this.droidUIComponentFactory.make(listType, structures[i], componentParams);
+      html += component.render();
+      components[i] = component;
+    }
+
+    // Update DOM
+    targetElement.innerHTML = emptyListHelper.process(html);
+
+    // Render the pixel art
+    for (let i = 0; i < components.length; i++) {
+      /** @type {HTMLCanvasElement} */
+      const canvas = document.getElementById(components[i].getCanvasId());
+      const artSet = new StructureArtSet(components[i].getDisplayObject());
+      new PixelArtViewer(canvas, artSet.getLayers(), artSet.getPalette());
+      components[i].initListeners();
+    }
   }
 
   /**
@@ -51,30 +87,13 @@ export class DroidUI {
    * @param {DroidUIMessagePanel} emptyMessage
    */
   handleLoadSchematics(schematics, targetElementId, creator = '', emptyMessage = null) {
-    const schematicElements = [];
-    const targetElement = document.getElementById(targetElementId);
-    let schematicsHtml = '';
-
-    // Batch drawing by collecting all the HTML first
-    for (let i = 0; i < schematics.length; i++) {
-      const droidUISchematic = new DroidUISchematic(schematics[i], creator);
-      schematicsHtml += droidUISchematic.render();
-      schematicElements[i] = droidUISchematic;
-    }
-
-    // Update DOM
-    if (schematicsHtml === '' && emptyMessage !== null) {
-      schematicsHtml = emptyMessage.render();
-    }
-    targetElement.innerHTML = schematicsHtml;
-
-    for (let i = 0; i < schematicElements.length; i++) {
-      /** @type {HTMLCanvasElement} */
-      const canvas = document.getElementById(schematicElements[i].getCanvasId());
-      const artSet = new StructureArtSet(schematicElements[i].schematic)
-      new PixelArtViewer(canvas, artSet.getLayers(), artSet.getPalette());
-      schematicElements[i].initBuildEventListeners();
-    }
+    this.handleLoadList(
+      schematics,
+      targetElementId,
+      'Schematic',
+      [creator],
+      new DroidUIEmptyListHelper(emptyMessage)
+    );
   }
 
   /**
@@ -84,30 +103,13 @@ export class DroidUI {
    * @param {DroidUIMessagePanel} emptyMessage
    */
   handleLoadStructures(structures, targetElementId, creator = '', emptyMessage = null) {
-    const structureElements = [];
-    const targetElement = document.getElementById(targetElementId);
-    let structuresHtml = '';
-
-    // Batch drawing by collecting all the HTML first
-    for (let i = 0; i < structures.length; i++) {
-      const droidUIStructure = new DroidUIStructure(structures[i], creator);
-      structuresHtml += droidUIStructure.render();
-      structureElements[i] = droidUIStructure;
-    }
-
-    // Update DOM
-    if (structuresHtml === '' && emptyMessage !== null) {
-      structuresHtml = emptyMessage.render();
-    }
-    targetElement.innerHTML = structuresHtml;
-
-    // Render the pixel art
-    for (let i = 0; i < structureElements.length; i++) {
-      /** @type {HTMLCanvasElement} */
-      const canvas = document.getElementById(structureElements[i].getCanvasId());
-      const artSet = new StructureArtSet(structureElements[i].structure);
-      new PixelArtViewer(canvas, artSet.getLayers(), artSet.getPalette());
-    }
+    this.handleLoadList(
+      structures,
+      targetElementId,
+      'Structure',
+      [creator],
+      new DroidUIEmptyListHelper(emptyMessage)
+    );
   }
 
   /**

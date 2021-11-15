@@ -13,6 +13,14 @@ export class DroidUIStructure {
     this.creator = creator;
     this.idPrefix = idPrefix;
   }
+
+  /**
+   * @return {Schematic|Structure}
+   */
+  getDisplayObject() {
+    return this.structure;
+  }
+
   getCanvasId() {
     return `${this.idPrefix}structure-${this.structure.getId()}`;
   }
@@ -159,4 +167,6 @@ export class DroidUIStructure {
       </div>
     `;
   }
+
+  initListeners() {}
 }
