@@ -7,6 +7,7 @@ import {BackgroundAnimator} from "../animations/BackgroundAnimator";
 import {AnimationEngine} from "../vendor/animation/AnimationEngine";
 import {DummyUtil} from "../util/DummyUtil";
 import {AMBITS, FEATURES} from "../constants";
+import {ShellDamageAnimator} from "../animations/ShellDamageAnimator";
 
 const instance = new Instance();
 await instance.init();
@@ -31,6 +32,7 @@ const mech2 = DummyUtil.getDummyStructure(
 
 const mechShootingAnimator = new MechShootingAnimator();
 const backgroundAnimator = new BackgroundAnimator();
+const shellDamageAnimator = new ShellDamageAnimator();
 
 const animationBackground1 = backgroundAnimator.animate(mech1);
 const animatedMechShooting1 = mechShootingAnimator.animate(mech1);
@@ -40,10 +42,10 @@ animationEngineAttack.registerAnimatedObjects(animatedMechShooting1);
 animationEngineAttack.play();
 
 const animationBackground2 = backgroundAnimator.animate(mech2);
-const animatedMechShooting2 = mechShootingAnimator.animate(mech2);
-const animationEngineDefend = new AnimationEngine('canvas-defend-mech', {}, 10);
+const shellDamage = shellDamageAnimator.animate(mech2);
+const animationEngineDefend = new AnimationEngine('canvas-defend-mech', {});
 animationEngineDefend.registerAnimatedObjects(animationBackground2);
-animationEngineDefend.registerAnimatedObjects(animatedMechShooting2);
+animationEngineDefend.registerAnimatedObjects(shellDamage);
 animationEngineDefend.play();
 
 const footer = new Footer();
