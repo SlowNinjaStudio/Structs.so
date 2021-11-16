@@ -34,14 +34,14 @@ const backgroundAnimator = new BackgroundAnimator();
 
 const animationBackground1 = backgroundAnimator.animate(mech1);
 const animatedMechShooting1 = mechShootingAnimator.animate(mech1);
-const animationEngineAttack = new AnimationEngine('canvas-attack', { flipHorizontally: true });
+const animationEngineAttack = new AnimationEngine('canvas-attack-mech', { flipHorizontally: true });
 animationEngineAttack.registerAnimatedObjects(animationBackground1);
 animationEngineAttack.registerAnimatedObjects(animatedMechShooting1);
 animationEngineAttack.play();
 
 const animationBackground2 = backgroundAnimator.animate(mech2);
 const animatedMechShooting2 = mechShootingAnimator.animate(mech2);
-const animationEngineDefend = new AnimationEngine('canvas-defend', {}, 10);
+const animationEngineDefend = new AnimationEngine('canvas-defend-mech', {}, 10);
 animationEngineDefend.registerAnimatedObjects(animationBackground2);
 animationEngineDefend.registerAnimatedObjects(animatedMechShooting2);
 animationEngineDefend.play();

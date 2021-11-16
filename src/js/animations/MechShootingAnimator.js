@@ -1,14 +1,9 @@
 import {AnimatedImage} from "../vendor/animation/AnimatedImage";
 import {AnimatedEffect} from "../vendor/animation/AnimatedEffect";
-import {StructureArtGeneratorFactory} from "../art_rendering/StructureArtGeneratorFactory";
 import {CanvasUtil} from "../vendor/CanvasUtil";
-import {StructurePaletteFactory} from "../art_rendering/StructurePaletteFactory";
+import {StructureArtSet} from "../art_rendering/StructureArtSet";
 
 export class MechShootingAnimator {
-  constructor() {
-    this.structureArtGeneratorFactory = new StructureArtGeneratorFactory();
-    this.structurePaletteFactory = new StructurePaletteFactory();
-  }
 
   cannonFireScript() {
     return function() {
@@ -106,14 +101,13 @@ export class MechShootingAnimator {
    * @return {*[]}
    */
   animate(structure) {
-    const artGenerator = this.structureArtGeneratorFactory.make(structure);
-    const mechConfiguration = [];
-    artGenerator.generate(mechConfiguration, structure);
-
-    const paletteGenerator = this.structurePaletteFactory.make(structure);
-    const palette = paletteGenerator.generatePaletteSwap(structure.getPrimaryColorRGB(), structure);
-
-    const mechKickBack = AnimatedImage.bulkAnimate(mechConfiguration, this.mechKickBackScript(palette), 0, 0);
+    const artSet = new StructureArtSet(structure);
+    const mechKickBack = AnimatedImage.bulkAnimate(
+      artSet.getStructureLayers(),
+      this.mechKickBackScript(artSet.getPalette()),
+      0,
+      0
+    );
 
     return mechKickBack.concat([
       new AnimatedImage(

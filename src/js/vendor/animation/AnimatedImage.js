@@ -20,6 +20,7 @@ export class AnimatedImage {
 
     // Load the image
     this.img = new Image();
+    this.img.decoding = 'sync';
     this.img.src = this.imagePath;
   }
 

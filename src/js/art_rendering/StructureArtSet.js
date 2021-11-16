@@ -12,10 +12,24 @@ export class StructureArtSet {
   }
 
   /**
-   * @return {String[]} The paths of the layers that make up the structure art.
+   * @return {String[]} The paths of the layers that make up the structure art and background.
    */
   getLayers() {
     return this.structureArtGenerator.generate(this.structure);
+  }
+
+  /**
+   * @return {String[]} The paths of the layers that make up the structure art background.
+   */
+  getBackgroundLayers() {
+    return this.structureArtGenerator.generateBackground(this.structure);
+  }
+
+  /**
+   * @return {String[]} The paths of the layers that make up the only the structure art.
+   */
+  getStructureLayers() {
+    return this.structureArtGenerator.generateStructure(this.structure);
   }
 
   /**
