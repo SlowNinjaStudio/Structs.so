@@ -1,7 +1,9 @@
 /**
  * Used for animating a preexisting image.
  */
-export class AnimatedImage {
+import {AnimatedEffect} from "./AnimatedEffect";
+
+export class AnimatedImage extends AnimatedEffect {
 
   /**
    * @param {string} imagePath
@@ -10,43 +12,13 @@ export class AnimatedImage {
    * @param {number} y starting vertical position on the canvas
    */
   constructor(imagePath, draw, x, y) {
+    super(draw, x, y);
     this.imagePath = imagePath;
-    this.draw = draw;
-    this.x = x;
-    this.y = y;
-    this.canvas = null;
-    this.context = null;
-    this.frameCount = 0;
 
     // Load the image
     this.img = new Image();
     this.img.decoding = 'sync';
     this.img.src = this.imagePath;
-  }
-
-  /**
-   * @param {HTMLCanvasElement} canvas
-   */
-  setCanvas(canvas) {
-    this.canvas = canvas;
-  }
-
-  /**
-   * @param {CanvasRenderingContext2D} context
-   */
-  setContext(context) {
-    this.context = context;
-  }
-
-  increaseFrameCount() {
-    this.frameCount++;
-  }
-
-  /**
-   * Used for looping animations.
-   */
-  resetFrameCount() {
-    this.frameCount = 0;
   }
 
   /**

@@ -15,6 +15,7 @@ export class AnimatedEffect {
     this.canvas = null;
     this.context = null;
     this.frameCount = 0;
+    this.loopCount = 0;
   }
 
   /**
@@ -40,6 +41,7 @@ export class AnimatedEffect {
    */
   resetFrameCount() {
     this.frameCount = 0;
+    this.loopCount++;
   }
 
 }
