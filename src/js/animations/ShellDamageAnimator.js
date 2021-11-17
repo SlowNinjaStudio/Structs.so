@@ -7,7 +7,7 @@ export class ShellDamageAnimator {
 
   shake(palette) {
     return function() {
-      const n = this.frameCount % 30;
+      const n = this.frameCount % this.fpsAdjustFrameNumber(30);
       if (n === 0 || n === 1) {
         this.context.drawImage(this.img, this.x, this.y);
       } else if (n === 2 || n === 3) {
@@ -19,7 +19,7 @@ export class ShellDamageAnimator {
       } else if (n > 7) {
         this.context.drawImage(this.img, this.x, this.y);
       }
-      if (this.frameCount === 30) {
+      if (this.frameCount >= this.fpsAdjustFrameNumber(30)) {
         this.resetFrameCount();
       }
       const canvasUtil = new CanvasUtil(this.canvas, this.context);
@@ -48,7 +48,7 @@ export class ShellDamageAnimator {
       this.context.shadowColor = '#aaaa00';
       this.context.shadowBlur = 4;
 
-      if (this.frameCount < 4) {
+      if (this.frameCount < this.fpsAdjustFrameNumber(2)) {
         this.context.fillStyle = 'rgba(255, 255, 255, 0.5)';
         this.context.fillRect(0, 0, 64, 64);
 
@@ -59,7 +59,7 @@ export class ShellDamageAnimator {
         this.context.beginPath();
         this.context.ellipse(x, y, 14, 14, Math.PI, 0, Math.PI);
         this.context.stroke();
-      } else if (this.frameCount < 4) {
+      } else if (this.frameCount < this.fpsAdjustFrameNumber(4)) {
         this.context.fillStyle = 'rgba(255, 255, 255, 0.25)';
         this.context.fillRect(0, 0, 64, 64);
 
@@ -71,7 +71,7 @@ export class ShellDamageAnimator {
         this.context.beginPath();
         this.context.ellipse(x, y, 6, 6, Math.PI, 0, Math.PI);
         this.context.stroke();
-      } else if (this.frameCount < 8) {
+      } else if (this.frameCount < this.fpsAdjustFrameNumber(8)) {
         this.context.fillStyle = '#ffff99';
         this.context.beginPath();
         this.context.ellipse(x, y, 7, 3, Math.PI, 0, 2 * Math.PI);
@@ -83,7 +83,7 @@ export class ShellDamageAnimator {
         this.context.ellipse(x, y, 7, 7, Math.PI, 0, Math.PI);
         this.context.stroke();
         this.context.fill();
-      } else if (this.frameCount < 10) {
+      } else if (this.frameCount < this.fpsAdjustFrameNumber(10)) {
         this.context.fillStyle = '#ffff99';
         this.context.beginPath();
         this.context.ellipse(x, y, 14, 6, Math.PI, 0, 2 * Math.PI);
@@ -95,7 +95,7 @@ export class ShellDamageAnimator {
         this.context.ellipse(x, y, 14, 14, Math.PI, 0, Math.PI);
         this.context.stroke();
         this.context.fill();
-      } else if (this.frameCount < 12) {
+      } else if (this.frameCount < this.fpsAdjustFrameNumber(12)) {
         this.context.fillStyle = '#ffff99';
         this.context.beginPath();
         this.context.ellipse(x, y, 21, 9, Math.PI, 0, 2 * Math.PI);
@@ -107,7 +107,7 @@ export class ShellDamageAnimator {
         this.context.ellipse(x, y, 21, 21, Math.PI, 0, Math.PI);
         this.context.stroke();
         this.context.fill();
-      } else if (this.frameCount < 14) {
+      } else if (this.frameCount < this.fpsAdjustFrameNumber(14)) {
         this.context.beginPath();
         this.context.ellipse(x, y, 28, 12, Math.PI, 0, 2 * Math.PI);
         this.context.stroke();
@@ -115,7 +115,7 @@ export class ShellDamageAnimator {
         this.context.beginPath();
         this.context.ellipse(x, y, 28, 28, Math.PI, 0, Math.PI);
         this.context.stroke();
-      } else if (this.frameCount === 30) {
+      } else if (this.frameCount >= this.fpsAdjustFrameNumber(30)) {
         this.resetFrameCount();
       }
 

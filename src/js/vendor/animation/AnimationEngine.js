@@ -8,14 +8,15 @@ export class AnimationEngine {
   /**
    * @param {string} canvasId
    * @param {object} options
-   * @param {number} refreshRate the animation speed
+   * @param {number} fps the animation speed in frames per second
    */
-  constructor(canvasId, options = {}, refreshRate = 20) {
+  constructor(canvasId, options = {}, fps = 60) {
     this.canvasId = canvasId;
     this.canvas = document.getElementById(this.canvasId);
     this.context = this.canvas.getContext('2d');
     this.options = options;
-    this.refreshRate = refreshRate;
+    this.fps = fps;
+    this.refreshRate = Math.round(1000 / this.fps);
     this.animatedObjects = [];
     this.interval = null;
     this.loopCount = 0;
@@ -33,6 +34,7 @@ export class AnimationEngine {
   registerAnimatedObject(object) {
     object.setCanvas(this.canvas);
     object.setContext(this.context);
+    object.setFPS(this.fps);
     this.animatedObjects.push(object);
   }
 

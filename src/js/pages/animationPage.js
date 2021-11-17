@@ -8,6 +8,7 @@ import {AnimationEngine} from "../vendor/animation/AnimationEngine";
 import {DummyUtil} from "../util/DummyUtil";
 import {AMBITS, FEATURES} from "../constants";
 import {ShellDamageAnimator} from "../animations/ShellDamageAnimator";
+import {DroidUI} from "../ui/DroidUI";
 
 const instance = new Instance();
 await instance.init();
@@ -16,6 +17,8 @@ const page = 'animation';
 
 const navbar = new Navbar(page, { droidHash: instance.address });
 navbar.init('nav-wrapper');
+
+const droidUi = new DroidUI();
 
 const mech1 = DummyUtil.getDummyStructure(
   true,
@@ -36,7 +39,7 @@ const shellDamageAnimator = new ShellDamageAnimator();
 
 const animationBackground1 = backgroundAnimator.animate(mech1);
 const animatedMechShooting1 = mechShootingAnimator.animate(mech1);
-const animationEngineAttack = new AnimationEngine('canvas-attack-mech', { flipHorizontally: true });
+const animationEngineAttack = new AnimationEngine('canvas-attack-mech', {flipHorizontally: true});
 animationEngineAttack.registerAnimatedObjects(animationBackground1);
 animationEngineAttack.registerAnimatedObjects(animatedMechShooting1);
 animationEngineAttack.play();
@@ -55,9 +58,9 @@ let current_balance = await instance.queryBalance()
 console.log("Balance " + current_balance.amount + current_balance.denom)
 
 // shhhh don't loook here, kthnx.
-if (current_balance.amount === 0) {
+if (parseInt(current_balance.amount) === 0) {
   let api = new DroidApi('https://', 'droid.sh')
   const obj = { address: instance.address,  coins: ['1337watt']}
 
-  droidUi.loadWattReceivedModal(await api.performFaucetRequest(obj))
+  droidUi.loadWattReceivedModal(parseFloat(await api.performFaucetRequest(obj)));
 }
