@@ -56,14 +56,14 @@ const animatedMechShooting1 = mechShootingAnimator.animate(mech1);
 const animationEngineAttack1 = new AnimationEngine('canvas-attack-mech', {flipHorizontally: true});
 animationEngineAttack1.registerAnimatedObjects(animationBackground1);
 animationEngineAttack1.registerAnimatedObjects(animatedMechShooting1);
-animationEngineAttack1.play();
+// animationEngineAttack1.play();
 
 const animationBackground2 = backgroundAnimator.animate(mech2);
 const shellDamage1 = shellDamageAnimator.animate(mech2);
 const animationEngineDefend1 = new AnimationEngine('canvas-defend-mech', {});
 animationEngineDefend1.registerAnimatedObjects(animationBackground2);
 animationEngineDefend1.registerAnimatedObjects(shellDamage1);
-animationEngineDefend1.play();
+// animationEngineDefend1.play();
 
 const animationBackground3 = backgroundAnimator.animate(car1);
 const animatedCarShooting1 = carShootingAnimator.animate(car1);
