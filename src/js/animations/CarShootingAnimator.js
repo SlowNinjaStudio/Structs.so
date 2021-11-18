@@ -82,7 +82,7 @@ export class CarShootingAnimator {
   shellCasingScript() {
     return function() {
 
-      for (let i = 0; i < this.frameCount; i = i + 6) {
+      for (let i = 0; i < this.frameCount; i = i + 12) {
         const trajectory = (x) => (Math.pow(x, 2) / 10) + this.y;
         const x = this.x + this.frameCount - i;
         const y = trajectory(this.fpsAdjustFrameCount(this.frameCount - i));
