@@ -67,7 +67,7 @@ const carShootingAnimator = new CarShootingAnimator();
 
 const animationBackground3 = await backgroundAnimator.animate(car1);
 const animatedCarShooting1 = await carShootingAnimator.animate(car1);
-const animationEngineAttack2 = new AnimationEngine('canvas-attack-car', {flipHorizontally: false}, 60);
+const animationEngineAttack2 = new AnimationEngine('canvas-attack-car', {flipHorizontally: true}, 60);
 animationEngineAttack2.registerAnimatedObjects(animationBackground3);
 animationEngineAttack2.registerAnimatedObjects(animatedCarShooting1);
 animationEngineAttack2.play();
