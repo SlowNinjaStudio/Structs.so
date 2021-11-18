@@ -51,19 +51,19 @@ const backgroundAnimator = new BackgroundAnimator();
 const shellDamageAnimator = new ShellDamageAnimator();
 const carShootingAnimator = new CarShootingAnimator();
 
-// const animationBackground1 = backgroundAnimator.animate(mech1);
-// const animatedMechShooting1 = mechShootingAnimator.animate(mech1);
-// const animationEngineAttack1 = new AnimationEngine('canvas-attack-mech', {flipHorizontally: true});
-// animationEngineAttack1.registerAnimatedObjects(animationBackground1);
-// animationEngineAttack1.registerAnimatedObjects(animatedMechShooting1);
-// animationEngineAttack1.play();
+const animationBackground1 = await backgroundAnimator.animate(mech1);
+const animatedMechShooting1 = await mechShootingAnimator.animate(mech1);
+const animationEngineAttack1 = new AnimationEngine('canvas-attack-mech', {flipHorizontally: true});
+animationEngineAttack1.registerAnimatedObjects(animationBackground1);
+animationEngineAttack1.registerAnimatedObjects(animatedMechShooting1);
+animationEngineAttack1.play();
 
-// const animationBackground2 = backgroundAnimator.animate(mech2);
-// const shellDamage1 = shellDamageAnimator.animate(mech2);
-// const animationEngineDefend1 = new AnimationEngine('canvas-defend-mech', {});
-// animationEngineDefend1.registerAnimatedObjects(animationBackground2);
-// animationEngineDefend1.registerAnimatedObjects(shellDamage1);
-// animationEngineDefend1.play();
+const animationBackground2 = await backgroundAnimator.animate(mech2);
+const shellDamage1 = await shellDamageAnimator.animate(mech2);
+const animationEngineDefend1 = new AnimationEngine('canvas-defend-mech', {});
+animationEngineDefend1.registerAnimatedObjects(animationBackground2);
+animationEngineDefend1.registerAnimatedObjects(shellDamage1);
+animationEngineDefend1.play();
 
 const animationBackground3 = await backgroundAnimator.animate(car1);
 const animatedCarShooting1 = await carShootingAnimator.animate(car1);
