@@ -51,30 +51,30 @@ const backgroundAnimator = new BackgroundAnimator();
 const shellDamageAnimator = new ShellDamageAnimator();
 const carShootingAnimator = new CarShootingAnimator();
 
-const animationBackground1 = backgroundAnimator.animate(mech1);
-const animatedMechShooting1 = mechShootingAnimator.animate(mech1);
-const animationEngineAttack1 = new AnimationEngine('canvas-attack-mech', {flipHorizontally: true});
-animationEngineAttack1.registerAnimatedObjects(animationBackground1);
-animationEngineAttack1.registerAnimatedObjects(animatedMechShooting1);
+// const animationBackground1 = backgroundAnimator.animate(mech1);
+// const animatedMechShooting1 = mechShootingAnimator.animate(mech1);
+// const animationEngineAttack1 = new AnimationEngine('canvas-attack-mech', {flipHorizontally: true});
+// animationEngineAttack1.registerAnimatedObjects(animationBackground1);
+// animationEngineAttack1.registerAnimatedObjects(animatedMechShooting1);
 // animationEngineAttack1.play();
 
-const animationBackground2 = backgroundAnimator.animate(mech2);
-const shellDamage1 = shellDamageAnimator.animate(mech2);
-const animationEngineDefend1 = new AnimationEngine('canvas-defend-mech', {});
-animationEngineDefend1.registerAnimatedObjects(animationBackground2);
-animationEngineDefend1.registerAnimatedObjects(shellDamage1);
+// const animationBackground2 = backgroundAnimator.animate(mech2);
+// const shellDamage1 = shellDamageAnimator.animate(mech2);
+// const animationEngineDefend1 = new AnimationEngine('canvas-defend-mech', {});
+// animationEngineDefend1.registerAnimatedObjects(animationBackground2);
+// animationEngineDefend1.registerAnimatedObjects(shellDamage1);
 // animationEngineDefend1.play();
 
-const animationBackground3 = backgroundAnimator.animate(car1);
-const animatedCarShooting1 = carShootingAnimator.animate(car1);
-const animationEngineAttack2 = new AnimationEngine('canvas-attack-car', {flipHorizontally: true}, 30);
+const animationBackground3 = await backgroundAnimator.animate(car1);
+const animatedCarShooting1 = await carShootingAnimator.animate(car1);
+const animationEngineAttack2 = new AnimationEngine('canvas-attack-car', {flipHorizontally: false}, 60);
 animationEngineAttack2.registerAnimatedObjects(animationBackground3);
 animationEngineAttack2.registerAnimatedObjects(animatedCarShooting1);
 animationEngineAttack2.play();
 
-const animationBackground4 = backgroundAnimator.animate(car2);
-const shellDamage2 = shellDamageAnimator.animate(car2);
-const animationEngineDefend2 = new AnimationEngine('canvas-defend-car', {}, 30);
+const animationBackground4 = await backgroundAnimator.animate(car2);
+const shellDamage2 = await shellDamageAnimator.animate(car2);
+const animationEngineDefend2 = new AnimationEngine('canvas-defend-car', {}, 60);
 animationEngineDefend2.registerAnimatedObjects(animationBackground4);
 animationEngineDefend2.registerAnimatedObjects(shellDamage2);
 animationEngineDefend2.play();
