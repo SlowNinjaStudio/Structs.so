@@ -14,7 +14,7 @@ export class StructureArtSet {
 
   /**
    * @param {string[]} paths
-   * @return {Image[]}
+   * @return {Promise<Image[]>}
    */
   async getImagesFromPaths(paths) {
     const images = [];
@@ -62,7 +62,7 @@ export class StructureArtSet {
   }
 
   /**
-   * @return {Image[]}
+   * @return {Promise<Image[]>}
    */
   async getLayerImages() {
     return this.paletteSwapImages(await this.getImagesFromPaths(this.getLayers()));
@@ -76,7 +76,7 @@ export class StructureArtSet {
   }
 
   /**
-   * @return {Image[]}
+   * @return {Promise<Image[]>}
    */
   async getBackgroundLayerImages() {
     return await this.getImagesFromPaths(this.getBackgroundLayers());
@@ -90,7 +90,7 @@ export class StructureArtSet {
   }
 
   /**
-   * @return {Image[]}
+   * @return {Promise<Image[]>}
    */
   async getStructureLayerImages() {
     return this.paletteSwapImages(await this.getImagesFromPaths(this.getStructureLayers()));
@@ -101,5 +101,21 @@ export class StructureArtSet {
    */
   getPalette() {
     return this.structurePaletteFactory.generatePaletteSwap(this.structure);
+  }
+
+  /**
+   * @param {string} feature
+   * @return {string[]}
+   */
+  getStructureFeature(feature) {
+    return this.structureArtGenerator.getFeature(this.structure, feature);
+  }
+
+  /**
+   * @param {string} feature
+   * @return {Promise<Image[]>}
+   */
+  async getStructureFeatureImages(feature) {
+    return this.paletteSwapImages(await this.getImagesFromPaths(this.getStructureFeature(feature)));
   }
 }

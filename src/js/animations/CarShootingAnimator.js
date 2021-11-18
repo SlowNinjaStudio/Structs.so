@@ -1,6 +1,7 @@
 import {AnimatedImage} from "../vendor/animation/AnimatedImage";
 import {AnimatedEffect} from "../vendor/animation/AnimatedEffect";
 import {StructureArtSet} from "../art_rendering/StructureArtSet";
+import {FEATURES} from "../constants";
 
 export class CarShootingAnimator {
 
@@ -102,6 +103,7 @@ export class CarShootingAnimator {
    */
   async animate(structure) {
     const artSet = new StructureArtSet(structure);
+
     const kickBack = AnimatedImage.bulkAnimate(
       await artSet.getStructureLayerImages(),
       this.carKickBackScript(artSet.getPalette()),
@@ -109,13 +111,15 @@ export class CarShootingAnimator {
       0
     );
 
+    const attackImages = await artSet.getStructureFeatureImages(FEATURES.ATTACK);
+
     return kickBack.concat([
-      // new AnimatedImage(
-      //   '/img/structures/mobile/car/mobile-car-attack.png',
-      //   this.cannonFireScript(),
-      //   0,
-      //   0
-      // ),
+      new AnimatedImage(
+        attackImages[0],
+        this.cannonFireScript(),
+        0,
+        0
+      ),
       new AnimatedEffect(
         this.muzzleFlashScript(),
         17,
