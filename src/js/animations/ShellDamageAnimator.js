@@ -1,11 +1,10 @@
 import {AnimatedImage} from "../vendor/animation/AnimatedImage";
 import {AnimatedEffect} from "../vendor/animation/AnimatedEffect";
-import {CanvasUtil} from "../vendor/CanvasUtil";
 import {StructureArtSet} from "../art_rendering/StructureArtSet";
 
 export class ShellDamageAnimator {
 
-  shake(palette) {
+  shake() {
     return function() {
       const n = this.frameCount % this.fpsAdjustFrameNumber(30);
       if (n === 0 || n === 1) {
@@ -22,8 +21,6 @@ export class ShellDamageAnimator {
       if (this.frameCount >= this.fpsAdjustFrameNumber(30)) {
         this.resetFrameCount();
       }
-      const canvasUtil = new CanvasUtil(this.canvas, this.context);
-      canvasUtil.swapColors(palette);
     }
   }
 
@@ -127,10 +124,10 @@ export class ShellDamageAnimator {
    * @param {Structure} structure
    * @return {*[]}
    */
-  animate(structure) {
+  async animate(structure) {
     const artSet = new StructureArtSet(structure);
     const shake = AnimatedImage.bulkAnimate(
-      artSet.getLayers(),
+      await artSet.getLayerImages(),
       this.shake(artSet.getPalette()),
       0,
       0

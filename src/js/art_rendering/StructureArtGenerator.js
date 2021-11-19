@@ -3,6 +3,7 @@
  */
 import {StructureArtGeneratorBackground} from "./StructureArtGeneratorBackground";
 import {StructureArtGeneratorFactory} from "./StructureArtGeneratorFactory";
+import {FEATURES} from "../constants";
 
 export class StructureArtGenerator {
   constructor() {
@@ -42,6 +43,33 @@ export class StructureArtGenerator {
     this.structureArtGeneratorBackground.generate(layers, structure);
     const generator = this.structureArtGeneratorFactory.make(structure);
     generator.generate(layers, structure);
+    return layers;
+  }
+
+  /**
+   * @param {Schematic|Structure} structure
+   * @param {string} feature
+   * @return {string[]}
+   */
+  getFeature(structure, feature) {
+    const generator = this.structureArtGeneratorFactory.make(structure);
+    const layers = [];
+
+    switch(feature) {
+      case FEATURES.ATTACK:
+        generator.attack(layers, structure);
+        break;
+      case FEATURES.DEFENSIVE:
+        generator.defensive(layers, structure);
+        break;
+      case FEATURES.ENGINEERING:
+        generator.engineering(layers, structure);
+        break;
+      case FEATURES.POWER:
+        generator.power(layers, structure);
+        break;
+    }
+
     return layers;
   }
 }

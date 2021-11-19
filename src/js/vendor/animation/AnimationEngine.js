@@ -1,5 +1,3 @@
-import {Uint8ClampedArrayUtil} from "../Uint8ClampArrayUtil";
-
 /**
  * An animation engine to assist with canvas animation.
  */
@@ -20,6 +18,11 @@ export class AnimationEngine {
     this.animatedObjects = [];
     this.interval = null;
     this.loopCount = 0;
+
+    if (this.options.hasOwnProperty('flipHorizontally') && this.options.flipHorizontally) {
+      this.context.translate(this.canvas.width, 0);
+      this.context.scale(-1, 1);
+    }
   }
 
   clearCanvas() {
@@ -50,18 +53,6 @@ export class AnimationEngine {
   }
 
   /**
-   * Flip the animation horizontally.
-   */
-  flipHorizontally() {
-    let imageData = this.context.getImageData(0, 0, this.canvas.width, this.canvas.height);
-    const newData = Uint8ClampedArrayUtil.flipHorizontal(imageData.data, 64);
-    for (let i = 0; i < imageData.data.length; i++) {
-      imageData.data[i] = newData[i];
-    }
-    this.context.putImageData(imageData, 0, 0);
-  }
-
-  /**
    * Draw all registered animated objects to the canvas.
    *
    * @params {number} maxLoops the max number of times to loop each animation
@@ -79,10 +70,6 @@ export class AnimationEngine {
       this.animatedObjects[i].increaseFrameCount(); // Increase the frame count so that objects know how many frames have passed.
       this.animatedObjects[i].draw();
       this.loopCount = this.animatedObjects[i].loopCount;
-    }
-
-    if (this.options.hasOwnProperty('flipHorizontally') && this.options.flipHorizontally) {
-      this.flipHorizontally();
     }
   }
 

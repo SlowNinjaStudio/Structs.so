@@ -1,7 +1,7 @@
 import {AnimatedImage} from "../vendor/animation/AnimatedImage";
 import {AnimatedEffect} from "../vendor/animation/AnimatedEffect";
-import {CanvasUtil} from "../vendor/CanvasUtil";
 import {StructureArtSet} from "../art_rendering/StructureArtSet";
+import {FEATURES} from "../constants";
 
 export class MechShootingAnimator {
 
@@ -23,8 +23,7 @@ export class MechShootingAnimator {
     };
   }
 
-  mechKickBackScript(palette) {
-
+  mechKickBackScript() {
     return function() {
       this.context.drawImage(this.img, this.x, this.y);
       if (this.frameCount === this.fpsAdjustFrameNumber(6)) {
@@ -36,8 +35,6 @@ export class MechShootingAnimator {
       if (this.frameCount >= this.fpsAdjustFrameNumber(30)) {
         this.resetFrameCount();
       }
-      const canvasUtil = new CanvasUtil(this.canvas, this.context);
-      canvasUtil.swapColors(palette);
     }
   }
 
@@ -100,18 +97,21 @@ export class MechShootingAnimator {
    * @param {Structure} structure
    * @return {*[]}
    */
-  animate(structure) {
+  async animate(structure) {
     const artSet = new StructureArtSet(structure);
+
     const mechKickBack = AnimatedImage.bulkAnimate(
-      artSet.getStructureLayers(),
+      await artSet.getStructureLayerImages(),
       this.mechKickBackScript(artSet.getPalette()),
       0,
       0
     );
 
+    const attackImages = await artSet.getStructureFeatureImages(FEATURES.ATTACK);
+
     return mechKickBack.concat([
       new AnimatedImage(
-        '/img/structures/mobile/mech/mobile-mech-attack.png',
+        attackImages[0],
         this.cannonFireScript(),
         0,
         0

@@ -12,8 +12,8 @@ export class BackgroundAnimator {
    * @param {Structure|Schematic} structure
    * @return {*[]}
    */
-  animate(structure) {
+  async animate(structure) {
     const artSet = new StructureArtSet(structure);
-    return AnimatedImage.bulkAnimate(artSet.getBackgroundLayers(), this.backgroundScript(), 0, 0);
+    return AnimatedImage.bulkAnimate(await artSet.getBackgroundLayerImages(), this.backgroundScript(), 0, 0);
   }
 }
