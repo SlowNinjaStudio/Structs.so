@@ -10,6 +10,7 @@ import {AMBITS, FEATURES} from "../constants";
 import {ShellDamageAnimator} from "../animations/ShellDamageAnimator";
 import {DroidUI} from "../ui/DroidUI";
 import {CarShootingAnimator} from "../animations/CarShootingAnimator";
+import {MachineGunDamageAnimator} from "../animations/MachineGunDamageAnimator";
 
 const instance = new Instance();
 await instance.init();
@@ -50,6 +51,7 @@ const mechShootingAnimator = new MechShootingAnimator();
 const backgroundAnimator = new BackgroundAnimator();
 const shellDamageAnimator = new ShellDamageAnimator();
 const carShootingAnimator = new CarShootingAnimator();
+const machineGunDamageAnimator = new MachineGunDamageAnimator();
 
 const animationBackground1 = await backgroundAnimator.animate(mech1);
 const animatedMechShooting1 = await mechShootingAnimator.animate(mech1);
@@ -59,24 +61,24 @@ animationEngineAttack1.registerAnimatedObjects(animatedMechShooting1);
 animationEngineAttack1.play();
 
 const animationBackground2 = await backgroundAnimator.animate(mech2);
-const shellDamage1 = await shellDamageAnimator.animate(mech2);
-const animationEngineDefend1 = new AnimationEngine('canvas-defend-mech', {});
+const shellDamage = await shellDamageAnimator.animate(mech2);
+const animationEngineDefend1 = new AnimationEngine('canvas-defend-mech');
 animationEngineDefend1.registerAnimatedObjects(animationBackground2);
-animationEngineDefend1.registerAnimatedObjects(shellDamage1);
+animationEngineDefend1.registerAnimatedObjects(shellDamage);
 animationEngineDefend1.play();
 
 const animationBackground3 = await backgroundAnimator.animate(car1);
 const animatedCarShooting1 = await carShootingAnimator.animate(car1);
-const animationEngineAttack2 = new AnimationEngine('canvas-attack-car', {flipHorizontally: true}, 60);
+const animationEngineAttack2 = new AnimationEngine('canvas-attack-car', {flipHorizontally: true});
 animationEngineAttack2.registerAnimatedObjects(animationBackground3);
 animationEngineAttack2.registerAnimatedObjects(animatedCarShooting1);
 animationEngineAttack2.play();
 
 const animationBackground4 = await backgroundAnimator.animate(car2);
-const shellDamage2 = await shellDamageAnimator.animate(car2);
-const animationEngineDefend2 = new AnimationEngine('canvas-defend-car', {}, 60);
+const machineGunDamage = await machineGunDamageAnimator.animate(car2);
+const animationEngineDefend2 = new AnimationEngine('canvas-defend-car');
 animationEngineDefend2.registerAnimatedObjects(animationBackground4);
-animationEngineDefend2.registerAnimatedObjects(shellDamage2);
+animationEngineDefend2.registerAnimatedObjects(machineGunDamage);
 animationEngineDefend2.play();
 
 const footer = new Footer();
