@@ -1,48 +1,40 @@
 import {AnimatedImage} from "../vendor/animation/AnimatedImage";
 import {AnimatedEffect} from "../vendor/animation/AnimatedEffect";
-import {StructureArtGeneratorFactory} from "../art_rendering/StructureArtGeneratorFactory";
-import {CanvasUtil} from "../vendor/CanvasUtil";
-import {StructurePaletteFactory} from "../art_rendering/StructurePaletteFactory";
+import {StructureArtSet} from "../art_rendering/StructureArtSet";
+import {FEATURES} from "../constants";
 
 export class MechShootingAnimator {
-  constructor() {
-    this.structureArtGeneratorFactory = new StructureArtGeneratorFactory();
-    this.structurePaletteFactory = new StructurePaletteFactory();
-  }
 
   cannonFireScript() {
     return function() {
       this.context.drawImage(this.img, this.x, this.y);
-      if (this.frameCount === 4) {
+      if (this.frameCount === this.fpsAdjustFrameNumber(4)) {
         this.x = 2;
       }
-      if (this.frameCount === 8) {
+      if (this.frameCount === this.fpsAdjustFrameNumber(8)) {
         this.x = 1;
       }
-      if (this.frameCount === 10) {
+      if (this.frameCount === this.fpsAdjustFrameNumber(10)) {
         this.x = 0;
       }
-      if (this.frameCount === 30) {
+      if (this.frameCount >= this.fpsAdjustFrameNumber(30)) {
         this.resetFrameCount();
       }
     };
   }
 
-  mechKickBackScript(palette) {
-
+  mechKickBackScript() {
     return function() {
       this.context.drawImage(this.img, this.x, this.y);
-      if (this.frameCount === 6) {
+      if (this.frameCount === this.fpsAdjustFrameNumber(6)) {
         this.x = 1;
       }
-      if (this.frameCount === 10) {
+      if (this.frameCount === this.fpsAdjustFrameNumber(10)) {
         this.x = 0;
       }
-      if (this.frameCount === 30) {
+      if (this.frameCount >= this.fpsAdjustFrameNumber(30)) {
         this.resetFrameCount();
       }
-      const canvasUtil = new CanvasUtil(this.canvas, this.context);
-      canvasUtil.swapColors(palette);
     }
   }
 
@@ -52,11 +44,11 @@ export class MechShootingAnimator {
       this.context.shadowColor = '#aaaa00';
       this.context.shadowBlur = 4;
 
-      if (this.frameCount < 4) {
+      if (this.frameCount < this.fpsAdjustFrameNumber(4)) {
         this.context.fillRect(this.x, this.y, 11, 2);
-      } else if (this.frameCount < 6) {
+      } else if (this.frameCount < this.fpsAdjustFrameNumber(6)) {
         this.context.fillRect(this.x, this.y, 5, 2);
-      } else if (this.frameCount === 30) {
+      } else if (this.frameCount >= this.fpsAdjustFrameNumber(30)) {
         this.resetFrameCount();
       }
 
@@ -70,15 +62,15 @@ export class MechShootingAnimator {
       this.context.shadowColor = '#aaaa00';
       this.context.shadowBlur = 4;
 
-      if (this.frameCount < 4) {
+      if (this.frameCount < this.fpsAdjustFrameNumber(4)) {
         this.context.beginPath();
         this.context.ellipse(this.x, this.y, 3, 7, Math.PI, 0, 2 * Math.PI);
         this.context.stroke();
-      } else if (this.frameCount < 6) {
+      } else if (this.frameCount < this.fpsAdjustFrameNumber(6)) {
         this.context.beginPath();
         this.context.ellipse(this.x, this.y, 1, 3, Math.PI, 0, 2 * Math.PI);
         this.context.stroke();
-      } else if (this.frameCount === 30) {
+      } else if (this.frameCount >= this.fpsAdjustFrameNumber(30)) {
         this.resetFrameCount();
       }
 
@@ -90,12 +82,12 @@ export class MechShootingAnimator {
     return function() {
       const trajectory = (x) => (Math.pow(x, 2) / 10) + this.y;
       const x = this.x + this.frameCount;
-      const y = trajectory(this.frameCount);
+      const y = trajectory(this.fpsAdjustFrameCount(this.frameCount));
 
       this.context.fillStyle = '#ffff00';
       this.context.fillRect(x, y, 2, 1);
 
-      if (this.frameCount === 30) {
+      if (this.frameCount >= this.fpsAdjustFrameNumber(30)) {
         this.resetFrameCount();
       }
     }
@@ -105,19 +97,21 @@ export class MechShootingAnimator {
    * @param {Structure} structure
    * @return {*[]}
    */
-  animate(structure) {
-    const artGenerator = this.structureArtGeneratorFactory.make(structure);
-    const mechConfiguration = [];
-    artGenerator.generate(mechConfiguration, structure);
+  async animate(structure) {
+    const artSet = new StructureArtSet(structure);
 
-    const paletteGenerator = this.structurePaletteFactory.make(structure);
-    const palette = paletteGenerator.generatePaletteSwap(structure.getPrimaryColorRGB(), structure);
+    const mechKickBack = AnimatedImage.bulkAnimate(
+      await artSet.getStructureLayerImages(),
+      this.mechKickBackScript(artSet.getPalette()),
+      0,
+      0
+    );
 
-    const mechKickBack = AnimatedImage.bulkAnimate(mechConfiguration, this.mechKickBackScript(palette), 0, 0);
+    const attackImages = await artSet.getStructureFeatureImages(FEATURES.ATTACK);
 
     return mechKickBack.concat([
       new AnimatedImage(
-        '/img/structures/mobile/mech/mobile-mech-attack.png',
+        attackImages[0],
         this.cannonFireScript(),
         0,
         0

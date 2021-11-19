@@ -126,7 +126,7 @@ export class DroidApi {
   }
 
   /**
-   * @param {obj} request
+   * @param {object} request
    * @returns {Promise<string>}
    */
   performFaucetRequest(request) {
