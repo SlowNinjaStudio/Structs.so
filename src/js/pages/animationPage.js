@@ -11,6 +11,7 @@ import {ShellDamageAnimator} from "../animations/ShellDamageAnimator";
 import {DroidUI} from "../ui/DroidUI";
 import {CarShootingAnimator} from "../animations/CarShootingAnimator";
 import {MachineGunDamageAnimator} from "../animations/MachineGunDamageAnimator";
+import {CityShootingAnimator} from "../animations/CityShootingAnimator";
 
 const instance = new Instance();
 await instance.init();
@@ -46,12 +47,26 @@ const car2 = DummyUtil.getDummyStructure(
   [FEATURES.ATTACK],
   10
 );
+const city1 = DummyUtil.getDummyStructure(
+  false,
+  [AMBITS.SPACE],
+  [FEATURES.ATTACK, FEATURES.POWER],
+  100
+);
+const city2 = DummyUtil.getDummyStructure(
+  false,
+  [AMBITS.SPACE],
+  [FEATURES.DEFENSIVE, FEATURES.ENGINEERING, FEATURES.POWER],
+  100
+);
 
 const mechShootingAnimator = new MechShootingAnimator();
 const backgroundAnimator = new BackgroundAnimator();
 const shellDamageAnimator = new ShellDamageAnimator();
 const carShootingAnimator = new CarShootingAnimator();
 const machineGunDamageAnimator = new MachineGunDamageAnimator();
+const cityShootingAnimator = new CityShootingAnimator();
+const laserDamageAnimator = new ShellDamageAnimator();
 
 const animationBackground1 = await backgroundAnimator.animate(mech1);
 const animatedMechShooting1 = await mechShootingAnimator.animate(mech1);
@@ -68,10 +83,10 @@ animationEngineDefend1.registerAnimatedObjects(shellDamage);
 animationEngineDefend1.play();
 
 const animationBackground3 = await backgroundAnimator.animate(car1);
-const animatedCarShooting1 = await carShootingAnimator.animate(car1);
+const animatedCarShooting = await carShootingAnimator.animate(car1);
 const animationEngineAttack2 = new AnimationEngine('canvas-attack-car', {flipHorizontally: true});
 animationEngineAttack2.registerAnimatedObjects(animationBackground3);
-animationEngineAttack2.registerAnimatedObjects(animatedCarShooting1);
+animationEngineAttack2.registerAnimatedObjects(animatedCarShooting);
 animationEngineAttack2.play();
 
 const animationBackground4 = await backgroundAnimator.animate(car2);
@@ -80,6 +95,20 @@ const animationEngineDefend2 = new AnimationEngine('canvas-defend-car');
 animationEngineDefend2.registerAnimatedObjects(animationBackground4);
 animationEngineDefend2.registerAnimatedObjects(machineGunDamage);
 animationEngineDefend2.play();
+
+const animationBackground5 = await backgroundAnimator.animate(city1);
+const animatedCityShooting = await cityShootingAnimator.animate(city1);
+const animationEngineAttack3 = new AnimationEngine('canvas-attack-city', {flipHorizontally: true});
+animationEngineAttack3.registerAnimatedObjects(animationBackground5);
+animationEngineAttack3.registerAnimatedObjects(animatedCityShooting);
+animationEngineAttack3.play();
+
+const animationBackground6 = await backgroundAnimator.animate(city2);
+const laserDamage = await laserDamageAnimator.animate(city2);
+const animationEngineDefend3 = new AnimationEngine('canvas-defend-city');
+animationEngineDefend3.registerAnimatedObjects(animationBackground6);
+animationEngineDefend3.registerAnimatedObjects(laserDamage);
+animationEngineDefend3.play();
 
 const footer = new Footer();
 footer.init('footer-wrapper');

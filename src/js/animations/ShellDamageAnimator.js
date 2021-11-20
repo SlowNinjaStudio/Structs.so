@@ -1,6 +1,7 @@
 import {AnimatedImage} from "../vendor/animation/AnimatedImage";
 import {AnimatedEffect} from "../vendor/animation/AnimatedEffect";
 import {StructureArtSet} from "../art_rendering/StructureArtSet";
+import {ExplosionEffectUtil} from "./common/ExplosionEffectUtil";
 
 export class ShellDamageAnimator {
 
@@ -41,77 +42,22 @@ export class ShellDamageAnimator {
         y = 37;
       }
 
-      this.context.strokeStyle = '#ffff00';
-      this.context.shadowColor = '#aaaa00';
-      this.context.shadowBlur = 4;
-
+      const explosionEffect = new ExplosionEffectUtil(this.context);
+      explosionEffect.initStroke();
       if (this.frameCount < this.fpsAdjustFrameNumber(2)) {
-        this.context.fillStyle = 'rgba(255, 255, 255, 0.5)';
-        this.context.fillRect(0, 0, 64, 64);
-
-        this.context.beginPath();
-        this.context.ellipse(x, y, 14, 6, Math.PI, 0, 2 * Math.PI);
-        this.context.stroke();
-
-        this.context.beginPath();
-        this.context.ellipse(x, y, 14, 14, Math.PI, 0, Math.PI);
-        this.context.stroke();
+        explosionEffect.drawFlash(64, 64, 0.5);
+        explosionEffect.drawShockwave(x, y, 14, 6);
       } else if (this.frameCount < this.fpsAdjustFrameNumber(4)) {
-        this.context.fillStyle = 'rgba(255, 255, 255, 0.25)';
-        this.context.fillRect(0, 0, 64, 64);
-
-        this.context.beginPath();
-        this.context.ellipse(x, y, 6, 2, Math.PI, 0, 2 * Math.PI);
-        this.context.stroke();
-
-        this.context.fillStyle = '#ffffcc';
-        this.context.beginPath();
-        this.context.ellipse(x, y, 6, 6, Math.PI, 0, Math.PI);
-        this.context.stroke();
+        explosionEffect.drawFlash(64, 64, 0.25);
+        explosionEffect.drawShockwave(x, y, 6, 2);
       } else if (this.frameCount < this.fpsAdjustFrameNumber(8)) {
-        this.context.fillStyle = '#ffff99';
-        this.context.beginPath();
-        this.context.ellipse(x, y, 7, 3, Math.PI, 0, 2 * Math.PI);
-        this.context.stroke();
-        this.context.fill();
-
-        this.context.fillStyle = '#ffffcc';
-        this.context.beginPath();
-        this.context.ellipse(x, y, 7, 7, Math.PI, 0, Math.PI);
-        this.context.stroke();
-        this.context.fill();
+        explosionEffect.drawExplosion(x, y, 7, 3);
       } else if (this.frameCount < this.fpsAdjustFrameNumber(10)) {
-        this.context.fillStyle = '#ffff99';
-        this.context.beginPath();
-        this.context.ellipse(x, y, 14, 6, Math.PI, 0, 2 * Math.PI);
-        this.context.stroke();
-        this.context.fill();
-
-        this.context.fillStyle = '#ffffcc';
-        this.context.beginPath();
-        this.context.ellipse(x, y, 14, 14, Math.PI, 0, Math.PI);
-        this.context.stroke();
-        this.context.fill();
+        explosionEffect.drawExplosion(x, y, 14, 6);
       } else if (this.frameCount < this.fpsAdjustFrameNumber(12)) {
-        this.context.fillStyle = '#ffff99';
-        this.context.beginPath();
-        this.context.ellipse(x, y, 21, 9, Math.PI, 0, 2 * Math.PI);
-        this.context.stroke();
-        this.context.fill();
-
-        this.context.fillStyle = '#ffffcc';
-        this.context.beginPath();
-        this.context.ellipse(x, y, 21, 21, Math.PI, 0, Math.PI);
-        this.context.stroke();
-        this.context.fill();
+        explosionEffect.drawExplosion(x, y, 21, 9);
       } else if (this.frameCount < this.fpsAdjustFrameNumber(14)) {
-        this.context.beginPath();
-        this.context.ellipse(x, y, 28, 12, Math.PI, 0, 2 * Math.PI);
-        this.context.stroke();
-
-        this.context.beginPath();
-        this.context.ellipse(x, y, 28, 28, Math.PI, 0, Math.PI);
-        this.context.stroke();
+        explosionEffect.drawShockwave(x, y, 28, 12);
       } else if (this.frameCount >= this.fpsAdjustFrameNumber(30)) {
         this.resetFrameCount();
       }
