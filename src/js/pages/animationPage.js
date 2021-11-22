@@ -12,6 +12,7 @@ import {DroidUI} from "../ui/DroidUI";
 import {CarShootingAnimator} from "../animations/CarShootingAnimator";
 import {MachineGunDamageAnimator} from "../animations/MachineGunDamageAnimator";
 import {CityShootingAnimator} from "../animations/CityShootingAnimator";
+import {LaserDamageAnimator} from "../animations/LaserDamageAnimator";
 
 const instance = new Instance();
 await instance.init();
@@ -66,7 +67,7 @@ const shellDamageAnimator = new ShellDamageAnimator();
 const carShootingAnimator = new CarShootingAnimator();
 const machineGunDamageAnimator = new MachineGunDamageAnimator();
 const cityShootingAnimator = new CityShootingAnimator();
-const laserDamageAnimator = new ShellDamageAnimator();
+const laserDamageAnimator = new LaserDamageAnimator();
 
 const animationBackground1 = await backgroundAnimator.animate(mech1);
 const animatedMechShooting1 = await mechShootingAnimator.animate(mech1);

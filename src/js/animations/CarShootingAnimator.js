@@ -57,7 +57,6 @@ export class CarShootingAnimator {
       if (this.frameCount < this.fpsAdjustFrameNumber(30)) {
         if (this.frameCount % 6 === this.fpsAdjustFrameNumber(2)) {
           this.context.fillRect(this.x, this.y, 16, 2);
-          console.log('fire');
         } else if (this.frameCount % 6 === this.fpsAdjustFrameNumber(3)) {
           this.context.fillRect(this.x, this.y, 10, 2);
         }
