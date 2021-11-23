@@ -17,19 +17,19 @@ export class DroidUIStructureCommandView {
     this.droidUICommandMenu = new DroidUICommandMenu(structure);
   }
 
+  /**
+   * @return {Schematic|Structure}
+   */
+  getDisplayObject() {
+    return this.structure;
+  }
+
   getCanvasId() {
     return `${this.idPrefix}structure-${this.structure.getId()}`;
   }
 
   isCreator() {
     return  this.structure.getCreator() === '' || this.structure.getCreator() === this.creator;
-  }
-
-  initMainMenuEventListeners() {
-    if (this.isCreator()) {
-      const commandMenu = new DroidUICommandMenu(this.structure);
-      commandMenu.initMainMenuEventListeners();
-    }
   }
 
   render() {

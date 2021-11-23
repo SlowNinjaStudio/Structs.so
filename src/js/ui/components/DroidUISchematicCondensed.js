@@ -43,6 +43,14 @@ export class DroidUISchematicCondensed {
       this.compute_status = computeStatus;
     }
   }
+
+  /**
+   * @return {Schematic|Structure}
+   */
+  getDisplayObject() {
+    return this.schematic;
+  }
+
   getCanvasId() {
     return `${this.idPrefix}schematic-list-item-${this.schematic.getId()}`;
   }

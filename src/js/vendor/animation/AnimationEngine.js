@@ -1,5 +1,3 @@
-import {Uint8ClampedArrayUtil} from "../Uint8ClampArrayUtil";
-
 /**
  * An animation engine to assist with canvas animation.
  */
@@ -8,16 +6,23 @@ export class AnimationEngine {
   /**
    * @param {string} canvasId
    * @param {object} options
-   * @param {number} refreshRate the animation speed
+   * @param {number} fps the animation speed in frames per second
    */
-  constructor(canvasId, options = {}, refreshRate = 20) {
+  constructor(canvasId, options = {}, fps = 60) {
     this.canvasId = canvasId;
     this.canvas = document.getElementById(this.canvasId);
     this.context = this.canvas.getContext('2d');
     this.options = options;
-    this.refreshRate = refreshRate;
+    this.fps = fps;
+    this.refreshRate = Math.round(1000 / this.fps);
     this.animatedObjects = [];
     this.interval = null;
+    this.loopCount = 0;
+
+    if (this.options.hasOwnProperty('flipHorizontally') && this.options.flipHorizontally) {
+      this.context.translate(this.canvas.width, 0);
+      this.context.scale(-1, 1);
+    }
   }
 
   clearCanvas() {
@@ -32,6 +37,7 @@ export class AnimationEngine {
   registerAnimatedObject(object) {
     object.setCanvas(this.canvas);
     object.setContext(this.context);
+    object.setFPS(this.fps);
     this.animatedObjects.push(object);
   }
 
@@ -47,40 +53,33 @@ export class AnimationEngine {
   }
 
   /**
-   * Flip the animation horizontally.
-   */
-  flipHorizontally() {
-    let imageData = this.context.getImageData(0, 0, this.canvas.width, this.canvas.height);
-    const newData = Uint8ClampedArrayUtil.flipHorizontal(imageData.data, 64);
-    for (let i = 0; i < imageData.data.length; i++) {
-      imageData.data[i] = newData[i];
-    }
-    this.context.putImageData(imageData, 0, 0);
-  }
-
-  /**
    * Draw all registered animated objects to the canvas.
+   *
+   * @params {number} maxLoops the max number of times to loop each animation
    */
-  draw() {
+  draw(maxLoops = -1) {
+    if (maxLoops >= 0 && this.loopCount >= maxLoops) {
+      this.pause();
+      return void(0);
+    }
+
     // Need to clear the canvas with every new frame, otherwise new objects will be drawn on top of old objects.
     this.clearCanvas();
 
     for (let i = 0; i < this.animatedObjects.length; i++) {
       this.animatedObjects[i].increaseFrameCount(); // Increase the frame count so that objects know how many frames have passed.
       this.animatedObjects[i].draw();
-    }
-
-    if (this.options.hasOwnProperty('flipHorizontally') && this.options.flipHorizontally) {
-      this.flipHorizontally();
+      this.loopCount = this.animatedObjects[i].loopCount;
     }
   }
 
   /**
    * Play the animation by running each animated objects' draw script.
+   *
+   * @params {number} maxLoops the max number of times to loop each animation
    */
-  play() {
-    console.log('play');
-    this.interval = setInterval(this.draw.bind(this), this.refreshRate);
+  play(maxLoops = -1) {
+    this.interval = setInterval(this.draw.bind(this, maxLoops), this.refreshRate);
   }
 
   /**

@@ -1,6 +1,3 @@
-import {DroidUI} from "../DroidUI";
-import {Instance} from "../../models/Instance";
-
 /**
  * Web UI component for schematic.
  */
@@ -16,6 +13,14 @@ export class DroidUISchematic {
     this.creator = creator;
     this.idPrefix = idPrefix;
   }
+
+  /**
+   * @return {Schematic|Structure}
+   */
+  getDisplayObject() {
+    return this.schematic;
+  }
+
   getCanvasId() {
     return `${this.idPrefix}schematic-${this.schematic.getId()}`;
   }
@@ -163,34 +168,5 @@ export class DroidUISchematic {
         </div>
       </div>
     `;
-  }
-
-  initBuildEventListeners() {
-    if (!this.isCreator()) {
-      return;
-    }
-    const droidUi = new DroidUI();
-
-    const searchHandler = async function() {
-      const instance = new Instance();
-      await instance.init();
-
-      const searchString = document.getElementById('offcanvas-search-input').value;
-      droidUi.loadStructureSelectionListFromSchematic('offcanvas-body', 'offcanvas-title', this.schematic);
-    }.bind(this);
-
-    document.getElementById('offcanvas-search-btn').addEventListener('click', searchHandler);
-    document.getElementById('offcanvas-search-input').addEventListener('keypress', (event) => {
-      if (event.key === 'Enter') {
-        searchHandler(event);
-      }
-    });
-
-    const instance = new Instance();
-    instance.lazyLoad();
-
-    document.getElementById(this.getBuildButtonId()).addEventListener('click', function() {
-      droidUi.loadStructureSelectionListFromSchematic('offcanvas-body', 'offcanvas-title', this.schematic, instance.address);
-    }.bind(this));
   }
 }

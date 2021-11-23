@@ -1,64 +1,32 @@
 /**
  * Used for animating a preexisting image.
  */
-export class AnimatedImage {
+import {AnimatedEffect} from "./AnimatedEffect";
+
+export class AnimatedImage extends AnimatedEffect {
 
   /**
-   * @param {string} imagePath
+   * @param {Image} img the image to animate
    * @param {function} draw the script that animates the image when called repeatedly
    * @param {number} x starting horizontal position on the canvas
    * @param {number} y starting vertical position on the canvas
    */
-  constructor(imagePath, draw, x, y) {
-    this.imagePath = imagePath;
-    this.draw = draw;
-    this.x = x;
-    this.y = y;
-    this.canvas = null;
-    this.context = null;
-    this.frameCount = 0;
-
-    // Load the image
-    this.img = new Image();
-    this.img.src = this.imagePath;
+  constructor(img, draw, x, y) {
+    super(draw, x, y);
+    this.img = img;
   }
 
   /**
-   * @param {HTMLCanvasElement} canvas
+   * @param {Image[]} imageLayers
+   * @param {function} animationScript
+   * @param {number} x
+   * @param {number} y
+   * @return {AnimatedImage[]}
    */
-  setCanvas(canvas) {
-    this.canvas = canvas;
-  }
-
-  /**
-   * @param {CanvasRenderingContext2D} context
-   */
-  setContext(context) {
-    this.context = context;
-  }
-
-  increaseFrameCount() {
-    this.frameCount++;
-  }
-
-  /**
-   * Used for looping animations.
-   */
-  resetFrameCount() {
-    this.frameCount = 0;
-  }
-
-  /**
-   * @param imageLayerPaths
-   * @param animationScript
-   * @param x
-   * @param y
-   * @return {*[]}
-   */
-  static bulkAnimate(imageLayerPaths, animationScript, x, y) {
+  static bulkAnimate(imageLayers, animationScript, x, y) {
     const animatedObjects = [];
-    for (let i = 0; i < imageLayerPaths.length; i++) {
-      animatedObjects.push(new AnimatedImage(imageLayerPaths[i], animationScript, x, y));
+    for (let i = 0; i < imageLayers.length; i++) {
+      animatedObjects.push(new AnimatedImage(imageLayers[i], animationScript, x, y));
     }
     return animatedObjects;
   }
