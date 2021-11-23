@@ -15,53 +15,53 @@ export class StationShootingAnimator {
   }
 
   muzzleFlashScript() {
-    return function() {
-      const muzzleSmokeOrb = function (context, x, y, frameCount) {
-        const smokeStrokeColor = '#dcdcdc';
-        const smokeShadowColor = '#5a5a5a';
-        const smokeShadowBlue = 4;
-        const smokeFillColor = '#b4b4b4';
+    const muzzleSmokeOrb = function (context, x, y, frameCount) {
+      const smokeStrokeColor = '#dcdcdc';
+      const smokeShadowColor = '#5a5a5a';
+      const smokeShadowBlue = 4;
+      const smokeFillColor = '#b4b4b4';
 
-        context.strokeStyle = smokeStrokeColor;
-        context.shadowColor = smokeShadowColor;
-        context.shadowBlur = smokeShadowBlue;
-        context.fillStyle = smokeFillColor;
+      context.strokeStyle = smokeStrokeColor;
+      context.shadowColor = smokeShadowColor;
+      context.shadowBlur = smokeShadowBlue;
+      context.fillStyle = smokeFillColor;
+
+      context.beginPath();
+      context.ellipse(x - Math.sqrt(frameCount), y - Math.sqrt(frameCount), 2, 2, Math.PI, 0, 2 * Math.PI);
+      context.stroke();
+      context.fill();
+    }
+
+    const muzzleFlash = function(context, x, y, frameCount) {
+      context.strokeStyle = '#ffff00';
+      context.shadowColor = '#aaaa00';
+      context.shadowBlur = 4;
+      context.fillStyle = '#ffff99';
+
+      if (frameCount < 1) {
+        context.fillStyle = `rgba(255, 255, 255, 0.10)`;
+        context.fillRect(0, 0, 64, 64);
 
         context.beginPath();
-        context.ellipse(x - Math.sqrt(frameCount), y - Math.sqrt(frameCount), 2, 2, Math.PI, 0, 2 * Math.PI);
+        context.ellipse(x, y, 2, 1, Math.PI / 4, 0, 2 * Math.PI);
         context.stroke();
         context.fill();
+      } else if (frameCount < 2) {
+        context.beginPath();
+        context.ellipse(x, y, 3, 2, Math.PI / 4, 0, 2 * Math.PI);
+        context.stroke();
+        context.fill();
+      } else if (frameCount < 3) {
+        context.beginPath();
+        context.ellipse(x, y, 3, 2, Math.PI / 4, 0, 2 * Math.PI);
+        context.stroke();
       }
+    }
 
+    return function() {
       if (this.frameCount < 100) {
         for(let i = 0; i < 6; i++) {
           muzzleSmokeOrb(this.context, this.x, this.y, (this.frameCount + (30 / i)) % 30);
-        }
-      }
-
-      const muzzleFlash = function(context, x, y, frameCount) {
-        context.strokeStyle = '#ffff00';
-        context.shadowColor = '#aaaa00';
-        context.shadowBlur = 4;
-        context.fillStyle = '#ffff99';
-
-        if (frameCount < 1) {
-          context.fillStyle = `rgba(255, 255, 255, 0.10)`;
-          context.fillRect(0, 0, 64, 64);
-
-          context.beginPath();
-          context.ellipse(x, y, 2, 1, Math.PI / 4, 0, 2 * Math.PI);
-          context.stroke();
-          context.fill();
-        } else if (frameCount < 2) {
-          context.beginPath();
-          context.ellipse(x, y, 3, 2, Math.PI / 4, 0, 2 * Math.PI);
-          context.stroke();
-          context.fill();
-        } else if (frameCount < 3) {
-          context.beginPath();
-          context.ellipse(x, y, 3, 2, Math.PI / 4, 0, 2 * Math.PI);
-          context.stroke();
         }
       }
 

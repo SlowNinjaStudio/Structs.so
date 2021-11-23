@@ -14,6 +14,7 @@ import {MachineGunDamageAnimator} from "../animations/MachineGunDamageAnimator";
 import {CityShootingAnimator} from "../animations/CityShootingAnimator";
 import {LaserDamageAnimator} from "../animations/LaserDamageAnimator";
 import {StationShootingAnimator} from "../animations/StationShootingAnimator";
+import {AntiAirDamageAnimator} from "../animations/AntiAirDamageAnimator";
 
 const instance = new Instance();
 await instance.init();
@@ -86,7 +87,7 @@ const cityShootingAnimator = new CityShootingAnimator();
 const laserDamageAnimator = new LaserDamageAnimator();
 
 const stationShootingAnimator = new StationShootingAnimator();
-const antiAirDamageAnimator = new ShellDamageAnimator();
+const antiAirDamageAnimator = new AntiAirDamageAnimator();
 
 const animationBackground1 = await backgroundAnimator.animate(mech1);
 const animatedMechShooting1 = await mechShootingAnimator.animate(mech1);
