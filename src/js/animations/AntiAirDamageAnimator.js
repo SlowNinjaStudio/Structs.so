@@ -4,10 +4,16 @@ import {StructureArtSet} from "../art_rendering/StructureArtSet";
 import {MoreMath} from "../vendor/MoreMath";
 import {ColorRGB} from "../vendor/ColorRGB";
 import {SmokeExplosion} from "./common/SmokeExplosion";
+import {AbstractStructureAnimator} from "./AbstractStructureAnimator";
 
-export class AntiAirDamageAnimator {
+export class AntiAirDamageAnimator extends AbstractStructureAnimator {
+
+  constructor() {
+    super(180);
+  }
 
   shake() {
+    const animationLengthInFrames = this.getAnimationLengthInFrames();
     return function() {
       const n = this.frameCount % this.fpsAdjustFrameNumber(8);
       if (
@@ -26,7 +32,7 @@ export class AntiAirDamageAnimator {
       } else if (n > 7) {
         this.context.drawImage(this.img, this.x, this.y);
       }
-      if (this.frameCount >= this.fpsAdjustFrameNumber(180)) {
+      if (this.frameCount >= this.fpsAdjustFrameNumber(animationLengthInFrames)) {
         this.resetFrameCount();
       }
     }
@@ -75,6 +81,8 @@ export class AntiAirDamageAnimator {
       ));
     }
 
+    const animationLengthInFrames = this.getAnimationLengthInFrames();
+
     return function() {
       if (this.frameCount % 6 === 5 && this.frameCount < 78) {
         this.context.fillStyle = `rgba(255, 255, 255, 0.25)`;
@@ -90,7 +98,7 @@ export class AntiAirDamageAnimator {
         }
       }
 
-      if (this.frameCount >= this.fpsAdjustFrameNumber(180)) {
+      if (this.frameCount >= this.fpsAdjustFrameNumber(animationLengthInFrames)) {
         this.resetFrameCount();
       }
 
@@ -100,7 +108,7 @@ export class AntiAirDamageAnimator {
 
   /**
    * @param {Structure} structure
-   * @return {*[]}
+   * @return {Promise<AnimatedEffect[]>}
    */
   async animate(structure) {
     const artSet = new StructureArtSet(structure);

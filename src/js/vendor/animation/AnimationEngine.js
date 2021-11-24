@@ -77,9 +77,11 @@ export class AnimationEngine {
    * Play the animation by running each animated objects' draw script.
    *
    * @params {number} maxLoops the max number of times to loop each animation
+   * @return {number} the length of the animation in milliseconds or null if maxLoops is negative
    */
   play(maxLoops = -1) {
     this.interval = setInterval(this.draw.bind(this, maxLoops), this.refreshRate);
+    //return maxLoops < 0 ? null : this.getAnimationLength() * maxLoops;
   }
 
   /**
@@ -87,6 +89,19 @@ export class AnimationEngine {
    */
   pause() {
     clearInterval(this.interval);
+  }
+
+  /**
+   * The animation length in milliseconds.
+   *
+   * @return {number}
+   */
+  getAnimationLength() {
+    let animationLengthInFrames = 0;
+    for (let i = 0; i < this.animatedObjects.length; i++) {
+      animationLengthInFrames = Math.max(animationLengthInFrames, this.animatedObjects[i].getAnimationLengthInFrames());
+    }
+    return Math.round((animationLengthInFrames / this.fps) * 1000);
   }
 
 }
