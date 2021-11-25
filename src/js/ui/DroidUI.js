@@ -283,7 +283,8 @@ export class DroidUI {
     const targetElementTitle = document.getElementById(`${targetElementTitleId}`);
     targetElementTitle.innerHTML = 'Select Structure';
 
-    this.droidApi.searchStructuresBySchematic(schematic.getId(), searchString, schematic.getCreator())
+    //this.droidApi.searchStructuresBySchematic(schematic.getId(), searchString, schematic.getCreator())
+    this.droidApi.searchStructuresByPerforming('build', schematic.hash, schematic.owner, searchString)
       .then(structures => {
         this.handleLoadList(
           structures,

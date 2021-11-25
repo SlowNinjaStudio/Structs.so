@@ -126,6 +126,35 @@ export class DroidApi {
   }
 
   /**
+   * @param {string} actionType
+   * @param {string} target
+   * @param {string} supervisor
+   * @param {string} searchString
+   * @returns {Promise<Structure[]>}
+   */
+  searchStructuresByPerforming(actionType, target, supervisor, searchString) {
+    // TODO: Add real endpoint call once created
+    const searchWithCreator = `${searchString}`;
+    ///di/Structure/search/performing/{action_type}/{target}/{instance}/{query}
+    return this.ajax.get(`${this.scheme}${this.domain}/api/di/Structure/search/performing/${encodeURIComponent(actionType)}/${encodeURIComponent(target)}/${encodeURIComponent(supervisor)}/${encodeURIComponent(searchWithCreator)}`)
+      .then(this.structureResponseHandler.bind(this));
+  }
+
+  /**
+   * @param {string} actionType
+   * @param {string} performing
+   * @param {string} searchString
+   * @returns {Promise<Structure[]>}
+   */
+  searchStructuresByTargeting(actionType, performing, searchString) {
+    // TODO: Add real endpoint call once created
+    const searchWithCreator = `${searchString}`;
+    ///di/Structure/search/targeting/{action_type}/{performing}/{query}
+    return this.ajax.get(`${this.scheme}${this.domain}/api/di/Structure/search/targeting/${encodeURIComponent(actionType)}/${encodeURIComponent(performing)}/${encodeURIComponent(searchWithCreator)}`)
+      .then(this.structureResponseHandler.bind(this));
+  }
+
+  /**
    * @param {object} request
    * @returns {Promise<string>}
    */

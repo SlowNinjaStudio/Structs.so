@@ -241,7 +241,7 @@ export class Schematic {
     this.accuracy = Math.max(this.accuracy, 1)
     this.strength = Math.max(this.strength, 1)
     this.speed 		= Math.max(this.speed, 1)
-    
+
     if (this.is_mobile) {
       this.melee_attack  = (this.strength * this.mass) % (this.speed * this.accuracy)
 
