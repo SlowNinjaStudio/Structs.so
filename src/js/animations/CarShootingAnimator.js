@@ -2,10 +2,16 @@ import {AnimatedImage} from "../vendor/animation/AnimatedImage";
 import {AnimatedEffect} from "../vendor/animation/AnimatedEffect";
 import {StructureArtSet} from "../art_rendering/StructureArtSet";
 import {FEATURES} from "../constants";
+import {AbstractStructureAnimator} from "./AbstractStructureAnimator";
 
-export class CarShootingAnimator {
+export class CarShootingAnimator extends AbstractStructureAnimator {
+
+  constructor() {
+    super(60);
+  }
 
   cannonFireScript() {
+    const animationLengthInFrames = this.animationLengthInFrames;
     return function() {
       this.context.drawImage(this.img, this.x, this.y);
 
@@ -21,7 +27,7 @@ export class CarShootingAnimator {
         }
       }
 
-      if (this.frameCount >= this.fpsAdjustFrameNumber(60)) {
+      if (this.frameCount >= this.fpsAdjustFrameNumber(animationLengthInFrames)) {
         this.resetFrameCount();
       }
 
@@ -29,7 +35,7 @@ export class CarShootingAnimator {
   }
 
   carKickBackScript() {
-
+    const animationLengthInFrames = this.animationLengthInFrames;
     return function() {
       this.context.drawImage(this.img, this.x, this.y);
 
@@ -42,13 +48,14 @@ export class CarShootingAnimator {
         }
       }
 
-      if (this.frameCount >= this.fpsAdjustFrameNumber(60)) {
+      if (this.frameCount >= this.fpsAdjustFrameNumber(animationLengthInFrames)) {
         this.resetFrameCount();
       }
     }
   }
 
   bulletScript() {
+    const animationLengthInFrames = this.animationLengthInFrames;
     return function() {
       this.context.fillStyle = '#ffff00';
       this.context.shadowColor = '#aaaa00';
@@ -62,7 +69,7 @@ export class CarShootingAnimator {
         }
       }
 
-      if (this.frameCount >= this.fpsAdjustFrameNumber(60)) {
+      if (this.frameCount >= this.fpsAdjustFrameNumber(animationLengthInFrames)) {
         this.resetFrameCount();
       }
 
@@ -71,6 +78,7 @@ export class CarShootingAnimator {
   }
 
   muzzleFlashScript() {
+    const animationLengthInFrames = this.animationLengthInFrames;
     return function() {
       this.context.strokeStyle = '#ffff00';
       this.context.shadowColor = '#aaaa00';
@@ -88,7 +96,7 @@ export class CarShootingAnimator {
         }
       }
 
-      if (this.frameCount >= this.fpsAdjustFrameNumber(60)) {
+      if (this.frameCount >= this.fpsAdjustFrameNumber(animationLengthInFrames)) {
         this.resetFrameCount();
       }
 
@@ -97,7 +105,7 @@ export class CarShootingAnimator {
   }
 
   shellCasingScript() {
-
+    const animationLengthInFrames = this.animationLengthInFrames;
     return function() {
       const trajectory = (n) => (Math.pow(n, 2) / 10) + this.y;
 
@@ -111,7 +119,7 @@ export class CarShootingAnimator {
         }
       }
 
-      if (this.frameCount >= this.fpsAdjustFrameNumber(60)) {
+      if (this.frameCount >= this.fpsAdjustFrameNumber(animationLengthInFrames)) {
         this.resetFrameCount();
       }
     }
@@ -119,7 +127,7 @@ export class CarShootingAnimator {
 
   /**
    * @param {Structure} structure
-   * @return {*[]}
+   * @return {Promise<AnimatedEffect[]>}
    */
   async animate(structure) {
     const artSet = new StructureArtSet(structure);

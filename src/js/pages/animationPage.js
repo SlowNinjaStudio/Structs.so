@@ -103,14 +103,14 @@ const animatedMechShooting1 = await mechShootingAnimator.animate(mech1);
 const animationEngineAttack1 = new AnimationEngine('canvas-attack-mech', {flipHorizontally: true});
 animationEngineAttack1.registerAnimatedObjects(animationBackground1);
 animationEngineAttack1.registerAnimatedObjects(animatedMechShooting1);
-// animationEngineAttack1.play();
+animationEngineAttack1.play();
 
 const animationBackground2 = await backgroundAnimator.animate(mech2);
 const shellDamage = await shellDamageAnimator.animate(mech2);
 const animationEngineDefend1 = new AnimationEngine('canvas-defend-mech');
 animationEngineDefend1.registerAnimatedObjects(animationBackground2);
 animationEngineDefend1.registerAnimatedObjects(shellDamage);
-// animationEngineDefend1.play();
+animationEngineDefend1.play();
 
 const animationBackground3 = await backgroundAnimator.animate(car1);
 const animatedCarShooting = await carShootingAnimator.animate(car1);
@@ -159,7 +159,7 @@ const postDamageSmoke = await postDamageSmokeAnimator.animate(station3);
 const animationEnginePostDamage1 = new AnimationEngine('canvas-post-damage-smoke-station');
 animationEnginePostDamage1.registerAnimatedObjects(animationBackground9);
 animationEnginePostDamage1.registerAnimatedObjects(postDamageSmoke);
-animationEnginePostDamage1.play();
+// animationEnginePostDamage1.play();
 
 const footer = new Footer();
 footer.init('footer-wrapper');

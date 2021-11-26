@@ -2,30 +2,16 @@ import {AnimatedImage} from "../vendor/animation/AnimatedImage";
 import {AnimatedEffect} from "../vendor/animation/AnimatedEffect";
 import {StructureArtSet} from "../art_rendering/StructureArtSet";
 import {ExplosionEffectUtil} from "./common/ExplosionEffectUtil";
+import {AbstractStructureAnimator} from "./AbstractStructureAnimator";
 
-export class ShellDamageAnimator {
+export class ShellDamageAnimator extends AbstractStructureAnimator {
 
-  shake() {
-    return function() {
-      const n = this.frameCount % this.fpsAdjustFrameNumber(30);
-      if (n === 0 || n === 1) {
-        this.context.drawImage(this.img, this.x, this.y);
-      } else if (n === 2 || n === 3) {
-        this.context.drawImage(this.img, this.x + 1, this.y - 1);
-      } else if (n === 4 || n === 5) {
-        this.context.drawImage(this.img, this.x - 1, this.y - 1);
-      } else if (n === 6 || n === 7) {
-        this.context.drawImage(this.img, this.x + 1, this.y + 1);
-      } else if (n > 7) {
-        this.context.drawImage(this.img, this.x, this.y);
-      }
-      if (this.frameCount >= this.fpsAdjustFrameNumber(30)) {
-        this.resetFrameCount();
-      }
-    }
+  constructor() {
+    super(30);
   }
 
   explosionScript() {
+    const animationLengthInFrames = this.animationLengthInFrames;
     return function() {
       let x = this.x;
       let y = this.y;
@@ -58,7 +44,7 @@ export class ShellDamageAnimator {
         explosionEffect.drawExplosion(x, y, 21, 9);
       } else if (this.frameCount < this.fpsAdjustFrameNumber(14)) {
         explosionEffect.drawShockwave(x, y, 28, 12);
-      } else if (this.frameCount >= this.fpsAdjustFrameNumber(30)) {
+      } else if (this.frameCount >= this.fpsAdjustFrameNumber(animationLengthInFrames)) {
         this.resetFrameCount();
       }
 
@@ -68,13 +54,13 @@ export class ShellDamageAnimator {
 
   /**
    * @param {Structure} structure
-   * @return {*[]}
+   * @return {Promise<AnimatedEffect[]>}
    */
   async animate(structure) {
     const artSet = new StructureArtSet(structure);
     const shake = AnimatedImage.bulkAnimate(
       await artSet.getLayerImages(),
-      this.shake(artSet.getPalette()),
+      this.shake(0, 8),
       0,
       0
     );

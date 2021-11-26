@@ -2,35 +2,16 @@ import {AnimatedImage} from "../vendor/animation/AnimatedImage";
 import {AnimatedEffect} from "../vendor/animation/AnimatedEffect";
 import {StructureArtSet} from "../art_rendering/StructureArtSet";
 import {ExplosionEffectUtil} from "./common/ExplosionEffectUtil";
+import {AbstractStructureAnimator} from "./AbstractStructureAnimator";
 
-export class LaserDamageAnimator {
+export class LaserDamageAnimator extends AbstractStructureAnimator {
 
-  shake() {
-    return function() {
-      const n = this.frameCount % this.fpsAdjustFrameNumber(8);
-      if (
-        n === 0
-        || n === 1
-        || this.frameCount < this.fpsAdjustFrameNumber(8)
-        || this.frameCount > this.fpsAdjustFrameNumber(120)
-      ) {
-        this.context.drawImage(this.img, this.x, this.y);
-      } else if (n === 2 || n === 3) {
-        this.context.drawImage(this.img, this.x + 1, this.y - 1);
-      } else if (n === 4 || n === 5) {
-        this.context.drawImage(this.img, this.x - 1, this.y - 1);
-      } else if (n === 6 || n === 7) {
-        this.context.drawImage(this.img, this.x + 1, this.y + 1);
-      } else if (n > 7) {
-        this.context.drawImage(this.img, this.x, this.y);
-      }
-      if (this.frameCount >= this.fpsAdjustFrameNumber(180)) {
-        this.resetFrameCount();
-      }
-    }
+  constructor() {
+    super(180);
   }
 
   explosionScript() {
+    const animationLengthInFrames = this.animationLengthInFrames;
     return function() {
       let x = this.x;
       let y = this.y;
@@ -64,7 +45,7 @@ export class LaserDamageAnimator {
         explosionEffect.drawFlash(64, 64, 0.50);
       } else if (this.frameCount < this.fpsAdjustFrameNumber(120)) {
         explosionEffect.drawFlash(64, 64, 1);
-      } else if (this.frameCount >= this.fpsAdjustFrameNumber(180)) {
+      } else if (this.frameCount >= this.fpsAdjustFrameNumber(animationLengthInFrames)) {
         this.resetFrameCount();
       }
 
@@ -74,13 +55,13 @@ export class LaserDamageAnimator {
 
   /**
    * @param {Structure} structure
-   * @return {*[]}
+   * @return {Promise<AnimatedEffect[]>}
    */
   async animate(structure) {
     const artSet = new StructureArtSet(structure);
     const shake = AnimatedImage.bulkAnimate(
       await artSet.getLayerImages(),
-      this.shake(),
+      this.shake(8, 120),
       0,
       0
     );

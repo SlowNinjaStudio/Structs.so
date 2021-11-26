@@ -1,20 +1,16 @@
 import {AnimatedImage} from "../vendor/animation/AnimatedImage";
 import {AnimatedEffect} from "../vendor/animation/AnimatedEffect";
 import {StructureArtSet} from "../art_rendering/StructureArtSet";
+import {AbstractStructureAnimator} from "./AbstractStructureAnimator";
 
-export class CityShootingAnimator {
+export class CityShootingAnimator extends AbstractStructureAnimator {
 
-  staticStruct() {
-    return function() {
-      this.context.drawImage(this.img, this.x, this.y);
-
-      if (this.frameCount >= this.fpsAdjustFrameNumber(30)) {
-        this.resetFrameCount();
-      }
-    }
+  constructor() {
+    super(180);
   }
 
   laserScript() {
+    const animationLengthInFrames = this.animationLengthInFrames;
     return function() {
       this.context.fillStyle = '#ffffcc';
       this.context.shadowColor = '#aaaa00';
@@ -25,7 +21,7 @@ export class CityShootingAnimator {
         this.context.fillRect(this.x, this.y, 11, 2);
       } else if (this.frameCount < this.fpsAdjustFrameNumber(100)) {
         this.context.fillRect(this.x - 22, this.y, 33, 2);
-      } else if (this.frameCount >= this.fpsAdjustFrameNumber(180)) {
+      } else if (this.frameCount >= this.fpsAdjustFrameNumber(animationLengthInFrames)) {
         this.resetFrameCount();
       }
 
@@ -34,6 +30,7 @@ export class CityShootingAnimator {
   }
 
   muzzleFlashScript() {
+    const animationLengthInFrames = this.animationLengthInFrames;
     return function() {
       this.context.strokeStyle = '#ffff00';
       this.context.shadowColor = '#aaaa00';
@@ -83,7 +80,7 @@ export class CityShootingAnimator {
         this.context.ellipse(this.x, this.y, 1, 1, Math.PI, 0, 2 * Math.PI);
         this.context.stroke();
         this.context.fill();
-      } else if (this.frameCount >= this.fpsAdjustFrameNumber(180)) {
+      } else if (this.frameCount >= this.fpsAdjustFrameNumber(animationLengthInFrames)) {
         this.resetFrameCount();
       }
 
@@ -100,7 +97,7 @@ export class CityShootingAnimator {
 
     const staticStruct = AnimatedImage.bulkAnimate(
       await artSet.getStructureLayerImages(),
-      this.staticStruct(artSet.getPalette()),
+      this.staticScript(),
       8,
       0
     );

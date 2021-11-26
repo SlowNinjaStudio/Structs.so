@@ -2,16 +2,12 @@ import {AnimatedImage} from "../vendor/animation/AnimatedImage";
 import {AnimatedEffect} from "../vendor/animation/AnimatedEffect";
 import {StructureArtSet} from "../art_rendering/StructureArtSet";
 import {ExplosionEffectUtil} from "./common/ExplosionEffectUtil";
+import {AbstractStructureAnimator} from "./AbstractStructureAnimator";
 
-export class MachineGunDamageAnimator {
+export class MachineGunDamageAnimator extends AbstractStructureAnimator {
 
-  staticStruct() {
-    return function() {
-      this.context.drawImage(this.img, this.x, this.y);
-      if (this.frameCount >= this.fpsAdjustFrameNumber(60)) {
-        this.resetFrameCount();
-      }
-    }
+  constructor() {
+    super(60);
   }
 
   explosionScript() {
@@ -27,6 +23,7 @@ export class MachineGunDamageAnimator {
         explosionEffect.drawExplosion(x, y, 6, 2);
       }
     }
+    const animationLengthInFrames = this.animationLengthInFrames;
     return function() {
       const explosions = [
         {
@@ -62,7 +59,7 @@ export class MachineGunDamageAnimator {
         }
       }
 
-      if (this.frameCount >= this.fpsAdjustFrameNumber(60)) {
+      if (this.frameCount >= this.fpsAdjustFrameNumber(animationLengthInFrames)) {
         this.resetFrameCount();
       }
 
@@ -72,14 +69,14 @@ export class MachineGunDamageAnimator {
 
   /**
    * @param {Structure} structure
-   * @return {*[]}
+   * @return {Promise<AnimatedEffect[]>}
    */
   async animate(structure) {
     const artSet = new StructureArtSet(structure);
 
     const staticStruct = AnimatedImage.bulkAnimate(
       await artSet.getLayerImages(),
-      this.staticStruct(artSet.getPalette()),
+      this.staticScript(),
       0,
       0
     );

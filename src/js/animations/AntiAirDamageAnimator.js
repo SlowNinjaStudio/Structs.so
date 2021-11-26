@@ -11,32 +11,6 @@ export class AntiAirDamageAnimator extends AbstractStructureAnimator {
     super(180);
   }
 
-  shake() {
-    const animationLengthInFrames = this.getAnimationLengthInFrames();
-    return function() {
-      const n = this.frameCount % this.fpsAdjustFrameNumber(8);
-      if (
-        n === 0
-        || n === 1
-        || this.frameCount < this.fpsAdjustFrameNumber(8)
-        || this.frameCount > this.fpsAdjustFrameNumber(78)
-      ) {
-        this.context.drawImage(this.img, this.x, this.y);
-      } else if (n === 2 || n === 3) {
-        this.context.drawImage(this.img, this.x + 1, this.y - 1);
-      } else if (n === 4 || n === 5) {
-        this.context.drawImage(this.img, this.x - 1, this.y - 1);
-      } else if (n === 6 || n === 7) {
-        this.context.drawImage(this.img, this.x + 1, this.y + 1);
-      } else if (n > 7) {
-        this.context.drawImage(this.img, this.x, this.y);
-      }
-      if (this.frameCount >= this.fpsAdjustFrameNumber(animationLengthInFrames)) {
-        this.resetFrameCount();
-      }
-    }
-  }
-
   explosionScript() {
 
     /** @type {SmokeExplosion[]} explosions */
@@ -91,7 +65,7 @@ export class AntiAirDamageAnimator extends AbstractStructureAnimator {
     const artSet = new StructureArtSet(structure);
     const struct = AnimatedImage.bulkAnimate(
       await artSet.getLayerImages(),
-      this.shake(),
+      this.shake(8, 78),
       0,
       0
     );
