@@ -16,6 +16,7 @@ import {LaserDamageAnimator} from "../animations/LaserDamageAnimator";
 import {StationShootingAnimator} from "../animations/StationShootingAnimator";
 import {AntiAirDamageAnimator} from "../animations/AntiAirDamageAnimator";
 import {PostDamageSmokeAnimator} from "../animations/PostDamageSmokeAnimator";
+import {MechAttackAnimation} from "../animations/MechAttackAnimation";
 
 const instance = new Instance();
 await instance.init();
@@ -174,37 +175,9 @@ const cityComboTest = DummyUtil.getDummyStructure(
   100
 );
 
-const animationBackgroundComboTest1 = await backgroundAnimator.animate(mechComboTest);
-const animatedMechShootingComboTest = await mechShootingAnimator.animate(mechComboTest);
-const animationEngineAttackComboTest = new AnimationEngine(
-  'canvas-attack-combined',
-  { flipHorizontally: true, animationLabel: 'ATTACK' },
-);
-animationEngineAttackComboTest.registerAnimatedObjects(animationBackgroundComboTest1);
-animationEngineAttackComboTest.registerAnimatedObjects(animatedMechShootingComboTest);
-
-const animationBackgroundComboTest2 = await backgroundAnimator.animate(cityComboTest);
-const shellDamageComboTest = await shellDamageAnimator.animate(cityComboTest);
-const animationEngineDamageComboTest = new AnimationEngine(
-  'canvas-attack-combined',
-  { animationLabel: 'ATTACK_DAMAGE' }
-);
-animationEngineDamageComboTest.registerAnimatedObjects(animationBackgroundComboTest2);
-animationEngineDamageComboTest.registerAnimatedObjects(shellDamageComboTest);
-document.addEventListener(AnimationEngine.eventName(ANIMATION_EVENTS.END, 'ATTACK'), function () {
-  animationEngineDamageComboTest.play(6);
-})
-
-const animationBackgroundComboTest3 = await backgroundAnimator.animate(cityComboTest);
-const postDamageSmokeComboTest = await postDamageSmokeAnimator.animate(cityComboTest);
-const animationEnginePostDamageComboTest = new AnimationEngine('canvas-attack-combined');
-animationEnginePostDamageComboTest.registerAnimatedObjects(animationBackgroundComboTest3);
-animationEnginePostDamageComboTest.registerAnimatedObjects(postDamageSmokeComboTest);
-document.addEventListener(AnimationEngine.eventName(ANIMATION_EVENTS.END, 'ATTACK_DAMAGE'), function () {
-  animationEnginePostDamageComboTest.play();
-})
-
-animationEngineAttackComboTest.play(6);
+const mechAttackAnimation = new MechAttackAnimation('canvas-attack-combined', mechComboTest, cityComboTest);
+await mechAttackAnimation.init();
+mechAttackAnimation.play();
 
 const footer = new Footer();
 footer.init('footer-wrapper');
