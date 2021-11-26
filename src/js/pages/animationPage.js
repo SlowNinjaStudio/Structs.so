@@ -17,6 +17,9 @@ import {StationShootingAnimator} from "../animations/StationShootingAnimator";
 import {AntiAirDamageAnimator} from "../animations/AntiAirDamageAnimator";
 import {PostDamageSmokeAnimator} from "../animations/PostDamageSmokeAnimator";
 import {MechAttackAnimation} from "../animations/MechAttackAnimation";
+import {CarAttackAnimation} from "../animations/CarAttackAnimation";
+import {CityAttackAnimation} from "../animations/CityAttackAnimation";
+import {StationAttackAnimation} from "../animations/StationAttackAnimation";
 
 const instance = new Instance();
 await instance.init();
@@ -171,13 +174,39 @@ const mechComboTest = DummyUtil.getDummyStructure(
 const cityComboTest = DummyUtil.getDummyStructure(
   false,
   [AMBITS.LAND, AMBITS.SPACE],
-  [FEATURES.DEFENSIVE, FEATURES.ENGINEERING, FEATURES.POWER],
+  [FEATURES.ATTACK, FEATURES.DEFENSIVE, FEATURES.ENGINEERING, FEATURES.POWER],
   100
 );
 
 const mechAttackAnimation = new MechAttackAnimation('canvas-attack-combined', mechComboTest, cityComboTest);
-await mechAttackAnimation.init();
-mechAttackAnimation.play();
+// await mechAttackAnimation.init();
+// mechAttackAnimation.play();
+
+const carComboTest = DummyUtil.getDummyStructure(
+  true,
+  [AMBITS.LAND, AMBITS.SKY, AMBITS.SPACE],
+  [FEATURES.ATTACK, FEATURES.POWER],
+  10
+);
+
+const carAttackAnimation = new CarAttackAnimation('canvas-attack-combined', carComboTest, cityComboTest)
+// await carAttackAnimation.init();
+// carAttackAnimation.play();
+
+const cityAttackAnimation = new CityAttackAnimation('canvas-attack-combined', cityComboTest, cityComboTest);
+// await cityAttackAnimation.init();
+// cityAttackAnimation.play();
+
+const stationComboTest = DummyUtil.getDummyStructure(
+  false,
+  [AMBITS.LAND, AMBITS.SKY, AMBITS.SPACE, AMBITS.WATER],
+  [FEATURES.ATTACK, FEATURES.DEFENSIVE, FEATURES.ENGINEERING, FEATURES.POWER],
+  10
+);
+
+const stationAttackAnimation = new StationAttackAnimation('canvas-attack-combined', stationComboTest, cityComboTest);
+await stationAttackAnimation.init();
+stationAttackAnimation.play();
 
 const footer = new Footer();
 footer.init('footer-wrapper');

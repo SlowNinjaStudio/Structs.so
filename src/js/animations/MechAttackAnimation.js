@@ -22,32 +22,32 @@ export class MechAttackAnimation extends AttackAnimationInterface {
   }
 
   async init() {
-    const animationBackgroundComboTest1 = await this.backgroundAnimator.animate(this.attackingStructure);
-    const animatedMechShootingComboTest = await this.mechShootingAnimator.animate(this.attackingStructure);
+    const background1 = await this.backgroundAnimator.animate(this.attackingStructure);
+    const mechShooting = await this.mechShootingAnimator.animate(this.attackingStructure);
     const animationEngineAttack = new AnimationEngine(
       this.canvasId,
       { flipHorizontally: true, animationLabel: 'ATTACK' },
     );
-    animationEngineAttack.registerAnimatedObjects(animationBackgroundComboTest1);
-    animationEngineAttack.registerAnimatedObjects(animatedMechShootingComboTest);
+    animationEngineAttack.registerAnimatedObjects(background1);
+    animationEngineAttack.registerAnimatedObjects(mechShooting);
 
-    const animationBackgroundComboTest2 = await this.backgroundAnimator.animate(this.defendingStructure);
-    const shellDamageComboTest = await this.shellDamageAnimator.animate(this.defendingStructure);
+    const background2 = await this.backgroundAnimator.animate(this.defendingStructure);
+    const shellDamage = await this.shellDamageAnimator.animate(this.defendingStructure);
     const animationEngineDamage = new AnimationEngine(
       this.canvasId,
       { animationLabel: 'ATTACK_DAMAGE' }
     );
-    animationEngineDamage.registerAnimatedObjects(animationBackgroundComboTest2);
-    animationEngineDamage.registerAnimatedObjects(shellDamageComboTest);
+    animationEngineDamage.registerAnimatedObjects(background2);
+    animationEngineDamage.registerAnimatedObjects(shellDamage);
     document.addEventListener(AnimationEngine.eventName(ANIMATION_EVENTS.END, 'ATTACK'), function () {
       animationEngineDamage.play(6);
     })
 
-    const animationBackgroundComboTest3 = await this.backgroundAnimator.animate(this.defendingStructure);
-    const postDamageSmokeComboTest = await this.postDamageSmokeAnimator.animate(this.defendingStructure);
+    const background3 = await this.backgroundAnimator.animate(this.defendingStructure);
+    const postDamageSmoke = await this.postDamageSmokeAnimator.animate(this.defendingStructure);
     const animationEnginePostDamage = new AnimationEngine(this.canvasId);
-    animationEnginePostDamage.registerAnimatedObjects(animationBackgroundComboTest3);
-    animationEnginePostDamage.registerAnimatedObjects(postDamageSmokeComboTest);
+    animationEnginePostDamage.registerAnimatedObjects(background3);
+    animationEnginePostDamage.registerAnimatedObjects(postDamageSmoke);
     document.addEventListener(AnimationEngine.eventName(ANIMATION_EVENTS.END, 'ATTACK_DAMAGE'), function () {
       animationEnginePostDamage.play();
     })
