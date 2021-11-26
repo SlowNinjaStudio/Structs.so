@@ -20,6 +20,7 @@ import {MechAttackAnimation} from "../animations/MechAttackAnimation";
 import {CarAttackAnimation} from "../animations/CarAttackAnimation";
 import {CityAttackAnimation} from "../animations/CityAttackAnimation";
 import {StationAttackAnimation} from "../animations/StationAttackAnimation";
+import {AttackAnimationFactory} from "../animations/AttackAnimationFactory";
 
 const instance = new Instance();
 await instance.init();
@@ -178,7 +179,7 @@ const cityComboTest = DummyUtil.getDummyStructure(
   100
 );
 
-const mechAttackAnimation = new MechAttackAnimation('canvas-attack-combined', mechComboTest, cityComboTest);
+// const mechAttackAnimation = new MechAttackAnimation('canvas-attack-combined', mechComboTest, cityComboTest);
 // await mechAttackAnimation.init();
 // mechAttackAnimation.play();
 
@@ -189,11 +190,11 @@ const carComboTest = DummyUtil.getDummyStructure(
   10
 );
 
-const carAttackAnimation = new CarAttackAnimation('canvas-attack-combined', carComboTest, cityComboTest)
+// const carAttackAnimation = new CarAttackAnimation('canvas-attack-combined', carComboTest, cityComboTest)
 // await carAttackAnimation.init();
 // carAttackAnimation.play();
 
-const cityAttackAnimation = new CityAttackAnimation('canvas-attack-combined', cityComboTest, cityComboTest);
+// const cityAttackAnimation = new CityAttackAnimation('canvas-attack-combined', cityComboTest, cityComboTest);
 // await cityAttackAnimation.init();
 // cityAttackAnimation.play();
 
@@ -204,9 +205,14 @@ const stationComboTest = DummyUtil.getDummyStructure(
   10
 );
 
-const stationAttackAnimation = new StationAttackAnimation('canvas-attack-combined', stationComboTest, cityComboTest);
-await stationAttackAnimation.init();
-stationAttackAnimation.play();
+// const stationAttackAnimation = new StationAttackAnimation('canvas-attack-combined', stationComboTest, cityComboTest);
+// await stationAttackAnimation.init();
+// stationAttackAnimation.play();
+
+const attackAnimationFactory = new AttackAnimationFactory();
+const attackAnimation = attackAnimationFactory.make('canvas-attack-combined', stationComboTest, cityComboTest);
+await attackAnimation.init();
+attackAnimation.play();
 
 const footer = new Footer();
 footer.init('footer-wrapper');
