@@ -26,7 +26,7 @@ export class StationAttackAnimation extends AttackAnimationInterface {
     const stationShooting = await this.stationShootingAnimator.animate(this.attackingStructure);
     const animationEngineAttack = new AnimationEngine(
       this.canvasId,
-      { flipHorizontally: true, animationLabel: 'ATTACK' },
+      { flipHorizontally: true, animationLabel: `ATTACK_${this.defendingStructure.getId()}` },
     );
     animationEngineAttack.registerAnimatedObjects(background1);
     animationEngineAttack.registerAnimatedObjects(stationShooting);
@@ -35,22 +35,28 @@ export class StationAttackAnimation extends AttackAnimationInterface {
     const antiAirDamage = await this.antiAirDamageAnimator.animate(this.defendingStructure);
     const animationEngineDamage = new AnimationEngine(
       this.canvasId,
-      { animationLabel: 'ATTACK_DAMAGE' }
+      { animationLabel: `ATTACK_DAMAGE_${this.defendingStructure.getId()}` }
     );
     animationEngineDamage.registerAnimatedObjects(background2);
     animationEngineDamage.registerAnimatedObjects(antiAirDamage);
-    document.addEventListener(AnimationEngine.eventName(ANIMATION_EVENTS.END, 'ATTACK'), function () {
-      animationEngineDamage.play(1);
-    })
+    document.addEventListener(
+      AnimationEngine.eventName(ANIMATION_EVENTS.END, `ATTACK_${this.defendingStructure.getId()}`),
+      function () {
+        animationEngineDamage.play(1);
+      }
+    );
 
     const background3 = await this.backgroundAnimator.animate(this.defendingStructure);
     const postDamageSmoke = await this.postDamageSmokeAnimator.animate(this.defendingStructure);
     const animationEnginePostDamage = new AnimationEngine(this.canvasId);
     animationEnginePostDamage.registerAnimatedObjects(background3);
     animationEnginePostDamage.registerAnimatedObjects(postDamageSmoke);
-    document.addEventListener(AnimationEngine.eventName(ANIMATION_EVENTS.END, 'ATTACK_DAMAGE'), function () {
-      animationEnginePostDamage.play();
-    })
+    document.addEventListener(
+      AnimationEngine.eventName(ANIMATION_EVENTS.END, `ATTACK_DAMAGE_${this.defendingStructure.getId()}`),
+      function () {
+        animationEnginePostDamage.play(10);
+      }
+    );
 
     this.playFunction = function() {
       animationEngineAttack.play(1);

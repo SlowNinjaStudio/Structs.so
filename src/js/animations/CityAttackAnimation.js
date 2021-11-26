@@ -26,7 +26,7 @@ export class CityAttackAnimation extends AttackAnimationInterface {
     const cityShooting = await this.cityShootingAnimator.animate(this.attackingStructure);
     const animationEngineAttack = new AnimationEngine(
       this.canvasId,
-      { flipHorizontally: true, animationLabel: 'ATTACK' },
+      { flipHorizontally: true, animationLabel: `ATTACK_${this.defendingStructure.getId()}` },
     );
     animationEngineAttack.registerAnimatedObjects(background1);
     animationEngineAttack.registerAnimatedObjects(cityShooting);
@@ -35,11 +35,12 @@ export class CityAttackAnimation extends AttackAnimationInterface {
     const laserDamage = await this.laserDamageAnimator.animate(this.defendingStructure);
     const animationEngineDamage = new AnimationEngine(
       this.canvasId,
-      { animationLabel: 'ATTACK_DAMAGE' }
+      { animationLabel: `ATTACK_DAMAGE_${this.defendingStructure.getId()}` }
     );
     animationEngineDamage.registerAnimatedObjects(background2);
     animationEngineDamage.registerAnimatedObjects(laserDamage);
-    document.addEventListener(AnimationEngine.eventName(ANIMATION_EVENTS.END, 'ATTACK'), function () {
+    document.addEventListener(
+      AnimationEngine.eventName(ANIMATION_EVENTS.END, `ATTACK_${this.defendingStructure.getId()}`), function () {
       animationEngineDamage.play(1);
     })
 
@@ -48,8 +49,8 @@ export class CityAttackAnimation extends AttackAnimationInterface {
     const animationEnginePostDamage = new AnimationEngine(this.canvasId);
     animationEnginePostDamage.registerAnimatedObjects(background3);
     animationEnginePostDamage.registerAnimatedObjects(postDamageSmoke);
-    document.addEventListener(AnimationEngine.eventName(ANIMATION_EVENTS.END, 'ATTACK_DAMAGE'), function () {
-      animationEnginePostDamage.play();
+    document.addEventListener(AnimationEngine.eventName(ANIMATION_EVENTS.END, `ATTACK_DAMAGE_${this.defendingStructure.getId()}`), function () {
+      animationEnginePostDamage.play(10);
     })
 
     this.playFunction = function() {
