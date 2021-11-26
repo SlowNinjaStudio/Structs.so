@@ -1,15 +1,12 @@
 /**
  * Web UI component for structures.
  */
-import {DroidUI} from "../DroidUI";
-import {DroidUISchematicCondensedCTANone} from "./DroidUISchematicCondensedCTANone";
-import {DroidUISchematicCondensed} from "./DroidUISchematicCondensed";
 import {DroidUIComputeStatus} from "./DroidUIComputeStatus";
 import {Computer} from "../../compute/Computer";
 import {DroidUIStructureHealthProgress} from "./DroidUIStructureHealthProgress";
-import {DroidUIStructureCondensedCTAAttack} from "./DroidUIStructureCondensedCTAAttack";
 import {DroidUIStructureCondensedCTANone} from "./DroidUIStructureCondensedCTANone";
 import {DroidUIStructureCondensed} from "./DroidUIStructureCondensed";
+import {AttackAnimationFactory} from "../../animations/AttackAnimationFactory";
 
 export class DroidUIStructureAttackStatusModal {
 
@@ -39,6 +36,11 @@ export class DroidUIStructureAttackStatusModal {
 
     this.backdrop = document.getElementById("backdrop");
 
+    this.attackAnimation = (new AttackAnimationFactory()).make(
+      'canvas-attack-animation',
+      program.performing_structure,
+      program.target_structure
+    );
   }
 
   render() {
@@ -50,6 +52,13 @@ export class DroidUIStructureAttackStatusModal {
                <h7 class="modal-title">🔪 Attacking Structure 🔪️</h7>
             </div>
             <div class="modal-body">
+              <div class="container-fluid">
+                <div class="row justify-content-center mb-4">
+                  <div class="col-auto">
+                    <canvas id="canvas-attack-animation" width="64" height="64" style="width:256px;"></canvas>
+                  </div>
+                </div>
+              </div>
               ${this.uiStructure.render()}
               <div id="health_status" class="row">${this.healthStatus.render()}</div>
               <div id="compute_status" class="row">${this.computeStatus.render()}</div>

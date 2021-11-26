@@ -1,17 +1,11 @@
 import {AnimatedImage} from "../vendor/animation/AnimatedImage";
 import {AnimatedEffect} from "../vendor/animation/AnimatedEffect";
 import {StructureArtSet} from "../art_rendering/StructureArtSet";
+import {AbstractStructureAnimator} from "./AbstractStructureAnimator";
 
-export class StationShootingAnimator {
-
-  staticStruct() {
-    return function() {
-      this.context.drawImage(this.img, this.x, this.y);
-
-      if (this.frameCount >= this.fpsAdjustFrameNumber(30)) {
-        this.resetFrameCount();
-      }
-    }
+export class StationShootingAnimator extends AbstractStructureAnimator {
+  constructor() {
+    super(180);
   }
 
   muzzleFlashScript() {
@@ -58,6 +52,8 @@ export class StationShootingAnimator {
       }
     }
 
+    const animationLengthInFrames = this.getAnimationLengthInFrames();
+
     return function() {
       if (this.frameCount < 100) {
         for(let i = 0; i < 6; i++) {
@@ -69,7 +65,7 @@ export class StationShootingAnimator {
         muzzleFlash(this.context, this.x, this.y, this.frameCount % 7);
       }
 
-      if (this.frameCount >= this.fpsAdjustFrameNumber(180)) {
+      if (this.frameCount >= this.fpsAdjustFrameNumber(animationLengthInFrames)) {
         this.resetFrameCount();
       }
 
@@ -86,7 +82,7 @@ export class StationShootingAnimator {
 
     const staticStruct = AnimatedImage.bulkAnimate(
       await artSet.getStructureLayerImages(),
-      this.staticStruct(artSet.getPalette()),
+      this.staticScript(),
       24,
       0
     );

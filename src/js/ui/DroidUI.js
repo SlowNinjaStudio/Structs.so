@@ -421,6 +421,9 @@ export class DroidUI {
 
     structureAttackStatusModal.initEventListeners();
     structureAttackStatusModal.showModal();
+    structureAttackStatusModal.attackAnimation.init().then(function() {
+      structureAttackStatusModal.attackAnimation.play();
+    });
   }
 
   /**

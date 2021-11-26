@@ -1,6 +1,8 @@
 /**
  * An animation engine to assist with canvas animation.
  */
+import {ANIMATION_EVENTS} from "../../constants";
+
 export class AnimationEngine {
 
   /**
@@ -18,10 +20,10 @@ export class AnimationEngine {
     this.animatedObjects = [];
     this.interval = null;
     this.loopCount = 0;
+    this.animationLabel = '';
 
-    if (this.options.hasOwnProperty('flipHorizontally') && this.options.flipHorizontally) {
-      this.context.translate(this.canvas.width, 0);
-      this.context.scale(-1, 1);
+    if (this.options.hasOwnProperty('animationLabel') && this.options.animationLabel) {
+      this.animationLabel = this.options.animationLabel;
     }
   }
 
@@ -53,6 +55,15 @@ export class AnimationEngine {
   }
 
   /**
+   * @param {string} animationEventType
+   * @param {string} name
+   * @return {string}
+   */
+  static eventName(animationEventType, name) {
+    return `${animationEventType}_${name.toUpperCase()}`;
+  }
+
+  /**
    * Draw all registered animated objects to the canvas.
    *
    * @params {number} maxLoops the max number of times to loop each animation
@@ -60,6 +71,14 @@ export class AnimationEngine {
   draw(maxLoops = -1) {
     if (maxLoops >= 0 && this.loopCount >= maxLoops) {
       this.pause();
+
+      if (this.options.hasOwnProperty('flipHorizontally') && this.options.flipHorizontally) {
+        this.context.restore();
+      }
+
+      if (this.animationLabel !== '') {
+        document.dispatchEvent(new Event(AnimationEngine.eventName(ANIMATION_EVENTS.END, this.animationLabel)));
+      }
       return void(0);
     }
 
@@ -69,7 +88,7 @@ export class AnimationEngine {
     for (let i = 0; i < this.animatedObjects.length; i++) {
       this.animatedObjects[i].increaseFrameCount(); // Increase the frame count so that objects know how many frames have passed.
       this.animatedObjects[i].draw();
-      this.loopCount = this.animatedObjects[i].loopCount;
+      this.loopCount = Math.max(this.loopCount, this.animatedObjects[i].loopCount);
     }
   }
 
@@ -77,8 +96,14 @@ export class AnimationEngine {
    * Play the animation by running each animated objects' draw script.
    *
    * @params {number} maxLoops the max number of times to loop each animation
+   * @return {number} the length of the animation in milliseconds or null if maxLoops is negative
    */
   play(maxLoops = -1) {
+    if (this.options.hasOwnProperty('flipHorizontally') && this.options.flipHorizontally) {
+      this.context.save();
+      this.context.translate(this.canvas.width, 0);
+      this.context.scale(-1, 1);
+    }
     this.interval = setInterval(this.draw.bind(this, maxLoops), this.refreshRate);
   }
 
@@ -88,5 +113,4 @@ export class AnimationEngine {
   pause() {
     clearInterval(this.interval);
   }
-
 }

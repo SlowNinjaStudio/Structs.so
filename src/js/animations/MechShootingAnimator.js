@@ -2,10 +2,16 @@ import {AnimatedImage} from "../vendor/animation/AnimatedImage";
 import {AnimatedEffect} from "../vendor/animation/AnimatedEffect";
 import {StructureArtSet} from "../art_rendering/StructureArtSet";
 import {FEATURES} from "../constants";
+import {AbstractStructureAnimator} from "./AbstractStructureAnimator";
 
-export class MechShootingAnimator {
+export class MechShootingAnimator extends AbstractStructureAnimator {
+
+  constructor() {
+    super(30);
+  }
 
   cannonFireScript() {
+    const animationLengthInFrames = this.animationLengthInFrames;
     return function() {
       this.context.drawImage(this.img, this.x, this.y);
       if (this.frameCount === this.fpsAdjustFrameNumber(4)) {
@@ -17,13 +23,14 @@ export class MechShootingAnimator {
       if (this.frameCount === this.fpsAdjustFrameNumber(10)) {
         this.x = 0;
       }
-      if (this.frameCount >= this.fpsAdjustFrameNumber(30)) {
+      if (this.frameCount >= this.fpsAdjustFrameNumber(animationLengthInFrames)) {
         this.resetFrameCount();
       }
     };
   }
 
   mechKickBackScript() {
+    const animationLengthInFrames = this.animationLengthInFrames;
     return function() {
       this.context.drawImage(this.img, this.x, this.y);
       if (this.frameCount === this.fpsAdjustFrameNumber(6)) {
@@ -32,13 +39,14 @@ export class MechShootingAnimator {
       if (this.frameCount === this.fpsAdjustFrameNumber(10)) {
         this.x = 0;
       }
-      if (this.frameCount >= this.fpsAdjustFrameNumber(30)) {
+      if (this.frameCount >= this.fpsAdjustFrameNumber(animationLengthInFrames)) {
         this.resetFrameCount();
       }
     }
   }
 
   bulletScript() {
+    const animationLengthInFrames = this.animationLengthInFrames;
     return function() {
       this.context.fillStyle = '#ffff00';
       this.context.shadowColor = '#aaaa00';
@@ -48,7 +56,7 @@ export class MechShootingAnimator {
         this.context.fillRect(this.x, this.y, 11, 2);
       } else if (this.frameCount < this.fpsAdjustFrameNumber(6)) {
         this.context.fillRect(this.x, this.y, 5, 2);
-      } else if (this.frameCount >= this.fpsAdjustFrameNumber(30)) {
+      } else if (this.frameCount >= this.fpsAdjustFrameNumber(animationLengthInFrames)) {
         this.resetFrameCount();
       }
 
@@ -57,6 +65,7 @@ export class MechShootingAnimator {
   }
 
   muzzleFlashScript() {
+    const animationLengthInFrames = this.animationLengthInFrames;
     return function() {
       this.context.strokeStyle = '#ffff00';
       this.context.shadowColor = '#aaaa00';
@@ -70,7 +79,7 @@ export class MechShootingAnimator {
         this.context.beginPath();
         this.context.ellipse(this.x, this.y, 1, 3, Math.PI, 0, 2 * Math.PI);
         this.context.stroke();
-      } else if (this.frameCount >= this.fpsAdjustFrameNumber(30)) {
+      } else if (this.frameCount >= this.fpsAdjustFrameNumber(animationLengthInFrames)) {
         this.resetFrameCount();
       }
 
@@ -79,6 +88,7 @@ export class MechShootingAnimator {
   }
 
   shellCasingScript() {
+    const animationLengthInFrames = this.animationLengthInFrames;
     return function() {
       const trajectory = (x) => (Math.pow(x, 2) / 10) + this.y;
       const x = this.x + this.frameCount;
@@ -87,7 +97,7 @@ export class MechShootingAnimator {
       this.context.fillStyle = '#ffff00';
       this.context.fillRect(x, y, 2, 1);
 
-      if (this.frameCount >= this.fpsAdjustFrameNumber(30)) {
+      if (this.frameCount >= this.fpsAdjustFrameNumber(animationLengthInFrames)) {
         this.resetFrameCount();
       }
     }
@@ -95,7 +105,7 @@ export class MechShootingAnimator {
 
   /**
    * @param {Structure} structure
-   * @return {*[]}
+   * @return {Promise<AnimatedEffect[]>}
    */
   async animate(structure) {
     const artSet = new StructureArtSet(structure);
