@@ -69,7 +69,7 @@ export class AnimationEngine {
     for (let i = 0; i < this.animatedObjects.length; i++) {
       this.animatedObjects[i].increaseFrameCount(); // Increase the frame count so that objects know how many frames have passed.
       this.animatedObjects[i].draw();
-      this.loopCount = this.animatedObjects[i].loopCount;
+      this.loopCount = Math.max(this.loopCount, this.animatedObjects[i].loopCount);
     }
   }
 

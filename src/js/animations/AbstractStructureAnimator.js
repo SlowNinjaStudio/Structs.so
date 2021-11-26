@@ -5,7 +5,7 @@ export class AbstractStructureAnimator {
   /**
    * @param {number} animationLengthInFrames
    */
-  constructor(animationLengthInFrames) {
+  constructor(animationLengthInFrames = 0) {
     this.animationLengthInFrames = animationLengthInFrames;
   }
 
@@ -14,6 +14,13 @@ export class AbstractStructureAnimator {
    */
   getAnimationLengthInFrames() {
     return this.animationLengthInFrames;
+  }
+
+  staticScript() {
+    return function () {
+      this.context.drawImage(this.img, this.x, this.y);
+      this.resetFrameCount(true);
+    }
   }
 
   /**

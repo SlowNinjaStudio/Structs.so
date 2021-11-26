@@ -68,10 +68,12 @@ export class AnimatedEffect {
 
   /**
    * Used for looping animations.
+   *
+   * @param {boolean} resetLoopCount
    */
-  resetFrameCount() {
+  resetFrameCount(resetLoopCount = false) {
     this.frameCount = 0;
-    if (this.loopCount >= 1000) {
+    if (resetLoopCount || this.loopCount >= 1000) {
       this.loopCount = 0;
     } else {
       this.loopCount++;
