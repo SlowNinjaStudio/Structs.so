@@ -17,12 +17,12 @@ export class PostDamageSmokeAnimator extends AbstractStructureAnimator {
     /** @type {SmokeExplosion[]} explosions */
     const explosions = [];
 
-    for (let i = 1; i <= 29; i++) {
+    for (let i = 1; i <= 25; i++) {
       explosions.push(new SmokeExplosion(
         MoreMath.getRandomInt(5, 55),
         MoreMath.getRandomInt(5, 55),
-        MoreMath.getRandomInt(3, 7),
-        i * 6,
+        MoreMath.getRandomInt(3, 6),
+        i * 7,
         16,
         20
       ));

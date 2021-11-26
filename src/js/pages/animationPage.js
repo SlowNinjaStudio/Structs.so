@@ -6,7 +6,7 @@ import {MechShootingAnimator} from "../animations/MechShootingAnimator";
 import {BackgroundAnimator} from "../animations/BackgroundAnimator";
 import {AnimationEngine} from "../vendor/animation/AnimationEngine";
 import {DummyUtil} from "../util/DummyUtil";
-import {AMBITS, FEATURES} from "../constants";
+import {AMBITS, ANIMATION_EVENTS, FEATURES} from "../constants";
 import {ShellDamageAnimator} from "../animations/ShellDamageAnimator";
 import {DroidUI} from "../ui/DroidUI";
 import {CarShootingAnimator} from "../animations/CarShootingAnimator";
@@ -103,14 +103,14 @@ const animatedMechShooting1 = await mechShootingAnimator.animate(mech1);
 const animationEngineAttack1 = new AnimationEngine('canvas-attack-mech', {flipHorizontally: true});
 animationEngineAttack1.registerAnimatedObjects(animationBackground1);
 animationEngineAttack1.registerAnimatedObjects(animatedMechShooting1);
-animationEngineAttack1.play();
+// animationEngineAttack1.play();
 
 const animationBackground2 = await backgroundAnimator.animate(mech2);
 const shellDamage = await shellDamageAnimator.animate(mech2);
 const animationEngineDefend1 = new AnimationEngine('canvas-defend-mech');
 animationEngineDefend1.registerAnimatedObjects(animationBackground2);
 animationEngineDefend1.registerAnimatedObjects(shellDamage);
-animationEngineDefend1.play();
+// animationEngineDefend1.play();
 
 const animationBackground3 = await backgroundAnimator.animate(car1);
 const animatedCarShooting = await carShootingAnimator.animate(car1);
@@ -160,6 +160,51 @@ const animationEnginePostDamage1 = new AnimationEngine('canvas-post-damage-smoke
 animationEnginePostDamage1.registerAnimatedObjects(animationBackground9);
 animationEnginePostDamage1.registerAnimatedObjects(postDamageSmoke);
 // animationEnginePostDamage1.play();
+
+const mechComboTest = DummyUtil.getDummyStructure(
+  true,
+  [AMBITS.LAND, AMBITS.SKY, AMBITS.SPACE],
+  [FEATURES.ATTACK, FEATURES.POWER],
+  100
+);
+const cityComboTest = DummyUtil.getDummyStructure(
+  false,
+  [AMBITS.LAND, AMBITS.SPACE],
+  [FEATURES.DEFENSIVE, FEATURES.ENGINEERING, FEATURES.POWER],
+  100
+);
+
+const animationBackgroundComboTest1 = await backgroundAnimator.animate(mechComboTest);
+const animatedMechShootingComboTest = await mechShootingAnimator.animate(mechComboTest);
+const animationEngineAttackComboTest = new AnimationEngine(
+  'canvas-attack-combined',
+  { flipHorizontally: true, animationLabel: 'ATTACK' },
+);
+animationEngineAttackComboTest.registerAnimatedObjects(animationBackgroundComboTest1);
+animationEngineAttackComboTest.registerAnimatedObjects(animatedMechShootingComboTest);
+
+const animationBackgroundComboTest2 = await backgroundAnimator.animate(cityComboTest);
+const shellDamageComboTest = await shellDamageAnimator.animate(cityComboTest);
+const animationEngineDamageComboTest = new AnimationEngine(
+  'canvas-attack-combined',
+  { animationLabel: 'ATTACK_DAMAGE' }
+);
+animationEngineDamageComboTest.registerAnimatedObjects(animationBackgroundComboTest2);
+animationEngineDamageComboTest.registerAnimatedObjects(shellDamageComboTest);
+document.addEventListener(AnimationEngine.eventName(ANIMATION_EVENTS.END, 'ATTACK'), function () {
+  animationEngineDamageComboTest.play(6);
+})
+
+const animationBackgroundComboTest3 = await backgroundAnimator.animate(cityComboTest);
+const postDamageSmokeComboTest = await postDamageSmokeAnimator.animate(cityComboTest);
+const animationEnginePostDamageComboTest = new AnimationEngine('canvas-attack-combined');
+animationEnginePostDamageComboTest.registerAnimatedObjects(animationBackgroundComboTest3);
+animationEnginePostDamageComboTest.registerAnimatedObjects(postDamageSmokeComboTest);
+document.addEventListener(AnimationEngine.eventName(ANIMATION_EVENTS.END, 'ATTACK_DAMAGE'), function () {
+  animationEnginePostDamageComboTest.play();
+})
+
+animationEngineAttackComboTest.play(6);
 
 const footer = new Footer();
 footer.init('footer-wrapper');

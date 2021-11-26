@@ -5,6 +5,9 @@ export const
     SPACE: 'SPACE',
     WATER: 'WATER',
   },
+  ANIMATION_EVENTS = {
+    END: 'ANIMATION_END'
+  },
   FEATURES = {
     ATTACK: 'ATTACK_SYSTEM',
     DEFENSIVE: 'DEFENSIVE_SYSTEM',
