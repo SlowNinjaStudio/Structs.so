@@ -13,6 +13,8 @@ export class DroidUIStructureCondensedCTADrain {
     return (new StructureDrain())
   }
 
+  getCTAType() { return 'drain'}
+
   render() {
     return `
       <div class="row gx-2 mt-2">

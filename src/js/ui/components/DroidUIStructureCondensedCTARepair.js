@@ -13,6 +13,8 @@ export class DroidUIStructureCondensedCTARepair {
     return (new StructureRepair())
   }
 
+  getCTAType() { return 'repair'}
+
   render() {
     return `
       <div class="row gx-2 mt-2">

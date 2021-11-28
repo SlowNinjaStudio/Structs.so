@@ -8,4 +8,6 @@ export class DroidUIStructureCondensedCTANone {
   initProgram() {
     return (new EmptyProgram())
   }
+
+  getCTAType() { return ''}
 }

@@ -13,6 +13,8 @@ export class DroidUIStructureCondensedCTABuild {
     return (new StructureBuild())
   }
 
+  getCTAType() { return 'build'}
+
   render() {
     return `
       <div class="row gx-2 mt-2">

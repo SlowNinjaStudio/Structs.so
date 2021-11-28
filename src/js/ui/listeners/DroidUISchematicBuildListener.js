@@ -36,7 +36,7 @@ export class DroidUISchematicBuildListener extends DroidUIListenerInterface {
     instance.lazyLoad();
 
     document.getElementById(this.component.getBuildButtonId()).addEventListener('click', function() {
-      droidUi.loadStructureSelectionListFromSchematic('offcanvas-body', 'offcanvas-title', this.schematic, instance.address);
+      droidUi.loadStructureSelectionListFromSchematic('offcanvas-body', 'offcanvas-title',  this.schematic);
     }.bind(this.component));
   }
 }
