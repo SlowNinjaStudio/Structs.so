@@ -25,6 +25,7 @@ import {DroidUISchematicCondensedBuildListener} from "./listeners/DroidUISchemat
 import {DroidUIEmptyListHelperStructureSelection} from "./components/DroidUIEmptyListHelperStructureSelection";
 import {DroidUIStructureCondensedBuildListener} from "./listeners/DroidUIStructureCondensedBuildListener";
 import {DroidUIStructureCondensedSubEventListener} from "./listeners/DroidUIStructureCondensedSubEventListener";
+import {Instance} from "../models/Instance";
 
 /**
  * Web App
@@ -305,23 +306,52 @@ export class DroidUI {
    * @param {string} callToActionType
    * @param {string} searchString
    */
-  loadStructureSelectionListFromStructure(targetElementId, targetElementTitleId, structure, callToActionType, searchString = '') {
+  loadStructureSelectionListFromPerforming(targetElementId, targetElementTitleId, structure, callToActionType, searchString = '') {
     const targetElementTitle = document.getElementById(`${targetElementTitleId}`);
     targetElementTitle.innerHTML = 'Select Structure';
 
-    this.droidApi.searchStructures(searchString)
+    const instance = new Instance()
+    instance.lazyLoad()
+
+    this.droidApi.searchStructuresByPerforming(callToActionType, structure.getId(), instance.address, searchString)
       .then(structures => {
-        this.handleLoadList(
-          structures,
-          targetElementId,
-          'StructureCondensedFactory',
-          [structure, callToActionType],
-          new DroidUIEmptyListHelperStructureSelection(searchString),
-          DroidUIStructureCondensedSubEventListener,
-          [callToActionType]
-        );
-      }
-    );
+          this.handleLoadList(
+            structures,
+            targetElementId,
+            'StructureCondensedFactory',
+            [structure, callToActionType],
+            new DroidUIEmptyListHelperStructureSelection(searchString),
+            DroidUIStructureCondensedSubEventListener,
+            [callToActionType]
+          );
+        }
+      );
+  }
+
+  /**
+   * @param {string} targetElementId
+   * @param {string} targetElementTitleId
+   * @param {Structure} structure
+   * @param {string} callToActionType
+   * @param {string} searchString
+   */
+  loadStructureSelectionListFromTargeting(targetElementId, targetElementTitleId, structure, callToActionType, searchString = '') {
+    const targetElementTitle = document.getElementById(`${targetElementTitleId}`);
+    targetElementTitle.innerHTML = 'Select Structure';
+
+    this.droidApi.searchStructuresByTargeting(callToActionType, structure.getId(), searchString)
+      .then(structures => {
+          this.handleLoadList(
+            structures,
+            targetElementId,
+            'StructureCondensedFactory',
+            [structure, callToActionType],
+            new DroidUIEmptyListHelperStructureSelection(searchString),
+            DroidUIStructureCondensedSubEventListener,
+            [callToActionType]
+          );
+        }
+      );
   }
 
   /**

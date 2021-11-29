@@ -43,5 +43,12 @@ export const
     CITY: 'CITY',
     MECH: 'MECH',
     STATION: 'STATION'
+  },
+  CTA_TYPES = {
+    NONE: '',
+    ATTACK: 'attack',
+    REPAIR: 'repair',
+    DRAIN: 'drain',
+    BUILD: 'build'
   }
 ;

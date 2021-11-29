@@ -1,4 +1,5 @@
 import {StructureAttack} from "../../compute/StructureAttack";
+import {CTA_TYPES} from "../../constants";
 
 export class DroidUIStructureCondensedCTAAttack {
 
@@ -12,6 +13,8 @@ export class DroidUIStructureCondensedCTAAttack {
   initProgram() {
     return (new StructureAttack())
   }
+
+  getCTAType() { return CTA_TYPES.ATTACK}
 
   render() {
     return `

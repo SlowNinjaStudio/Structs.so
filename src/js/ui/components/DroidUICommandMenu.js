@@ -163,7 +163,7 @@ export class DroidUICommandMenu {
           await instance.init();
 
           const searchString = document.getElementById('offcanvas-search-input').value;
-          droidUi.loadStructureSelectionListFromStructure(
+          droidUi.loadStructureSelectionListFromTargeting(
             'offcanvas-body',
             'offcanvas-title',
             this.structure,
@@ -179,7 +179,7 @@ export class DroidUICommandMenu {
         });
 
 
-        droidUi.loadStructureSelectionListFromStructure('offcanvas-body', 'offcanvas-title', this.structure, 'attack');
+        droidUi.loadStructureSelectionListFromTargeting('offcanvas-body', 'offcanvas-title', this.structure, 'attack');
 
       }.bind(this));
     }
@@ -230,7 +230,7 @@ export class DroidUICommandMenu {
         await instance.init();
 
         const searchString = document.getElementById('offcanvas-search-input').value;
-        droidUi.loadStructureSelectionListFromStructure(
+        droidUi.loadStructureSelectionListFromTargeting(
           'offcanvas-body',
           'offcanvas-title',
           this.structure,
@@ -246,7 +246,7 @@ export class DroidUICommandMenu {
       });
 
 
-      droidUi.loadStructureSelectionListFromStructure('offcanvas-body', 'offcanvas-title', this.structure, 'repair');
+      droidUi.loadStructureSelectionListFromTargeting('offcanvas-body', 'offcanvas-title', this.structure, 'repair');
 
     }.bind(this));
   }
@@ -260,7 +260,7 @@ export class DroidUICommandMenu {
       await instance.init();
 
       const searchString = document.getElementById('offcanvas-search-input').value;
-      droidUi.loadStructureSelectionListFromStructure(
+      droidUi.loadStructureSelectionListFromTargeting(
         'offcanvas-body',
         'offcanvas-title',
         this.structure,
@@ -297,7 +297,7 @@ export class DroidUICommandMenu {
         await instance.init();
 
         const searchString = document.getElementById('offcanvas-search-input').value;
-        droidUi.loadStructureSelectionListFromStructure(
+        droidUi.loadStructureSelectionListFromTargeting(
           'offcanvas-body',
           'offcanvas-title',
           this.structure,
@@ -313,7 +313,7 @@ export class DroidUICommandMenu {
       });
 
 
-      droidUi.loadStructureSelectionListFromStructure('offcanvas-body', 'offcanvas-title', this.structure, 'drain');
+      droidUi.loadStructureSelectionListFromTargeting('offcanvas-body', 'offcanvas-title', this.structure, 'drain');
 
     }.bind(this));
   }
