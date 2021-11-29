@@ -1,4 +1,5 @@
 import {StructureDrain} from "../../compute/StructureDrain";
+import {CTA_TYPES} from "../../constants";
 
 export class DroidUIStructureCondensedCTADrain {
 
@@ -13,7 +14,7 @@ export class DroidUIStructureCondensedCTADrain {
     return (new StructureDrain())
   }
 
-  getCTAType() { return 'drain'}
+  getCTAType() { return CTA_TYPES.DRAIN}
 
   render() {
     return `

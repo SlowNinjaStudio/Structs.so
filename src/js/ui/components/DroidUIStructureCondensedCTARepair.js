@@ -1,4 +1,5 @@
 import {StructureRepair} from "../../compute/StructureRepair";
+import {CTA_TYPES} from "../../constants";
 
 export class DroidUIStructureCondensedCTARepair {
 
@@ -13,7 +14,7 @@ export class DroidUIStructureCondensedCTARepair {
     return (new StructureRepair())
   }
 
-  getCTAType() { return 'repair'}
+  getCTAType() { return CTA_TYPES.REPAIR}
 
   render() {
     return `

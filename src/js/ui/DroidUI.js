@@ -305,34 +305,6 @@ export class DroidUI {
    * @param {Structure} structure
    * @param {string} callToActionType
    * @param {string} searchString
-   *
-   * Deprecated. Use loadStructureSelectionListFromPerforming or loadStructureSelectionListFromTargeting
-   */
-  loadStructureSelectionListFromStructure(targetElementId, targetElementTitleId, structure, callToActionType, searchString = '') {
-    const targetElementTitle = document.getElementById(`${targetElementTitleId}`);
-    targetElementTitle.innerHTML = 'Select Structure';
-
-    this.droidApi.searchStructures(searchString)
-      .then(structures => {
-        this.handleLoadList(
-          structures,
-          targetElementId,
-          'StructureCondensedFactory',
-          [structure, callToActionType],
-          new DroidUIEmptyListHelperStructureSelection(searchString),
-          DroidUIStructureCondensedSubEventListener,
-          [callToActionType]
-        );
-      }
-    );
-  }
-
-  /**
-   * @param {string} targetElementId
-   * @param {string} targetElementTitleId
-   * @param {Structure} structure
-   * @param {string} callToActionType
-   * @param {string} searchString
    */
   loadStructureSelectionListFromPerforming(targetElementId, targetElementTitleId, structure, callToActionType, searchString = '') {
     const targetElementTitle = document.getElementById(`${targetElementTitleId}`);
