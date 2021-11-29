@@ -21,7 +21,7 @@ export class DroidUICommandMenu {
               href="#offcanvas"
               data-bs-toggle="offcanvas"
               role="button"
-              class="nes-btn ${this.structure.hasFeatureAttack() ? 'is-warning' : 'is-disabled' } nes-btn-fluid"
+              class="nes-btn ${this.structure.hasFeatureAttack() ? 'is-error' : 'is-disabled' } nes-btn-fluid"
             >
               Attack
             </a>
@@ -43,7 +43,7 @@ export class DroidUICommandMenu {
             <a
               id="power-command"
               href="javascript:void(0)"
-              class="nes-btn ${ this.structure.hasFeaturePower() ? 'is-warning' : 'is-disabled' } nes-btn-fluid"
+              class="nes-btn ${ this.structure.hasFeaturePower() ? 'is-success' : 'is-disabled' } nes-btn-fluid"
             >
               Power
             </a>
@@ -102,7 +102,7 @@ export class DroidUICommandMenu {
             <a
               id="drain-structure-command"
               href="#offcanvas"
-              class="nes-btn is-warning nes-btn-fluid"
+              class="nes-btn is-success nes-btn-fluid"
               data-bs-toggle="offcanvas"
               role="button"
             >
