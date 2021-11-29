@@ -15,6 +15,8 @@ export class Instance {
         this.wallet;
         this.address = '';
 
+        this.wattUnderManagement = 0;
+
         this.mnemonic;
 
         this.fee = {
@@ -26,6 +28,23 @@ export class Instance {
           ],
           gas: "180000",
         };
+    }
+
+    /**
+     * Used when instantiating a non-signing Instance object
+     *
+     * @param {string} address
+     * @param {string} name
+     * @param {string} mood
+     * @param {numeric} wattUnderManagement
+     */
+    stub(address, name, mood, wattUnderManagement) {
+      this.address = address;
+      this.name = name;
+      this.mood = mood;
+      this.wattUnderManagement = wattUnderManagement;
+
+      return this;
     }
 
   /**

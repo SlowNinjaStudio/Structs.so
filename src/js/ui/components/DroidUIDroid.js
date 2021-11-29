@@ -1,6 +1,7 @@
 import {Instance} from "../../models/Instance";
 import {StringToFile} from "../../vendor/StringToFile";
 import {BIP39SeedPhraseValidator} from "../../vendor/BIP39/BIP39SeedPhraseValidator";
+import {DroidUI} from "../DroidUI";
 
 export class DroidUIDroid {
   /**
@@ -42,6 +43,24 @@ export class DroidUIDroid {
       }.bind(this));
 
       this.updater = setTimeout(updateTime, 120000);
+    }.bind(this), 10);
+
+    this.rankUpdater = setTimeout(async function updateRank() {
+      const instance = new Instance();
+      instance.lazyLoad();
+
+      const droidAPI = new DroidUI().droidApi;
+
+      const instances = await droidAPI.getInstancesByAWUM();
+
+      for(let x = 0; x < instances.length; x++) {
+        if (instances[x].address == instance.address) {
+          document.getElementById('droid_panel_rank').innerHTML = (x + 1);
+          break;
+        }
+      }
+
+      this.rankUpdater = setTimeout(updateRank, 120000);
     }.bind(this), 10);
 
   }
@@ -102,6 +121,18 @@ export class DroidUIDroid {
               <div class="col nes-container battery-container">
                 <div class="row">
                   <div id="droid_panel_battery" class="col battery-text-container"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row account-menu-section">
+          <div class="col nes-container with-title">
+            <h3 class="title">Rank</h3>
+            <div class="row justify-content-center">
+              <div class="col nes-container rank-container">
+                <div class="row">
+                  <div id="droid_panel_rank" class="col rank-text-container"></div>
                 </div>
               </div>
             </div>

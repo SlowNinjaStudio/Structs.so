@@ -404,6 +404,20 @@ textarea.custom-nes-text-area.is-invalid {
   text-align: center;
 }
 
+.rank-container {
+  background: url(/img/background/power-background.gif);
+  background-size: 512px 16px;
+  max-width: 320px;
+  padding: 4px 16px;
+}
+.rank-text-container {
+  background: #000000;
+  border: 4px solid #000000;
+  color: #ffffff;
+  font-size: 14px;
+  text-align: center;
+}
+
 /* Footer */
 #footer-wrapper {
   border-top: 4px solid #000000;
