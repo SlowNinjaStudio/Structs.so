@@ -7,6 +7,9 @@ import {DroidUIStructureHealthProgress} from "./DroidUIStructureHealthProgress";
 import {DroidUIStructureCondensedCTANone} from "./DroidUIStructureCondensedCTANone";
 import {DroidUIStructureCondensed} from "./DroidUIStructureCondensed";
 import {AttackAnimationFactory} from "../../animations/AttackAnimationFactory";
+import {DroidUIArtOverlay} from "./DroidUIArtOverlay";
+import {AnimationEngine} from "../../vendor/animation/AnimationEngine";
+import {ANIMATION_EVENTS} from "../../constants";
 
 export class DroidUIStructureAttackStatusModal {
 
@@ -41,6 +44,12 @@ export class DroidUIStructureAttackStatusModal {
       program.performing_structure,
       program.target_structure
     );
+
+    this.attackEndOverlay = new DroidUIArtOverlay(
+      `art-overlay-attack-${program.target_structure.id}`,
+      'Attack Complete',
+      `/structure.html?structure_id=${program.target_structure.id}`
+    );
   }
 
   render() {
@@ -54,8 +63,9 @@ export class DroidUIStructureAttackStatusModal {
             <div class="modal-body">
               <div class="container-fluid">
                 <div class="row justify-content-center mb-4">
-                  <div class="col-auto">
+                  <div class="col-auto animation-wrapper">
                     <canvas id="canvas-attack-animation" width="64" height="64" style="width:256px;"></canvas>
+                    ${this.attackEndOverlay.render()}
                   </div>
                 </div>
               </div>
@@ -104,10 +114,19 @@ export class DroidUIStructureAttackStatusModal {
   }
 
   initEventListeners() {
-    document.getElementById('attack-status-dialog-cancel-button').addEventListener('click', function() {
+    document.getElementById('attack-status-dialog-cancel-button').addEventListener('click', function () {
       this.destroyModal();
       (new Computer()).stop_process(this.process_id);
     }.bind(this));
-  }
 
+    const attackEndOverlayId = this.attackEndOverlay.id;
+    document.addEventListener(
+      AnimationEngine.eventName(ANIMATION_EVENTS.END,`ATTACK_POST_DAMAGE_${this.target_structure.id}`),
+      function () {
+        const overlay = document.getElementById(attackEndOverlayId);
+        overlay.style.display = 'block';
+        overlay.style.opacity = '0.8';
+      }
+    );
+  }
 }
