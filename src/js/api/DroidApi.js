@@ -1,7 +1,7 @@
 import {JsonAjaxer} from "../vendor/JsonAjaxer";
 import {StructureFactory} from "../models/StructureFactory";
 import {SchematicFactory} from "../models/SchematicFactory";
-import {Instance} from "../models/Instance";
+import {InstanceFactory} from "../models/InstanceFactory";
 
 /**
  * API Gateway for the Droid API
@@ -180,11 +180,13 @@ export class DroidApi {
    * @returns {Instance[]}
    */
   instanceResponseHandler(data) {
+    const instanceFactory = new InstanceFactory();
+
     let instances = [];
     const rawInstances = Array.isArray(data.watt_under_management) ? data.watt_under_management : [data.watt_under_management];
 
     for (let i = 0; i < rawInstances.length; i ++) {
-      instances[i] = (new Instance()).stub(rawInstances[i].creator, rawInstances[i].name, rawInstances[i].mood, BigInt(rawInstances[i].watt_under_management.amount));
+      instances[i] = instanceFactory.make(rawInstances[i])
     }
 
     instances.sort(function(a, b) {
