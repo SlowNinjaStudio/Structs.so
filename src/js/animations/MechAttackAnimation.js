@@ -1,12 +1,10 @@
-import {AttackAnimationInterface} from "./AttackAnimationInterface";
+import {AttackAnimation} from "./AttackAnimation";
 import {BackgroundAnimator} from "./BackgroundAnimator";
 import {MechShootingAnimator} from "./MechShootingAnimator";
 import {ShellDamageAnimator} from "./ShellDamageAnimator";
 import {PostDamageSmokeAnimator} from "./PostDamageSmokeAnimator";
-import {AnimationEngine} from "../vendor/animation/AnimationEngine";
-import {ANIMATION_EVENTS} from "../constants";
 
-export class MechAttackAnimation extends AttackAnimationInterface {
+export class MechAttackAnimation extends AttackAnimation {
 
   /**
    * @param {string} canvasId
@@ -14,56 +12,17 @@ export class MechAttackAnimation extends AttackAnimationInterface {
    * @param {Structure} defendingStructure
    */
   constructor(canvasId, attackingStructure, defendingStructure) {
-    super(canvasId, attackingStructure, defendingStructure);
-    this.backgroundAnimator = new BackgroundAnimator();
-    this.mechShootingAnimator = new MechShootingAnimator();
-    this.shellDamageAnimator = new ShellDamageAnimator();
-    this.postDamageSmokeAnimator = new PostDamageSmokeAnimator();
-  }
-
-  async init() {
-    const background1 = await this.backgroundAnimator.animate(this.attackingStructure);
-    const mechShooting = await this.mechShootingAnimator.animate(this.attackingStructure);
-    const animationEngineAttack = new AnimationEngine(
-      this.canvasId,
-      { flipHorizontally: true, animationLabel: `ATTACK_${this.defendingStructure.getId()}` },
+    super(
+      canvasId,
+      attackingStructure,
+      defendingStructure,
+      new BackgroundAnimator(),
+      new MechShootingAnimator(),
+      new ShellDamageAnimator(),
+      new PostDamageSmokeAnimator(),
+      6,
+      6,
+      3
     );
-    animationEngineAttack.registerAnimatedObjects(background1);
-    animationEngineAttack.registerAnimatedObjects(mechShooting);
-
-    const background2 = await this.backgroundAnimator.animate(this.defendingStructure);
-    const shellDamage = await this.shellDamageAnimator.animate(this.defendingStructure);
-    const animationEngineDamage = new AnimationEngine(
-      this.canvasId,
-      { animationLabel: `ATTACK_DAMAGE_${this.defendingStructure.getId()}` }
-    );
-    animationEngineDamage.registerAnimatedObjects(background2);
-    animationEngineDamage.registerAnimatedObjects(shellDamage);
-    document.addEventListener(
-      AnimationEngine.eventName(ANIMATION_EVENTS.END, `ATTACK_${this.defendingStructure.getId()}`),
-      function () {
-        animationEngineDamage.play(6);
-      }
-    );
-
-    const background3 = await this.backgroundAnimator.animate(this.defendingStructure);
-    const postDamageSmoke = await this.postDamageSmokeAnimator.animate(this.defendingStructure);
-    const animationEnginePostDamage = new AnimationEngine(this.canvasId);
-    animationEnginePostDamage.registerAnimatedObjects(background3);
-    animationEnginePostDamage.registerAnimatedObjects(postDamageSmoke);
-    document.addEventListener(
-      AnimationEngine.eventName(ANIMATION_EVENTS.END, `ATTACK_DAMAGE_${this.defendingStructure.getId()}`),
-      function () {
-        animationEnginePostDamage.play(10);
-      }
-    );
-
-    this.playFunction = function() {
-      animationEngineAttack.play(6);
-    }
-  }
-
-  play() {
-    this.playFunction();
   }
 }
