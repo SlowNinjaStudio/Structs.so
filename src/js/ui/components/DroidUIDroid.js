@@ -18,8 +18,11 @@ export class DroidUIDroid {
     const seedPhraseFileName = this.getSeedPhraseFileName();
 
     this.updater = setTimeout(async function updateTime() {
-      this.instance = new Instance();
-      await this.instance.init();
+
+      if (typeof this.instance === 'undefined' || !this.instance.active) {
+        this.instance = new Instance();
+        await this.instance.init();
+      }
       // document.getElementById('droid_panel_name').innerHTML = this.instance.name;
       // document.getElementById('droid_panel_mood').innerHTML = this.instance.mood;
       document.getElementById('droid_panel_battery').innerHTML = ((await this.instance.queryBalance()).amount) + ' watt';
@@ -46,6 +49,7 @@ export class DroidUIDroid {
     }.bind(this), 10);
 
     this.rankUpdater = setTimeout(async function updateRank() {
+
       const instance = new Instance();
       instance.lazyLoad();
 

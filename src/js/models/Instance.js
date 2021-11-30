@@ -9,25 +9,28 @@ import {assertIsBroadcastTxSuccess} from "@cosmjs/stargate";
  */
 export class Instance {
     constructor() {
-        this.name = '';
-        this.mood = '';
+      this.active = false;
+      this.server;
 
-        this.wallet;
-        this.address = '';
+      this.name = '';
+      this.mood = '';
 
-        this.wattUnderManagement = 0;
+      this.wallet;
+      this.address = '';
 
-        this.mnemonic;
+      this.wattUnderManagement = 0;
 
-        this.fee = {
-          amount: [
-            {
-              denom: "watt",
-              amount: "1",
-            },
-          ],
-          gas: "180000",
-        };
+      this.mnemonic;
+
+      this.fee = {
+        amount: [
+          {
+            denom: "watt",
+            amount: "1",
+          },
+        ],
+        gas: "180000",
+      };
     }
 
     /**
@@ -68,6 +71,11 @@ export class Instance {
         this.mood = identity.mood;
         this.mnemonic = identity.mnemonic;
         this.address = identity.address;
+
+        this.server = new Server();
+        await this.server.init(await this.getWallet());
+
+        this.active = true;
 
     }
 
@@ -135,8 +143,6 @@ export class Instance {
    * @param {string} newName
    */
     async setName(newName) {
-        let server = new Server();
-        await server.init(await this.getWallet());
 
         const msgRename = {
             typeUrl: "/di.MsgUpdateInstanceName",
@@ -146,7 +152,7 @@ export class Instance {
             }
         };
 
-        let result = await server.client.signAndBroadcast(this.address, [msgRename], this.fee);
+        let result = await this.server.client.signAndBroadcast(this.address, [msgRename], this.fee);
         assertIsBroadcastTxSuccess(result);
 
         this.name = newName;
@@ -157,8 +163,6 @@ export class Instance {
    * @param {string} newMood
    */
     async setMood(newMood) {
-        let server = new Server();
-        await server.init(await this.getWallet());
 
         const msgRemood = {
             typeUrl: "/di.MsgUpdateInstanceMood",
@@ -168,7 +172,7 @@ export class Instance {
             }
         };
 
-        let result = await server.client.signAndBroadcast(this.address, [msgRemood], this.fee);
+        let result = await this.server.client.signAndBroadcast(this.address, [msgRemood], this.fee);
         assertIsBroadcastTxSuccess(result);
 
         this.mood = newMood;
@@ -208,8 +212,7 @@ export class Instance {
    */
     async performPatent(computeResult, personalization) {
        console.log("Patenting")
-        let server = new Server();
-        await server.init(await this.getWallet());
+
 
         const msgCreateSchematic = {
             typeUrl: "/di.MsgCreateSchematic",
@@ -224,7 +227,7 @@ export class Instance {
         };
 
 
-        let result = await server.client.signAndBroadcast(this.address, [msgCreateSchematic], this.fee);
+        let result = await this.server.client.signAndBroadcast(this.address, [msgCreateSchematic], this.fee);
         console.log(result)
         //assertIsBroadcastTxSuccess(result);
 
@@ -237,8 +240,6 @@ export class Instance {
    * @param {Object} personalization
    */
     async performBuild(computeResult, personalization) {
-        let server = new Server();
-        await server.init(await this.getWallet());
 
         console.log(computeResult)
 
@@ -258,7 +259,7 @@ export class Instance {
 
         console.log(msgCreateStructure)
 
-        let result = await server.client.signAndBroadcast(this.address, [msgCreateStructure], this.fee);
+        let result = await this.server.client.signAndBroadcast(this.address, [msgCreateStructure], this.fee);
         console.log(result)
 
         //assertIsBroadcastTxSuccess(result);
@@ -270,8 +271,6 @@ export class Instance {
    * @param {Object} computeResult
    */
   async performAttack(computeResult) {
-    let server = new Server();
-    await server.init(await this.getWallet());
 
     console.log(computeResult)
 
@@ -288,7 +287,7 @@ export class Instance {
 
     console.log(msgAttackStructure)
 
-    let result = await server.client.signAndBroadcast(this.address, [msgAttackStructure], this.fee);
+    let result = await this.server.client.signAndBroadcast(this.address, [msgAttackStructure], this.fee);
     console.log(result)
 
     //assertIsBroadcastTxSuccess(result);
@@ -301,8 +300,6 @@ export class Instance {
    * @param {StructureRepair} program
    */
   async performRepair(program) {
-    let server = new Server();
-    await server.init(await this.getWallet());
 
     const msgRepairStructure = {
       typeUrl: "/di.MsgRepairStructure",
@@ -315,7 +312,7 @@ export class Instance {
 
     console.log(msgRepairStructure)
 
-    let result = await server.client.signAndBroadcast(this.address, [msgRepairStructure], this.fee);
+    let result = await this.server.client.signAndBroadcast(this.address, [msgRepairStructure], this.fee);
     console.log(result)
 
     //assertIsBroadcastTxSuccess(result);
@@ -328,8 +325,6 @@ export class Instance {
    * @param {StructureDrain} program
    */
   async performDrain(program) {
-    let server = new Server();
-    await server.init(await this.getWallet());
 
     const msgDrainStructure = {
       typeUrl: "/di.MsgDrainStructure",
@@ -342,7 +337,7 @@ export class Instance {
 
     console.log(msgDrainStructure)
 
-    let result = await server.client.signAndBroadcast(this.address, [msgDrainStructure], this.fee);
+    let result = await this.server.client.signAndBroadcast(this.address, [msgDrainStructure], this.fee);
     console.log(result)
 
     //assertIsBroadcastTxSuccess(result);
@@ -356,10 +351,8 @@ export class Instance {
      *
      */
     async queryBalance() {
-      let server = new Server();
-      await server.init(await this.getWallet());
 
-      let balance_query_result = await server.client.getBalance(this.address, "watt")
+      let balance_query_result = await this.server.client.getBalance(this.address, "watt")
 
       if (typeof balance_query_result == 'undefined' || balance_query_result == null){
         balance_query_result = {amount: 0, denom:'watt'}
