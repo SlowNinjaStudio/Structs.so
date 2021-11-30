@@ -368,6 +368,9 @@ textarea.custom-nes-text-area.is-invalid {
   color: #dc3545 !important;
   font-family: sans-serif;
 }
+.animation-wrapper {
+  height: 256px;
+}
 
 /* Account Menu */
 #account-menu-profile-image .game-asset-wrapper {
@@ -615,6 +618,37 @@ img.structure-card-icon {
 .droid-ui-generic-modal.modal .modal-body {
   font-family: sans-serif;
 }
+
+/**
+ * Art Overlay
+ */
+ .art-overlay {
+   display: none;
+   background-color: black;
+   color: white;
+   height: 256px;
+   left: 0;
+   opacity: 0;
+   position: relative;
+   width: 256px;
+   text-align: center;
+   top: -256px;
+   transition: opacity 1s ease-in;
+ }
+.art-overlay-vertical-align-helper {
+  display: inline-block;
+  height: 100%;
+  width: 0;
+  vertical-align: middle;
+}
+.art-overlay-body {
+  display: inline-block;
+  vertical-align: middle;
+}
+.art-overlay a, .art-overlay a:link, .art-overlay a:visited {
+  color: #FFFFFF;
+}
+
 
 /**
  * Responsive Styling Page Overrides
