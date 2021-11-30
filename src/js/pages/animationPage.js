@@ -210,7 +210,7 @@ const stationComboTest = DummyUtil.getDummyStructure(
 // stationAttackAnimation.play();
 
 const attackAnimationFactory = new AttackAnimationFactory();
-const attackAnimation = attackAnimationFactory.make('canvas-attack-combined', stationComboTest, cityComboTest);
+const attackAnimation = attackAnimationFactory.make('canvas-attack-combined', mechComboTest, cityComboTest);
 await attackAnimation.init();
 attackAnimation.play();
 

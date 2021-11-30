@@ -14,7 +14,7 @@ export class AttackAnimationFactory {
    * @param {string} canvasId
    * @param {Structure} attackingStructure
    * @param {Structure} defendingStructure
-   * @return {AttackAnimationInterface}
+   * @return {AttackAnimation}
    */
   make(canvasId, attackingStructure, defendingStructure) {
     const type = this.structureClassifier.getType(attackingStructure);
