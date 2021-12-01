@@ -20,7 +20,7 @@ export class DroidUIStructureHealthProgress {
           <section class="nes-container with-title">
           <p class="title">Target Health</p>
             <div class="nes-field is-inline">
-              <label for="health_status_progress_bar_cpu">Est.(<span id="health_status_progress_cpu_value">0</span>%)</label>
+              <label for="health_status_progress_bar_cpu"><span id="health_status_progress_cpu_value">0</span>%</label>
               <progress id="health_status_progress_bar_cpu" class="nes-progress is-primary is-pattern" value="0" max="100"></progress>
             </div>
           </section>

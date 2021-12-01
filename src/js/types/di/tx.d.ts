@@ -114,6 +114,23 @@ export interface MsgDeleteSchematic {
 }
 export interface MsgDeleteSchematicResponse {
 }
+export interface MsgTransferSchematic {
+    creator: string;
+    schematic: string;
+    newOwner: string;
+}
+export interface MsgTransferSchematicResponse {
+    /** SUCCESS, POWER_FAILURE, */
+    actionResult: MsgTransferSchematicResponse_Result;
+}
+export declare enum MsgTransferSchematicResponse_Result {
+    SUCCESS = 0,
+    FAILURE = 1,
+    PERMISSION_FAILURE = 2,
+    UNRECOGNIZED = -1
+}
+export declare function msgTransferSchematicResponse_ResultFromJSON(object: any): MsgTransferSchematicResponse_Result;
+export declare function msgTransferSchematicResponse_ResultToJSON(object: MsgTransferSchematicResponse_Result): string;
 export interface MsgAttackStructure {
     creator: string;
     performingStructure: number;
@@ -205,6 +222,59 @@ export declare enum MsgConnectStructureResponse_Result {
 }
 export declare function msgConnectStructureResponse_ResultFromJSON(object: any): MsgConnectStructureResponse_Result;
 export declare function msgConnectStructureResponse_ResultToJSON(object: MsgConnectStructureResponse_Result): string;
+export interface MsgChargeStructure {
+    creator: string;
+    targetStructure: number;
+    chargeAmount: number;
+}
+export interface MsgChargeStructureResponse {
+    /** SUCCESS, POWER_FAILURE, */
+    actionResult: MsgChargeStructureResponse_Result;
+    chargeAmount: number;
+}
+export declare enum MsgChargeStructureResponse_Result {
+    SUCCESS = 0,
+    FAILURE = 1,
+    POWER_FAILURE = 2,
+    UNRECOGNIZED = -1
+}
+export declare function msgChargeStructureResponse_ResultFromJSON(object: any): MsgChargeStructureResponse_Result;
+export declare function msgChargeStructureResponse_ResultToJSON(object: MsgChargeStructureResponse_Result): string;
+export interface MsgTransferStructure {
+    creator: string;
+    targetStructure: number;
+    newSupervisor: string;
+}
+export interface MsgTransferStructureResponse {
+    actionResult: MsgTransferStructureResponse_Result;
+}
+export declare enum MsgTransferStructureResponse_Result {
+    SUCCESS = 0,
+    FAILURE = 1,
+    PERMISSION_FAILURE = 2,
+    UNRECOGNIZED = -1
+}
+export declare function msgTransferStructureResponse_ResultFromJSON(object: any): MsgTransferStructureResponse_Result;
+export declare function msgTransferStructureResponse_ResultToJSON(object: MsgTransferStructureResponse_Result): string;
+export interface MsgStructureChargeSlot {
+    creator: string;
+    performingStructure: number;
+    chargeSlot: number;
+    targetAddress: string;
+}
+export interface MsgStructureChargeSlotResponse {
+    /** SUCCESS, POWER_FAILURE, */
+    actionResult: MsgStructureChargeSlotResponse_Result;
+}
+export declare enum MsgStructureChargeSlotResponse_Result {
+    SUCCESS = 0,
+    FAILURE = 1,
+    PERMISSION_FAILURE = 2,
+    FEATURE_FAILURE = 3,
+    UNRECOGNIZED = -1
+}
+export declare function msgStructureChargeSlotResponse_ResultFromJSON(object: any): MsgStructureChargeSlotResponse_Result;
+export declare function msgStructureChargeSlotResponse_ResultToJSON(object: MsgStructureChargeSlotResponse_Result): string;
 export declare const MsgCreateReactor: {
     encode(message: MsgCreateReactor, writer?: Writer): Writer;
     decode(input: Reader | Uint8Array, length?: number): MsgCreateReactor;
@@ -359,6 +429,20 @@ export declare const MsgDeleteSchematicResponse: {
     toJSON(_: MsgDeleteSchematicResponse): unknown;
     fromPartial(_: DeepPartial<MsgDeleteSchematicResponse>): MsgDeleteSchematicResponse;
 };
+export declare const MsgTransferSchematic: {
+    encode(message: MsgTransferSchematic, writer?: Writer): Writer;
+    decode(input: Reader | Uint8Array, length?: number): MsgTransferSchematic;
+    fromJSON(object: any): MsgTransferSchematic;
+    toJSON(message: MsgTransferSchematic): unknown;
+    fromPartial(object: DeepPartial<MsgTransferSchematic>): MsgTransferSchematic;
+};
+export declare const MsgTransferSchematicResponse: {
+    encode(message: MsgTransferSchematicResponse, writer?: Writer): Writer;
+    decode(input: Reader | Uint8Array, length?: number): MsgTransferSchematicResponse;
+    fromJSON(object: any): MsgTransferSchematicResponse;
+    toJSON(message: MsgTransferSchematicResponse): unknown;
+    fromPartial(object: DeepPartial<MsgTransferSchematicResponse>): MsgTransferSchematicResponse;
+};
 export declare const MsgAttackStructure: {
     encode(message: MsgAttackStructure, writer?: Writer): Writer;
     decode(input: Reader | Uint8Array, length?: number): MsgAttackStructure;
@@ -415,6 +499,48 @@ export declare const MsgConnectStructureResponse: {
     toJSON(message: MsgConnectStructureResponse): unknown;
     fromPartial(object: DeepPartial<MsgConnectStructureResponse>): MsgConnectStructureResponse;
 };
+export declare const MsgChargeStructure: {
+    encode(message: MsgChargeStructure, writer?: Writer): Writer;
+    decode(input: Reader | Uint8Array, length?: number): MsgChargeStructure;
+    fromJSON(object: any): MsgChargeStructure;
+    toJSON(message: MsgChargeStructure): unknown;
+    fromPartial(object: DeepPartial<MsgChargeStructure>): MsgChargeStructure;
+};
+export declare const MsgChargeStructureResponse: {
+    encode(message: MsgChargeStructureResponse, writer?: Writer): Writer;
+    decode(input: Reader | Uint8Array, length?: number): MsgChargeStructureResponse;
+    fromJSON(object: any): MsgChargeStructureResponse;
+    toJSON(message: MsgChargeStructureResponse): unknown;
+    fromPartial(object: DeepPartial<MsgChargeStructureResponse>): MsgChargeStructureResponse;
+};
+export declare const MsgTransferStructure: {
+    encode(message: MsgTransferStructure, writer?: Writer): Writer;
+    decode(input: Reader | Uint8Array, length?: number): MsgTransferStructure;
+    fromJSON(object: any): MsgTransferStructure;
+    toJSON(message: MsgTransferStructure): unknown;
+    fromPartial(object: DeepPartial<MsgTransferStructure>): MsgTransferStructure;
+};
+export declare const MsgTransferStructureResponse: {
+    encode(message: MsgTransferStructureResponse, writer?: Writer): Writer;
+    decode(input: Reader | Uint8Array, length?: number): MsgTransferStructureResponse;
+    fromJSON(object: any): MsgTransferStructureResponse;
+    toJSON(message: MsgTransferStructureResponse): unknown;
+    fromPartial(object: DeepPartial<MsgTransferStructureResponse>): MsgTransferStructureResponse;
+};
+export declare const MsgStructureChargeSlot: {
+    encode(message: MsgStructureChargeSlot, writer?: Writer): Writer;
+    decode(input: Reader | Uint8Array, length?: number): MsgStructureChargeSlot;
+    fromJSON(object: any): MsgStructureChargeSlot;
+    toJSON(message: MsgStructureChargeSlot): unknown;
+    fromPartial(object: DeepPartial<MsgStructureChargeSlot>): MsgStructureChargeSlot;
+};
+export declare const MsgStructureChargeSlotResponse: {
+    encode(message: MsgStructureChargeSlotResponse, writer?: Writer): Writer;
+    decode(input: Reader | Uint8Array, length?: number): MsgStructureChargeSlotResponse;
+    fromJSON(object: any): MsgStructureChargeSlotResponse;
+    toJSON(message: MsgStructureChargeSlotResponse): unknown;
+    fromPartial(object: DeepPartial<MsgStructureChargeSlotResponse>): MsgStructureChargeSlotResponse;
+};
 /** Msg defines the Msg service. */
 export interface Msg {
     /** this line is used by starport scaffolding # proto/tx/rpc */
@@ -431,9 +557,13 @@ export interface Msg {
     DrainStructure(request: MsgDrainStructure): Promise<MsgDrainStructureResponse>;
     RepairStructure(request: MsgRepairStructure): Promise<MsgRepairStructureResponse>;
     ConnectStructure(request: MsgConnectStructure): Promise<MsgConnectStructureResponse>;
+    ChargeStructure(request: MsgChargeStructure): Promise<MsgChargeStructureResponse>;
+    TransferStructure(request: MsgTransferStructure): Promise<MsgTransferStructureResponse>;
+    StructureChargeSlot(request: MsgStructureChargeSlot): Promise<MsgStructureChargeSlotResponse>;
     CreateSchematic(request: MsgCreateSchematic): Promise<MsgCreateSchematicResponse>;
     UpdateSchematic(request: MsgUpdateSchematic): Promise<MsgUpdateSchematicResponse>;
     DeleteSchematic(request: MsgDeleteSchematic): Promise<MsgDeleteSchematicResponse>;
+    TransferSchematic(request: MsgTransferSchematic): Promise<MsgTransferSchematicResponse>;
 }
 export declare class MsgClientImpl implements Msg {
     private readonly rpc;
@@ -451,9 +581,13 @@ export declare class MsgClientImpl implements Msg {
     DrainStructure(request: MsgDrainStructure): Promise<MsgDrainStructureResponse>;
     RepairStructure(request: MsgRepairStructure): Promise<MsgRepairStructureResponse>;
     ConnectStructure(request: MsgConnectStructure): Promise<MsgConnectStructureResponse>;
+    ChargeStructure(request: MsgChargeStructure): Promise<MsgChargeStructureResponse>;
+    TransferStructure(request: MsgTransferStructure): Promise<MsgTransferStructureResponse>;
+    StructureChargeSlot(request: MsgStructureChargeSlot): Promise<MsgStructureChargeSlotResponse>;
     CreateSchematic(request: MsgCreateSchematic): Promise<MsgCreateSchematicResponse>;
     UpdateSchematic(request: MsgUpdateSchematic): Promise<MsgUpdateSchematicResponse>;
     DeleteSchematic(request: MsgDeleteSchematic): Promise<MsgDeleteSchematicResponse>;
+    TransferSchematic(request: MsgTransferSchematic): Promise<MsgTransferSchematicResponse>;
 }
 interface Rpc {
     request(service: string, method: string, data: Uint8Array): Promise<Uint8Array>;

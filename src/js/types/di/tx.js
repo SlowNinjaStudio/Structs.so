@@ -63,6 +63,42 @@ export function msgCreateStructureResponse_ResultToJSON(object) {
             return "UNKNOWN";
     }
 }
+export var MsgTransferSchematicResponse_Result;
+(function (MsgTransferSchematicResponse_Result) {
+    MsgTransferSchematicResponse_Result[MsgTransferSchematicResponse_Result["SUCCESS"] = 0] = "SUCCESS";
+    MsgTransferSchematicResponse_Result[MsgTransferSchematicResponse_Result["FAILURE"] = 1] = "FAILURE";
+    MsgTransferSchematicResponse_Result[MsgTransferSchematicResponse_Result["PERMISSION_FAILURE"] = 2] = "PERMISSION_FAILURE";
+    MsgTransferSchematicResponse_Result[MsgTransferSchematicResponse_Result["UNRECOGNIZED"] = -1] = "UNRECOGNIZED";
+})(MsgTransferSchematicResponse_Result || (MsgTransferSchematicResponse_Result = {}));
+export function msgTransferSchematicResponse_ResultFromJSON(object) {
+    switch (object) {
+        case 0:
+        case "SUCCESS":
+            return MsgTransferSchematicResponse_Result.SUCCESS;
+        case 1:
+        case "FAILURE":
+            return MsgTransferSchematicResponse_Result.FAILURE;
+        case 2:
+        case "PERMISSION_FAILURE":
+            return MsgTransferSchematicResponse_Result.PERMISSION_FAILURE;
+        case -1:
+        case "UNRECOGNIZED":
+        default:
+            return MsgTransferSchematicResponse_Result.UNRECOGNIZED;
+    }
+}
+export function msgTransferSchematicResponse_ResultToJSON(object) {
+    switch (object) {
+        case MsgTransferSchematicResponse_Result.SUCCESS:
+            return "SUCCESS";
+        case MsgTransferSchematicResponse_Result.FAILURE:
+            return "FAILURE";
+        case MsgTransferSchematicResponse_Result.PERMISSION_FAILURE:
+            return "PERMISSION_FAILURE";
+        default:
+            return "UNKNOWN";
+    }
+}
 export var MsgAttackStructureResponse_Result;
 (function (MsgAttackStructureResponse_Result) {
     MsgAttackStructureResponse_Result[MsgAttackStructureResponse_Result["SUCCESS"] = 0] = "SUCCESS";
@@ -299,6 +335,120 @@ export function msgConnectStructureResponse_ResultToJSON(object) {
             return "OFFLINE_FAILURE";
         case MsgConnectStructureResponse_Result.PERMISSION_FAILURE:
             return "PERMISSION_FAILURE";
+        default:
+            return "UNKNOWN";
+    }
+}
+export var MsgChargeStructureResponse_Result;
+(function (MsgChargeStructureResponse_Result) {
+    MsgChargeStructureResponse_Result[MsgChargeStructureResponse_Result["SUCCESS"] = 0] = "SUCCESS";
+    MsgChargeStructureResponse_Result[MsgChargeStructureResponse_Result["FAILURE"] = 1] = "FAILURE";
+    MsgChargeStructureResponse_Result[MsgChargeStructureResponse_Result["POWER_FAILURE"] = 2] = "POWER_FAILURE";
+    MsgChargeStructureResponse_Result[MsgChargeStructureResponse_Result["UNRECOGNIZED"] = -1] = "UNRECOGNIZED";
+})(MsgChargeStructureResponse_Result || (MsgChargeStructureResponse_Result = {}));
+export function msgChargeStructureResponse_ResultFromJSON(object) {
+    switch (object) {
+        case 0:
+        case "SUCCESS":
+            return MsgChargeStructureResponse_Result.SUCCESS;
+        case 1:
+        case "FAILURE":
+            return MsgChargeStructureResponse_Result.FAILURE;
+        case 2:
+        case "POWER_FAILURE":
+            return MsgChargeStructureResponse_Result.POWER_FAILURE;
+        case -1:
+        case "UNRECOGNIZED":
+        default:
+            return MsgChargeStructureResponse_Result.UNRECOGNIZED;
+    }
+}
+export function msgChargeStructureResponse_ResultToJSON(object) {
+    switch (object) {
+        case MsgChargeStructureResponse_Result.SUCCESS:
+            return "SUCCESS";
+        case MsgChargeStructureResponse_Result.FAILURE:
+            return "FAILURE";
+        case MsgChargeStructureResponse_Result.POWER_FAILURE:
+            return "POWER_FAILURE";
+        default:
+            return "UNKNOWN";
+    }
+}
+export var MsgTransferStructureResponse_Result;
+(function (MsgTransferStructureResponse_Result) {
+    MsgTransferStructureResponse_Result[MsgTransferStructureResponse_Result["SUCCESS"] = 0] = "SUCCESS";
+    MsgTransferStructureResponse_Result[MsgTransferStructureResponse_Result["FAILURE"] = 1] = "FAILURE";
+    MsgTransferStructureResponse_Result[MsgTransferStructureResponse_Result["PERMISSION_FAILURE"] = 2] = "PERMISSION_FAILURE";
+    MsgTransferStructureResponse_Result[MsgTransferStructureResponse_Result["UNRECOGNIZED"] = -1] = "UNRECOGNIZED";
+})(MsgTransferStructureResponse_Result || (MsgTransferStructureResponse_Result = {}));
+export function msgTransferStructureResponse_ResultFromJSON(object) {
+    switch (object) {
+        case 0:
+        case "SUCCESS":
+            return MsgTransferStructureResponse_Result.SUCCESS;
+        case 1:
+        case "FAILURE":
+            return MsgTransferStructureResponse_Result.FAILURE;
+        case 2:
+        case "PERMISSION_FAILURE":
+            return MsgTransferStructureResponse_Result.PERMISSION_FAILURE;
+        case -1:
+        case "UNRECOGNIZED":
+        default:
+            return MsgTransferStructureResponse_Result.UNRECOGNIZED;
+    }
+}
+export function msgTransferStructureResponse_ResultToJSON(object) {
+    switch (object) {
+        case MsgTransferStructureResponse_Result.SUCCESS:
+            return "SUCCESS";
+        case MsgTransferStructureResponse_Result.FAILURE:
+            return "FAILURE";
+        case MsgTransferStructureResponse_Result.PERMISSION_FAILURE:
+            return "PERMISSION_FAILURE";
+        default:
+            return "UNKNOWN";
+    }
+}
+export var MsgStructureChargeSlotResponse_Result;
+(function (MsgStructureChargeSlotResponse_Result) {
+    MsgStructureChargeSlotResponse_Result[MsgStructureChargeSlotResponse_Result["SUCCESS"] = 0] = "SUCCESS";
+    MsgStructureChargeSlotResponse_Result[MsgStructureChargeSlotResponse_Result["FAILURE"] = 1] = "FAILURE";
+    MsgStructureChargeSlotResponse_Result[MsgStructureChargeSlotResponse_Result["PERMISSION_FAILURE"] = 2] = "PERMISSION_FAILURE";
+    MsgStructureChargeSlotResponse_Result[MsgStructureChargeSlotResponse_Result["FEATURE_FAILURE"] = 3] = "FEATURE_FAILURE";
+    MsgStructureChargeSlotResponse_Result[MsgStructureChargeSlotResponse_Result["UNRECOGNIZED"] = -1] = "UNRECOGNIZED";
+})(MsgStructureChargeSlotResponse_Result || (MsgStructureChargeSlotResponse_Result = {}));
+export function msgStructureChargeSlotResponse_ResultFromJSON(object) {
+    switch (object) {
+        case 0:
+        case "SUCCESS":
+            return MsgStructureChargeSlotResponse_Result.SUCCESS;
+        case 1:
+        case "FAILURE":
+            return MsgStructureChargeSlotResponse_Result.FAILURE;
+        case 2:
+        case "PERMISSION_FAILURE":
+            return MsgStructureChargeSlotResponse_Result.PERMISSION_FAILURE;
+        case 3:
+        case "FEATURE_FAILURE":
+            return MsgStructureChargeSlotResponse_Result.FEATURE_FAILURE;
+        case -1:
+        case "UNRECOGNIZED":
+        default:
+            return MsgStructureChargeSlotResponse_Result.UNRECOGNIZED;
+    }
+}
+export function msgStructureChargeSlotResponse_ResultToJSON(object) {
+    switch (object) {
+        case MsgStructureChargeSlotResponse_Result.SUCCESS:
+            return "SUCCESS";
+        case MsgStructureChargeSlotResponse_Result.FAILURE:
+            return "FAILURE";
+        case MsgStructureChargeSlotResponse_Result.PERMISSION_FAILURE:
+            return "PERMISSION_FAILURE";
+        case MsgStructureChargeSlotResponse_Result.FEATURE_FAILURE:
+            return "FEATURE_FAILURE";
         default:
             return "UNKNOWN";
     }
@@ -2171,6 +2321,157 @@ export const MsgDeleteSchematicResponse = {
         return message;
     },
 };
+const baseMsgTransferSchematic = {
+    creator: "",
+    schematic: "",
+    newOwner: "",
+};
+export const MsgTransferSchematic = {
+    encode(message, writer = Writer.create()) {
+        if (message.creator !== "") {
+            writer.uint32(10).string(message.creator);
+        }
+        if (message.schematic !== "") {
+            writer.uint32(18).string(message.schematic);
+        }
+        if (message.newOwner !== "") {
+            writer.uint32(26).string(message.newOwner);
+        }
+        return writer;
+    },
+    decode(input, length) {
+        const reader = input instanceof Uint8Array ? new Reader(input) : input;
+        let end = length === undefined ? reader.len : reader.pos + length;
+        const message = { ...baseMsgTransferSchematic };
+        while (reader.pos < end) {
+            const tag = reader.uint32();
+            switch (tag >>> 3) {
+                case 1:
+                    message.creator = reader.string();
+                    break;
+                case 2:
+                    message.schematic = reader.string();
+                    break;
+                case 3:
+                    message.newOwner = reader.string();
+                    break;
+                default:
+                    reader.skipType(tag & 7);
+                    break;
+            }
+        }
+        return message;
+    },
+    fromJSON(object) {
+        const message = { ...baseMsgTransferSchematic };
+        if (object.creator !== undefined && object.creator !== null) {
+            message.creator = String(object.creator);
+        }
+        else {
+            message.creator = "";
+        }
+        if (object.schematic !== undefined && object.schematic !== null) {
+            message.schematic = String(object.schematic);
+        }
+        else {
+            message.schematic = "";
+        }
+        if (object.newOwner !== undefined && object.newOwner !== null) {
+            message.newOwner = String(object.newOwner);
+        }
+        else {
+            message.newOwner = "";
+        }
+        return message;
+    },
+    toJSON(message) {
+        const obj = {};
+        message.creator !== undefined && (obj.creator = message.creator);
+        message.schematic !== undefined && (obj.schematic = message.schematic);
+        message.newOwner !== undefined && (obj.newOwner = message.newOwner);
+        return obj;
+    },
+    fromPartial(object) {
+        const message = { ...baseMsgTransferSchematic };
+        if (object.creator !== undefined && object.creator !== null) {
+            message.creator = object.creator;
+        }
+        else {
+            message.creator = "";
+        }
+        if (object.schematic !== undefined && object.schematic !== null) {
+            message.schematic = object.schematic;
+        }
+        else {
+            message.schematic = "";
+        }
+        if (object.newOwner !== undefined && object.newOwner !== null) {
+            message.newOwner = object.newOwner;
+        }
+        else {
+            message.newOwner = "";
+        }
+        return message;
+    },
+};
+const baseMsgTransferSchematicResponse = { actionResult: 0 };
+export const MsgTransferSchematicResponse = {
+    encode(message, writer = Writer.create()) {
+        if (message.actionResult !== 0) {
+            writer.uint32(8).int32(message.actionResult);
+        }
+        return writer;
+    },
+    decode(input, length) {
+        const reader = input instanceof Uint8Array ? new Reader(input) : input;
+        let end = length === undefined ? reader.len : reader.pos + length;
+        const message = {
+            ...baseMsgTransferSchematicResponse,
+        };
+        while (reader.pos < end) {
+            const tag = reader.uint32();
+            switch (tag >>> 3) {
+                case 1:
+                    message.actionResult = reader.int32();
+                    break;
+                default:
+                    reader.skipType(tag & 7);
+                    break;
+            }
+        }
+        return message;
+    },
+    fromJSON(object) {
+        const message = {
+            ...baseMsgTransferSchematicResponse,
+        };
+        if (object.actionResult !== undefined && object.actionResult !== null) {
+            message.actionResult = msgTransferSchematicResponse_ResultFromJSON(object.actionResult);
+        }
+        else {
+            message.actionResult = 0;
+        }
+        return message;
+    },
+    toJSON(message) {
+        const obj = {};
+        message.actionResult !== undefined &&
+            (obj.actionResult = msgTransferSchematicResponse_ResultToJSON(message.actionResult));
+        return obj;
+    },
+    fromPartial(object) {
+        const message = {
+            ...baseMsgTransferSchematicResponse,
+        };
+        if (object.actionResult !== undefined && object.actionResult !== null) {
+            message.actionResult = object.actionResult;
+        }
+        else {
+            message.actionResult = 0;
+        }
+        return message;
+    },
+};
 const baseMsgAttackStructure = {
     creator: "",
     performingStructure: 0,
@@ -2932,6 +3233,514 @@ export const MsgConnectStructureResponse = {
         return message;
     },
 };
+const baseMsgChargeStructure = {
+    creator: "",
+    targetStructure: 0,
+    chargeAmount: 0,
+};
+export const MsgChargeStructure = {
+    encode(message, writer = Writer.create()) {
+        if (message.creator !== "") {
+            writer.uint32(10).string(message.creator);
+        }
+        if (message.targetStructure !== 0) {
+            writer.uint32(16).uint64(message.targetStructure);
+        }
+        if (message.chargeAmount !== 0) {
+            writer.uint32(24).uint64(message.chargeAmount);
+        }
+        return writer;
+    },
+    decode(input, length) {
+        const reader = input instanceof Uint8Array ? new Reader(input) : input;
+        let end = length === undefined ? reader.len : reader.pos + length;
+        const message = { ...baseMsgChargeStructure };
+        while (reader.pos < end) {
+            const tag = reader.uint32();
+            switch (tag >>> 3) {
+                case 1:
+                    message.creator = reader.string();
+                    break;
+                case 2:
+                    message.targetStructure = longToNumber(reader.uint64());
+                    break;
+                case 3:
+                    message.chargeAmount = longToNumber(reader.uint64());
+                    break;
+                default:
+                    reader.skipType(tag & 7);
+                    break;
+            }
+        }
+        return message;
+    },
+    fromJSON(object) {
+        const message = { ...baseMsgChargeStructure };
+        if (object.creator !== undefined && object.creator !== null) {
+            message.creator = String(object.creator);
+        }
+        else {
+            message.creator = "";
+        }
+        if (object.targetStructure !== undefined &&
+            object.targetStructure !== null) {
+            message.targetStructure = Number(object.targetStructure);
+        }
+        else {
+            message.targetStructure = 0;
+        }
+        if (object.chargeAmount !== undefined && object.chargeAmount !== null) {
+            message.chargeAmount = Number(object.chargeAmount);
+        }
+        else {
+            message.chargeAmount = 0;
+        }
+        return message;
+    },
+    toJSON(message) {
+        const obj = {};
+        message.creator !== undefined && (obj.creator = message.creator);
+        message.targetStructure !== undefined &&
+            (obj.targetStructure = message.targetStructure);
+        message.chargeAmount !== undefined &&
+            (obj.chargeAmount = message.chargeAmount);
+        return obj;
+    },
+    fromPartial(object) {
+        const message = { ...baseMsgChargeStructure };
+        if (object.creator !== undefined && object.creator !== null) {
+            message.creator = object.creator;
+        }
+        else {
+            message.creator = "";
+        }
+        if (object.targetStructure !== undefined &&
+            object.targetStructure !== null) {
+            message.targetStructure = object.targetStructure;
+        }
+        else {
+            message.targetStructure = 0;
+        }
+        if (object.chargeAmount !== undefined && object.chargeAmount !== null) {
+            message.chargeAmount = object.chargeAmount;
+        }
+        else {
+            message.chargeAmount = 0;
+        }
+        return message;
+    },
+};
+const baseMsgChargeStructureResponse = {
+    actionResult: 0,
+    chargeAmount: 0,
+};
+export const MsgChargeStructureResponse = {
+    encode(message, writer = Writer.create()) {
+        if (message.actionResult !== 0) {
+            writer.uint32(8).int32(message.actionResult);
+        }
+        if (message.chargeAmount !== 0) {
+            writer.uint32(16).uint64(message.chargeAmount);
+        }
+        return writer;
+    },
+    decode(input, length) {
+        const reader = input instanceof Uint8Array ? new Reader(input) : input;
+        let end = length === undefined ? reader.len : reader.pos + length;
+        const message = {
+            ...baseMsgChargeStructureResponse,
+        };
+        while (reader.pos < end) {
+            const tag = reader.uint32();
+            switch (tag >>> 3) {
+                case 1:
+                    message.actionResult = reader.int32();
+                    break;
+                case 2:
+                    message.chargeAmount = longToNumber(reader.uint64());
+                    break;
+                default:
+                    reader.skipType(tag & 7);
+                    break;
+            }
+        }
+        return message;
+    },
+    fromJSON(object) {
+        const message = {
+            ...baseMsgChargeStructureResponse,
+        };
+        if (object.actionResult !== undefined && object.actionResult !== null) {
+            message.actionResult = msgChargeStructureResponse_ResultFromJSON(object.actionResult);
+        }
+        else {
+            message.actionResult = 0;
+        }
+        if (object.chargeAmount !== undefined && object.chargeAmount !== null) {
+            message.chargeAmount = Number(object.chargeAmount);
+        }
+        else {
+            message.chargeAmount = 0;
+        }
+        return message;
+    },
+    toJSON(message) {
+        const obj = {};
+        message.actionResult !== undefined &&
+            (obj.actionResult = msgChargeStructureResponse_ResultToJSON(message.actionResult));
+        message.chargeAmount !== undefined &&
+            (obj.chargeAmount = message.chargeAmount);
+        return obj;
+    },
+    fromPartial(object) {
+        const message = {
+            ...baseMsgChargeStructureResponse,
+        };
+        if (object.actionResult !== undefined && object.actionResult !== null) {
+            message.actionResult = object.actionResult;
+        }
+        else {
+            message.actionResult = 0;
+        }
+        if (object.chargeAmount !== undefined && object.chargeAmount !== null) {
+            message.chargeAmount = object.chargeAmount;
+        }
+        else {
+            message.chargeAmount = 0;
+        }
+        return message;
+    },
+};
+const baseMsgTransferStructure = {
+    creator: "",
+    targetStructure: 0,
+    newSupervisor: "",
+};
+export const MsgTransferStructure = {
+    encode(message, writer = Writer.create()) {
+        if (message.creator !== "") {
+            writer.uint32(10).string(message.creator);
+        }
+        if (message.targetStructure !== 0) {
+            writer.uint32(16).uint64(message.targetStructure);
+        }
+        if (message.newSupervisor !== "") {
+            writer.uint32(26).string(message.newSupervisor);
+        }
+        return writer;
+    },
+    decode(input, length) {
+        const reader = input instanceof Uint8Array ? new Reader(input) : input;
+        let end = length === undefined ? reader.len : reader.pos + length;
+        const message = { ...baseMsgTransferStructure };
+        while (reader.pos < end) {
+            const tag = reader.uint32();
+            switch (tag >>> 3) {
+                case 1:
+                    message.creator = reader.string();
+                    break;
+                case 2:
+                    message.targetStructure = longToNumber(reader.uint64());
+                    break;
+                case 3:
+                    message.newSupervisor = reader.string();
+                    break;
+                default:
+                    reader.skipType(tag & 7);
+                    break;
+            }
+        }
+        return message;
+    },
+    fromJSON(object) {
+        const message = { ...baseMsgTransferStructure };
+        if (object.creator !== undefined && object.creator !== null) {
+            message.creator = String(object.creator);
+        }
+        else {
+            message.creator = "";
+        }
+        if (object.targetStructure !== undefined &&
+            object.targetStructure !== null) {
+            message.targetStructure = Number(object.targetStructure);
+        }
+        else {
+            message.targetStructure = 0;
+        }
+        if (object.newSupervisor !== undefined && object.newSupervisor !== null) {
+            message.newSupervisor = String(object.newSupervisor);
+        }
+        else {
+            message.newSupervisor = "";
+        }
+        return message;
+    },
+    toJSON(message) {
+        const obj = {};
+        message.creator !== undefined && (obj.creator = message.creator);
+        message.targetStructure !== undefined &&
+            (obj.targetStructure = message.targetStructure);
+        message.newSupervisor !== undefined &&
+            (obj.newSupervisor = message.newSupervisor);
+        return obj;
+    },
+    fromPartial(object) {
+        const message = { ...baseMsgTransferStructure };
+        if (object.creator !== undefined && object.creator !== null) {
+            message.creator = object.creator;
+        }
+        else {
+            message.creator = "";
+        }
+        if (object.targetStructure !== undefined &&
+            object.targetStructure !== null) {
+            message.targetStructure = object.targetStructure;
+        }
+        else {
+            message.targetStructure = 0;
+        }
+        if (object.newSupervisor !== undefined && object.newSupervisor !== null) {
+            message.newSupervisor = object.newSupervisor;
+        }
+        else {
+            message.newSupervisor = "";
+        }
+        return message;
+    },
+};
+const baseMsgTransferStructureResponse = { actionResult: 0 };
+export const MsgTransferStructureResponse = {
+    encode(message, writer = Writer.create()) {
+        if (message.actionResult !== 0) {
+            writer.uint32(8).int32(message.actionResult);
+        }
+        return writer;
+    },
+    decode(input, length) {
+        const reader = input instanceof Uint8Array ? new Reader(input) : input;
+        let end = length === undefined ? reader.len : reader.pos + length;
+        const message = {
+            ...baseMsgTransferStructureResponse,
+        };
+        while (reader.pos < end) {
+            const tag = reader.uint32();
+            switch (tag >>> 3) {
+                case 1:
+                    message.actionResult = reader.int32();
+                    break;
+                default:
+                    reader.skipType(tag & 7);
+                    break;
+            }
+        }
+        return message;
+    },
+    fromJSON(object) {
+        const message = {
+            ...baseMsgTransferStructureResponse,
+        };
+        if (object.actionResult !== undefined && object.actionResult !== null) {
+            message.actionResult = msgTransferStructureResponse_ResultFromJSON(object.actionResult);
+        }
+        else {
+            message.actionResult = 0;
+        }
+        return message;
+    },
+    toJSON(message) {
+        const obj = {};
+        message.actionResult !== undefined &&
+            (obj.actionResult = msgTransferStructureResponse_ResultToJSON(message.actionResult));
+        return obj;
+    },
+    fromPartial(object) {
+        const message = {
+            ...baseMsgTransferStructureResponse,
+        };
+        if (object.actionResult !== undefined && object.actionResult !== null) {
+            message.actionResult = object.actionResult;
+        }
+        else {
+            message.actionResult = 0;
+        }
+        return message;
+    },
+};
+const baseMsgStructureChargeSlot = {
+    creator: "",
+    performingStructure: 0,
+    chargeSlot: 0,
+    targetAddress: "",
+};
+export const MsgStructureChargeSlot = {
+    encode(message, writer = Writer.create()) {
+        if (message.creator !== "") {
+            writer.uint32(10).string(message.creator);
+        }
+        if (message.performingStructure !== 0) {
+            writer.uint32(16).uint64(message.performingStructure);
+        }
+        if (message.chargeSlot !== 0) {
+            writer.uint32(24).uint64(message.chargeSlot);
+        }
+        if (message.targetAddress !== "") {
+            writer.uint32(34).string(message.targetAddress);
+        }
+        return writer;
+    },
+    decode(input, length) {
+        const reader = input instanceof Uint8Array ? new Reader(input) : input;
+        let end = length === undefined ? reader.len : reader.pos + length;
+        const message = { ...baseMsgStructureChargeSlot };
+        while (reader.pos < end) {
+            const tag = reader.uint32();
+            switch (tag >>> 3) {
+                case 1:
+                    message.creator = reader.string();
+                    break;
+                case 2:
+                    message.performingStructure = longToNumber(reader.uint64());
+                    break;
+                case 3:
+                    message.chargeSlot = longToNumber(reader.uint64());
+                    break;
+                case 4:
+                    message.targetAddress = reader.string();
+                    break;
+                default:
+                    reader.skipType(tag & 7);
+                    break;
+            }
+        }
+        return message;
+    },
+    fromJSON(object) {
+        const message = { ...baseMsgStructureChargeSlot };
+        if (object.creator !== undefined && object.creator !== null) {
+            message.creator = String(object.creator);
+        }
+        else {
+            message.creator = "";
+        }
+        if (object.performingStructure !== undefined &&
+            object.performingStructure !== null) {
+            message.performingStructure = Number(object.performingStructure);
+        }
+        else {
+            message.performingStructure = 0;
+        }
+        if (object.chargeSlot !== undefined && object.chargeSlot !== null) {
+            message.chargeSlot = Number(object.chargeSlot);
+        }
+        else {
+            message.chargeSlot = 0;
+        }
+        if (object.targetAddress !== undefined && object.targetAddress !== null) {
+            message.targetAddress = String(object.targetAddress);
+        }
+        else {
+            message.targetAddress = "";
+        }
+        return message;
+    },
+    toJSON(message) {
+        const obj = {};
+        message.creator !== undefined && (obj.creator = message.creator);
+        message.performingStructure !== undefined &&
+            (obj.performingStructure = message.performingStructure);
+        message.chargeSlot !== undefined && (obj.chargeSlot = message.chargeSlot);
+        message.targetAddress !== undefined &&
+            (obj.targetAddress = message.targetAddress);
+        return obj;
+    },
+    fromPartial(object) {
+        const message = { ...baseMsgStructureChargeSlot };
+        if (object.creator !== undefined && object.creator !== null) {
+            message.creator = object.creator;
+        }
+        else {
+            message.creator = "";
+        }
+        if (object.performingStructure !== undefined &&
+            object.performingStructure !== null) {
+            message.performingStructure = object.performingStructure;
+        }
+        else {
+            message.performingStructure = 0;
+        }
+        if (object.chargeSlot !== undefined && object.chargeSlot !== null) {
+            message.chargeSlot = object.chargeSlot;
+        }
+        else {
+            message.chargeSlot = 0;
+        }
+        if (object.targetAddress !== undefined && object.targetAddress !== null) {
+            message.targetAddress = object.targetAddress;
+        }
+        else {
+            message.targetAddress = "";
+        }
+        return message;
+    },
+};
+const baseMsgStructureChargeSlotResponse = { actionResult: 0 };
+export const MsgStructureChargeSlotResponse = {
+    encode(message, writer = Writer.create()) {
+        if (message.actionResult !== 0) {
+            writer.uint32(8).int32(message.actionResult);
+        }
+        return writer;
+    },
+    decode(input, length) {
+        const reader = input instanceof Uint8Array ? new Reader(input) : input;
+        let end = length === undefined ? reader.len : reader.pos + length;
+        const message = {
+            ...baseMsgStructureChargeSlotResponse,
+        };
+        while (reader.pos < end) {
+            const tag = reader.uint32();
+            switch (tag >>> 3) {
+                case 1:
+                    message.actionResult = reader.int32();
+                    break;
+                default:
+                    reader.skipType(tag & 7);
+                    break;
+            }
+        }
+        return message;
+    },
+    fromJSON(object) {
+        const message = {
+            ...baseMsgStructureChargeSlotResponse,
+        };
+        if (object.actionResult !== undefined && object.actionResult !== null) {
+            message.actionResult = msgStructureChargeSlotResponse_ResultFromJSON(object.actionResult);
+        }
+        else {
+            message.actionResult = 0;
+        }
+        return message;
+    },
+    toJSON(message) {
+        const obj = {};
+        message.actionResult !== undefined &&
+            (obj.actionResult = msgStructureChargeSlotResponse_ResultToJSON(message.actionResult));
+        return obj;
+    },
+    fromPartial(object) {
+        const message = {
+            ...baseMsgStructureChargeSlotResponse,
+        };
+        if (object.actionResult !== undefined && object.actionResult !== null) {
+            message.actionResult = object.actionResult;
+        }
+        else {
+            message.actionResult = 0;
+        }
+        return message;
+    },
+};
 export class MsgClientImpl {
     constructor(rpc) {
         this.rpc = rpc;
@@ -3001,6 +3810,21 @@ export class MsgClientImpl {
         const promise = this.rpc.request("di.Msg", "ConnectStructure", data);
         return promise.then((data) => MsgConnectStructureResponse.decode(new Reader(data)));
     }
+    ChargeStructure(request) {
+        const data = MsgChargeStructure.encode(request).finish();
+        const promise = this.rpc.request("di.Msg", "ChargeStructure", data);
+        return promise.then((data) => MsgChargeStructureResponse.decode(new Reader(data)));
+    }
+    TransferStructure(request) {
+        const data = MsgTransferStructure.encode(request).finish();
+        const promise = this.rpc.request("di.Msg", "TransferStructure", data);
+        return promise.then((data) => MsgTransferStructureResponse.decode(new Reader(data)));
+    }
+    StructureChargeSlot(request) {
+        const data = MsgStructureChargeSlot.encode(request).finish();
+        const promise = this.rpc.request("di.Msg", "StructureChargeSlot", data);
+        return promise.then((data) => MsgStructureChargeSlotResponse.decode(new Reader(data)));
+    }
     CreateSchematic(request) {
         const data = MsgCreateSchematic.encode(request).finish();
         const promise = this.rpc.request("di.Msg", "CreateSchematic", data);
@@ -3015,6 +3839,11 @@ export class MsgClientImpl {
         const data = MsgDeleteSchematic.encode(request).finish();
         const promise = this.rpc.request("di.Msg", "DeleteSchematic", data);
         return promise.then((data) => MsgDeleteSchematicResponse.decode(new Reader(data)));
+    }
+    TransferSchematic(request) {
+        const data = MsgTransferSchematic.encode(request).finish();
+        const promise = this.rpc.request("di.Msg", "TransferSchematic", data);
+        return promise.then((data) => MsgTransferSchematicResponse.decode(new Reader(data)));
     }
 }
 var globalThis = (() => {

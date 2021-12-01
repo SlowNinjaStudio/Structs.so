@@ -1,7 +1,7 @@
 /* eslint-disable */
 import * as Long from "long";
 import { util, configure, Writer, Reader } from "protobufjs/minimal";
-import { DecProto, Coin } from "../cosmos/base/v1beta1/coin";
+import { DecProto, Coin } from "../../cosmos/base/v1beta1/coin";
 export const protobufPackage = "di";
 const baseContributor = { address: "" };
 export const Contributor = {

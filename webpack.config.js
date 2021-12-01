@@ -13,7 +13,9 @@ module.exports = {
   output: {
     filename: '[name].js',
     path: path.resolve(__dirname, 'js'),
+    sourceMapFilename: "[name].js.map",
   },
+  devtool: "source-map",
   experiments: {
     topLevelAwait: true,
   },

@@ -1,7 +1,7 @@
 /* eslint-disable */
 import * as Long from "long";
 import { util, configure, Writer, Reader } from "protobufjs/minimal";
-import { Coin } from "../cosmos/base/v1beta1/coin";
+import { Coin } from "../../cosmos/base/v1beta1/coin";
 export const protobufPackage = "di";
 export var Structure_Feature;
 (function (Structure_Feature) {
@@ -143,6 +143,7 @@ const baseStructure = {
     reactor: "",
     primaryColor: "",
     secondaryColor: "",
+    builtBy: 0,
 };
 export const Structure = {
     encode(message, writer = Writer.create()) {
@@ -268,6 +269,9 @@ export const Structure = {
         }
         if (message.secondaryColor !== "") {
             writer.uint32(306).string(message.secondaryColor);
+        }
+        if (message.builtBy !== 0) {
+            writer.uint32(320).uint64(message.builtBy);
         }
         return writer;
     },
@@ -422,6 +426,9 @@ export const Structure = {
                     break;
                 case 38:
                     message.secondaryColor = reader.string();
+                    break;
+                case 40:
+                    message.builtBy = longToNumber(reader.uint64());
                     break;
                 default:
                     reader.skipType(tag & 7);
@@ -670,6 +677,12 @@ export const Structure = {
         else {
             message.secondaryColor = "";
         }
+        if (object.builtBy !== undefined && object.builtBy !== null) {
+            message.builtBy = Number(object.builtBy);
+        }
+        else {
+            message.builtBy = 0;
+        }
         return message;
     },
     toJSON(message) {
@@ -754,6 +767,7 @@ export const Structure = {
             (obj.primaryColor = message.primaryColor);
         message.secondaryColor !== undefined &&
             (obj.secondaryColor = message.secondaryColor);
+        message.builtBy !== undefined && (obj.builtBy = message.builtBy);
         return obj;
     },
     fromPartial(object) {
@@ -995,6 +1009,12 @@ export const Structure = {
         }
         else {
             message.secondaryColor = "";
+        }
+        if (object.builtBy !== undefined && object.builtBy !== null) {
+            message.builtBy = object.builtBy;
+        }
+        else {
+            message.builtBy = 0;
         }
         return message;
     },

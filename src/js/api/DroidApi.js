@@ -1,6 +1,7 @@
 import {JsonAjaxer} from "../vendor/JsonAjaxer";
 import {StructureFactory} from "../models/StructureFactory";
 import {SchematicFactory} from "../models/SchematicFactory";
+import {InstanceFactory} from "../models/InstanceFactory";
 
 /**
  * API Gateway for the Droid API
@@ -165,4 +166,41 @@ export class DroidApi {
     return response.transfers[0].coin;
 
   }
+
+  /**
+   * @returns {Promise<Instance[]>}
+   */
+  getInstancesByAWUM() {
+    return this.ajax.get(`${this.scheme}${this.domain}/api/di/awum`)
+      .then(this.instanceResponseHandler.bind(this));
+  }
+
+  /**
+   * @param data response data
+   * @returns {Instance[]}
+   */
+  instanceResponseHandler(data) {
+    const instanceFactory = new InstanceFactory();
+
+    let instances = [];
+    const rawInstances = Array.isArray(data.watt_under_management) ? data.watt_under_management : [data.watt_under_management];
+
+    for (let i = 0; i < rawInstances.length; i ++) {
+      instances[i] = instanceFactory.make(rawInstances[i])
+    }
+
+    instances.sort(function(a, b) {
+      if (a.wattUnderManagement > b.wattUnderManagement) {
+        return -1;
+      }
+      if (a.wattUnderManagement < b.wattUnderManagement) {
+        return 1;
+      }
+      // names must be equal
+      return 0;
+    })
+
+    return instances;
+  }
+
 }
