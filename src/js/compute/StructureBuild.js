@@ -430,7 +430,7 @@ export class StructureBuild {
       console.log(result.data[1].input);
 
       let instance = new Instance();
-      await instance.init();
+      await instance.initActive();
 
       try {
         let tx_result = await instance.performBuild(result.data[1], {

@@ -2,6 +2,7 @@ import {Instance} from "../../models/Instance";
 import {StringToFile} from "../../vendor/StringToFile";
 import {BIP39SeedPhraseValidator} from "../../vendor/BIP39/BIP39SeedPhraseValidator";
 import {DroidUI} from "../DroidUI";
+import {DroidApi} from "../../api/DroidApi";
 
 export class DroidUIDroid {
   /**
@@ -14,6 +15,8 @@ export class DroidUIDroid {
     this.idPrefix = idPrefix;
 
     this.instance;
+    this.droidUi = new DroidUI();
+    this.droidAPI = this.droidUi.droidApi;
 
     const seedPhraseFileName = this.getSeedPhraseFileName();
 
@@ -21,11 +24,32 @@ export class DroidUIDroid {
 
       if (typeof this.instance === 'undefined' || !this.instance.active) {
         this.instance = new Instance();
-        await this.instance.init();
+        await this.instance.initActive();
       }
+
+      let current_balance = await this.instance.queryBalance()
+      console.log("Balance " + current_balance.amount + current_balance.denom)
+
+
       // document.getElementById('droid_panel_name').innerHTML = this.instance.name;
       // document.getElementById('droid_panel_mood').innerHTML = this.instance.mood;
-      document.getElementById('droid_panel_battery').innerHTML = ((await this.instance.queryBalance()).amount) + ' watt';
+      document.getElementById('droid_panel_battery').innerHTML = (current_balance.amount) + ' ' + current_balance.denom;
+
+      // shhhh don't loook here, kthnx.
+      if (current_balance.amount == 0) {
+        const obj = { address: this.instance.address,  coins: ['1337watt']}
+        this.droidUi.loadWattReceivedModal(await this.droidUi.droidApi.performFaucetRequest(obj))
+      }
+
+      // Build the Rank Score
+      const instances = await this.droidUi.droidApi.getInstancesByAWUM();
+      for (let x = 0; x < instances.length; x++) {
+        if (instances[x].address == this.instance.address) {
+          document.getElementById('droid_panel_rank').innerHTML = (x + 1);
+          break;
+        }
+      }
+
 
       // Create the download link on the fly so that the mnemonic isn't crawl-able.
       const mnemonic = this.instance.mnemonic;
@@ -45,27 +69,9 @@ export class DroidUIDroid {
         this.loadAccount('seed-phrase-input', 'seed-phrase-input-error');
       }.bind(this));
 
-      this.updater = setTimeout(updateTime, 120000);
+      this.updater = setTimeout(updateTime.bind(this), 120000);
     }.bind(this), 10);
 
-    this.rankUpdater = setTimeout(async function updateRank() {
-
-      const instance = new Instance();
-      instance.lazyLoad();
-
-      const droidAPI = new DroidUI().droidApi;
-
-      const instances = await droidAPI.getInstancesByAWUM();
-
-      for(let x = 0; x < instances.length; x++) {
-        if (instances[x].address == instance.address) {
-          document.getElementById('droid_panel_rank').innerHTML = (x + 1);
-          break;
-        }
-      }
-
-      this.rankUpdater = setTimeout(updateRank, 120000);
-    }.bind(this), 10);
 
   }
 
@@ -136,7 +142,7 @@ export class DroidUIDroid {
             <div class="row justify-content-center">
               <div class="col nes-container rank-container">
                 <div class="row">
-                  <div id="droid_panel_rank" class="col rank-text-container"></div>
+                  <div id="droid_panel_rank" class="col rank-text-container">Calculating...</div>
                 </div>
               </div>
             </div>

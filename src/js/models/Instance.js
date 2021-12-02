@@ -72,12 +72,38 @@ export class Instance {
         this.mnemonic = identity.mnemonic;
         this.address = identity.address;
 
-        this.server = new Server();
-        await this.server.init(await this.getWallet());
-
-        this.active = true;
-
     }
+
+
+  /**
+   * force = true //destroys old account!
+   *
+   * Should probably create some sort of account
+   * graveyard instead of just saving over the old one
+   *
+   * @param {string} mnemonic
+   * @param {boolean} force
+   */
+  async initActive(mnemonic = '', force = false) {
+    let identity = JSON.parse(localStorage.getItem('identity'));
+
+    if (identity === null || (typeof identity === 'undefined') || force) {
+      identity = await this.createIdentity(mnemonic);
+    }
+
+    console.log(identity.address)
+    this.name = identity.name;
+    this.mood = identity.mood;
+    this.mnemonic = identity.mnemonic;
+    this.address = identity.address;
+
+    this.server = new Server();
+    await this.server.init(await this.getWallet());
+
+    this.active = true;
+
+  }
+
 
     /*
      * Used if you just want to pull from the local storage without the

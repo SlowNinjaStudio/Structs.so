@@ -18,7 +18,7 @@ export class DroidUISchematicRDPatentedModal {
         <div class="modal-dialog">
           <div class="modal-content align-items-center">
             <div class="modal-header">
-               <h6 class="modal-title">🎉Schematic Patented️🎉</h6>
+               <h6 class="modal-title">🎉Schematic Patented🎉</h6>
             </div>
             <div class="modal-body">
                 ${this.schematicCondensed.render()}

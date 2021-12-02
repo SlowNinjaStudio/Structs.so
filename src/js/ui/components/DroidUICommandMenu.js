@@ -159,8 +159,8 @@ export class DroidUICommandMenu {
         const droidUi = new DroidUI();
 
         const searchHandler = async function() {
-          const instance = new Instance();
-          await instance.init();
+          //const instance = new Instance();
+          //await instance.init();
 
           const searchString = document.getElementById('offcanvas-search-input').value;
           droidUi.loadStructureSelectionListFromTargeting(
@@ -191,7 +191,7 @@ export class DroidUICommandMenu {
 
     const searchHandler = async function() {
       const instance = new Instance();
-      await instance.init();
+      await instance.lazyLoad();
 
       const searchString = document.getElementById('offcanvas-search-input').value;
       droidUi.loadSchematicSelectionList(
@@ -226,8 +226,8 @@ export class DroidUICommandMenu {
       const droidUi = new DroidUI();
 
       const searchHandler = async function() {
-        const instance = new Instance();
-        await instance.init();
+        //const instance = new Instance();
+        //await instance.init();
 
         const searchString = document.getElementById('offcanvas-search-input').value;
         droidUi.loadStructureSelectionListFromTargeting(
@@ -256,8 +256,8 @@ export class DroidUICommandMenu {
     const droidUi = new DroidUI();
 
     const searchHandler = async function() {
-      const instance = new Instance();
-      await instance.init();
+      //const instance = new Instance();
+      //await instance.init();
 
       const searchString = document.getElementById('offcanvas-search-input').value;
       droidUi.loadStructureSelectionListFromTargeting(
@@ -293,8 +293,8 @@ export class DroidUICommandMenu {
       const droidUi = new DroidUI();
 
       const searchHandler = async function() {
-        const instance = new Instance();
-        await instance.init();
+        //const instance = new Instance();
+        //await instance.init();
 
         const searchString = document.getElementById('offcanvas-search-input').value;
         droidUi.loadStructureSelectionListFromTargeting(

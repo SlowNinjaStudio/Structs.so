@@ -197,7 +197,7 @@ export class DroidUISchematicCondensed {
         window.bootstrap.Offcanvas.getInstance(document.getElementById('offcanvas')).hide();
 
         let instance = new Instance();
-        await instance.init();
+        instance.lazyLoad();
         this.program.instance = instance.address;
 
         let new_process_id = this.computer.add_process(this.program);
