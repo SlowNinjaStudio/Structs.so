@@ -159,9 +159,6 @@ export class DroidUICommandMenu {
         const droidUi = new DroidUI();
 
         const searchHandler = async function() {
-          //const instance = new Instance();
-          //await instance.init();
-
           const searchString = document.getElementById('offcanvas-search-input').value;
           droidUi.loadStructureSelectionListFromTargeting(
             'offcanvas-body',
@@ -171,13 +168,13 @@ export class DroidUICommandMenu {
             searchString
           );
         }.bind(this);
+
         document.getElementById('offcanvas-search-btn').addEventListener('click', searchHandler);
         document.getElementById('offcanvas-search-input').addEventListener('keypress', (event) => {
           if (event.key === 'Enter') {
             searchHandler(event);
           }
         });
-
 
         droidUi.loadStructureSelectionListFromTargeting('offcanvas-body', 'offcanvas-title', this.structure, 'attack');
 
@@ -226,9 +223,6 @@ export class DroidUICommandMenu {
       const droidUi = new DroidUI();
 
       const searchHandler = async function() {
-        //const instance = new Instance();
-        //await instance.init();
-
         const searchString = document.getElementById('offcanvas-search-input').value;
         droidUi.loadStructureSelectionListFromTargeting(
           'offcanvas-body',
@@ -238,13 +232,13 @@ export class DroidUICommandMenu {
           searchString
         );
       }.bind(this);
+
       document.getElementById('offcanvas-search-btn').addEventListener('click', searchHandler);
       document.getElementById('offcanvas-search-input').addEventListener('keypress', (event) => {
         if (event.key === 'Enter') {
           searchHandler(event);
         }
       });
-
 
       droidUi.loadStructureSelectionListFromTargeting('offcanvas-body', 'offcanvas-title', this.structure, 'repair');
 
@@ -256,9 +250,6 @@ export class DroidUICommandMenu {
     const droidUi = new DroidUI();
 
     const searchHandler = async function() {
-      //const instance = new Instance();
-      //await instance.init();
-
       const searchString = document.getElementById('offcanvas-search-input').value;
       droidUi.loadStructureSelectionListFromTargeting(
         'offcanvas-body',
@@ -268,6 +259,7 @@ export class DroidUICommandMenu {
         searchString
       );
     }.bind(this);
+
     document.getElementById('offcanvas-search-btn').addEventListener('click', searchHandler);
     document.getElementById('offcanvas-search-input').addEventListener('keypress', (event) => {
       if (event.key === 'Enter') {
@@ -293,9 +285,6 @@ export class DroidUICommandMenu {
       const droidUi = new DroidUI();
 
       const searchHandler = async function() {
-        //const instance = new Instance();
-        //await instance.init();
-
         const searchString = document.getElementById('offcanvas-search-input').value;
         droidUi.loadStructureSelectionListFromTargeting(
           'offcanvas-body',
@@ -311,7 +300,6 @@ export class DroidUICommandMenu {
           searchHandler(event);
         }
       });
-
 
       droidUi.loadStructureSelectionListFromTargeting('offcanvas-body', 'offcanvas-title', this.structure, 'drain');
 
