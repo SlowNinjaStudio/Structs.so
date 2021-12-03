@@ -39,7 +39,7 @@ export class DroidUIStructureBuildStatusModal {
         <div class="modal-dialog">
           <div class="modal-content ">
             <div class="modal-header">
-               <h6 class="modal-title">🏭 Building Structure 🏭️</h6>
+               <h6 class="modal-title">Building Structure</h6>
             </div>
             <div class="modal-body">
               ${this.uiSchematic.render()}

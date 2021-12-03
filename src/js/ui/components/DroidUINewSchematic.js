@@ -168,7 +168,7 @@ export class DroidUINewSchematic {
     document.getElementById('new_schematic_patent_' + this.schematic.getHash()).addEventListener('click', async function() {
       console.log('patenting new..');
       const instance = new Instance();
-      await instance.init();
+      await instance.initActive();
 
       const personalization = {
         name: document.getElementById('new_schematic_name').value,

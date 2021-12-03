@@ -167,7 +167,7 @@ export class StructureAttack {
       console.log('Finished aiming...');
 
       let instance = new Instance();
-      await instance.init();
+      await instance.initActive();
 
       try {
         let tx_result = await instance.performAttack(result.data[1])

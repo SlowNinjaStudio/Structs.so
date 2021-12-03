@@ -21,7 +21,7 @@ export class DroidUIStructureCondensedDrainListener extends DroidUIListenerInter
       window.bootstrap.Offcanvas.getInstance(document.getElementById('offcanvas')).hide();
 
       let instance = new Instance();
-      await instance.init();
+      await instance.initActive();
       this.program.instance = instance.address;
 
       (new DroidUI()).loadStructureDrainStatusModal(this.program)

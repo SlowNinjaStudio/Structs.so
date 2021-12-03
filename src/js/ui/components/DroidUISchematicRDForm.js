@@ -116,7 +116,7 @@ export class DroidUISchematicRDForm {
     this.compute_status.setProgram(this.program)
 
     this.instance = new Instance();
-    await this.instance.init();
+    await this.instance.initActive();
   }
 
 

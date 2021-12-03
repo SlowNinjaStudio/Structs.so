@@ -21,7 +21,7 @@ export class DroidUIStructureCondensedRepairListener extends DroidUIListenerInte
       window.bootstrap.Offcanvas.getInstance(document.getElementById('offcanvas')).hide();
 
       let instance = new Instance();
-      await instance.init();
+      await instance.initActive();
       this.program.instance = instance.address;
 
       (new DroidUI()).loadStructureRepairStatusModal(this.program)

@@ -18,9 +18,6 @@ export class DroidUISchematicBuildListener extends DroidUIListenerInterface {
     const droidUi = new DroidUI();
 
     const searchHandler = async function() {
-      const instance = new Instance();
-      await instance.init();
-
       const searchString = document.getElementById('offcanvas-search-input').value;
       droidUi.loadStructureSelectionListFromSchematic('offcanvas-body', 'offcanvas-title', this.schematic, searchString);
     }.bind(this.component);
