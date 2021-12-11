@@ -50,25 +50,25 @@ export class AbstractLottieArtConfigurator {
 
   attack() {
     if (!this.structure.hasFeatureAttack()) {
-      this.disabledAttributes.set(`${this.structureLayerPrefix}_attack_system`, true);
+      this.disabledAttributes.set(`${this.structureLayerPrefix}_attack`, true);
     }
   }
 
   defensive() {
     if (!this.structure.hasFeatureDefensive()) {
-      this.disabledAttributes.set(`${this.structureLayerPrefix}_defensive_system`, true);
+      this.disabledAttributes.set(`${this.structureLayerPrefix}_defensive`, true);
     }
   }
 
   engineering() {
     if (!this.structure.hasFeatureEngineering()) {
-      this.disabledAttributes.set(`${this.structureLayerPrefix}_engineering_system`, true);
+      this.disabledAttributes.set(`${this.structureLayerPrefix}_engineering`, true);
     }
   }
 
   power() {
     if (!this.structure.hasFeaturePower()) {
-      this.disabledAttributes.set(`${this.structureLayerPrefix}_power_system`, true);
+      this.disabledAttributes.set(`${this.structureLayerPrefix}_power`, true);
     }
   }
 

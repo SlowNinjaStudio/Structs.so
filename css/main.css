@@ -663,6 +663,12 @@ img.structure-card-icon {
   color: #FFFFFF;
 }
 
+/**
+ * Lottie
+ */
+.lottie-container {
+  width: 256px;
+}
 
 /**
  * Responsive Styling Page Overrides
