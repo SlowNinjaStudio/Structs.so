@@ -35,24 +35,23 @@
     </div>
     <div class="row justify-content-center mb-4">
       <div class="col-auto">
-        <div id="idle-space" class="lottie-container"></div>
+        <div class="lottie-custom-player">
+          <div id="idle-space" class="lottie-container"></div>
+          <div id="idle-sky" class="lottie-container"></div>
+          <div id="idle-land" class="lottie-container"></div>
+          <div id="idle-water" class="lottie-container"></div>
+        </div>
       </div>
     </div>
-    <div class="row justify-content-center mb-4">
-      <div class="col-auto">
-        <div id="idle-sky" class="lottie-container"></div>
-      </div>
+  </div>
+  <div class="row justify-content-center mb-4">
+    <div class="col-auto">
+      <div><a href="javascript: document.getElementById('idle-space').dispatchEvent(new Event('LOTTIE_PLAY'))">Space</a></div>
+      <div><a href="javascript: document.getElementById('idle-sky').dispatchEvent(new Event('LOTTIE_PLAY'))">Sky</a></div>
+      <div><a href="javascript: document.getElementById('idle-land').dispatchEvent(new Event('LOTTIE_PLAY'))">Land</a></div>
+      <div><a href="javascript: document.getElementById('idle-water').dispatchEvent(new Event('LOTTIE_PLAY'))">Water</a></div>
     </div>
-    <div class="row justify-content-center mb-4">
-      <div class="col-auto">
-        <div id="idle-land" class="lottie-container"></div>
-      </div>
-    </div>
-    <div class="row justify-content-center mb-4">
-      <div class="col-auto">
-        <div id="idle-water" class="lottie-container"></div>
-      </div>
-    </div>
+  </div>
   </div>
   <div id="footer-wrapper" class="bg-dark mt-auto"></div>
 

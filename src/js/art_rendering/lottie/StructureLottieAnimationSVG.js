@@ -1,21 +1,25 @@
 import {StructureArtSet} from "../StructureArtSet";
 import {LottieArtConfiguratorFactory} from "./LottieArtConfiguratorFactory";
+import {LOTTIE_EVENTS} from "../../EventConstants";
 
 export class StructureLottieAnimationSVG {
 
   /**
    * Only works with Lottie SVG rendering.
    *
+   * @param {string} animationName
    * @param {Structure} structure
    * @param {string} lottieContainerId
    * @param {Object} lottieLoadOptions
    */
-  constructor(structure, lottieContainerId, lottieLoadOptions) {
+  constructor(animationName, structure, lottieContainerId, lottieLoadOptions) {
+    this.animationName = animationName;
     this.structure = structure;
     this.lottieContainerId = lottieContainerId;
     this.lottieLoadOptions = lottieLoadOptions;
     this.artConfigurator = (new LottieArtConfiguratorFactory()).make(structure);
     this.structureArtSet = new StructureArtSet(structure);
+    this.animation = null;
 
     // Autoplay must be handled manually as we need to customize the structure art first
     this.lottieLoadOptions.autoplay = false;
@@ -78,42 +82,69 @@ export class StructureLottieAnimationSVG {
     }
   }
 
-  /**
-   * Load the animation and customize the structure art.
-   *
-   * @return {*} Lottie AnimationItem
-   */
-  init(autoplay = false) {
-    const lottieContainer = this.lottieLoadOptions.container;
-    const lottieAnimation = this;
+  show() {
+    this.lottieLoadOptions.container.style.visibility = 'visible';
+  }
 
+  hide() {
+    this.lottieLoadOptions.container.style.visibility = 'hidden';
+  }
+
+  play() {
+    this.show();
+    this.animation.play();
+  }
+
+  stop() {
+    this.hide();
+    this.animation.stop();
+  }
+
+  /**
+   * @param {boolean} showAfterCustomized
+   * @return {Promise<void>}
+   */
+  async customizeLottie(showAfterCustomized) {
+    // Customize the structure art
+    this.configureLottieArt();
+    await this.paletteSwapLottie();
+
+    if (showAfterCustomized) {
+      // Show the animation now that the art is ready
+      this.show();
+    }
+
+    // Alert listeners that the animation is ready to be played
+    this.lottieLoadOptions.container.dispatchEvent(new CustomEvent(
+      LOTTIE_EVENTS.LOTTIE_CUSTOMIZED,
+      { animationName: this.animationName }
+    ));
+  }
+
+  /**
+   * Load the animation, customize the structure art and add event listeners.
+   *
+   * @param {boolean} showAfterInit
+   * @param {boolean} autoplay
+   */
+  init(showAfterInit, autoplay = false) {
     // Hide the lottie container while the art is being loaded customized
-    lottieContainer.style.visibility = 'hidden';
+    this.hide();
 
     // Load the lottie animation
     const animation = window.lottie.loadAnimation(this.lottieLoadOptions);
 
     // If autoplay was originally enabled, automatically play the animation after it's loaded and customized
     if (autoplay) {
-      lottieContainer.addEventListener('lottieStructureArtReady', async function() {
-        animation.play();
-      });
+      this.lottieLoadOptions.container.addEventListener(LOTTIE_EVENTS.LOTTIE_CUSTOMIZED, this.play.bind(this));
     }
 
     // Once the animation is loaded into the DOM, we can begin customizing it.
-    animation.addEventListener('DOMLoaded', async function() {
+    animation.addEventListener('DOMLoaded', this.customizeLottie.bind(this, showAfterInit));
 
-      // Customize the structure art
-      lottieAnimation.configureLottieArt();
-      await lottieAnimation.paletteSwapLottie();
+    this.lottieLoadOptions.container.addEventListener(LOTTIE_EVENTS.LOTTIE_PLAY, this.play.bind(this));
+    this.lottieLoadOptions.container.addEventListener(LOTTIE_EVENTS.LOTTIE_STOP, this.stop.bind(this));
 
-      // Show the animation now that the art is ready
-      lottieContainer.style.visibility = 'visible';
-
-      // Alert listeners that the animation is ready to be played
-      lottieContainer.dispatchEvent(new CustomEvent('lottieStructureArtReady', { animationName: 'hello' }));
-    });
-
-    return animation;
+    this.animation = animation;
   }
 }

@@ -1,5 +1,5 @@
 import {Computer} from "../../compute/Computer";
-import {CONFIG} from "../../constants";
+import {CONFIG} from "../../Constants";
 import {secondsToString} from "../../vendor/SecondsToString"
 
 /**

@@ -2,7 +2,7 @@ import {Navbar} from "./common/Navbar";
 import {Instance} from "../models/Instance";
 import {Footer} from "./common/Footer";
 import {DummyUtil} from "../util/DummyUtil";
-import {AMBITS, FEATURES} from "../constants";
+import {AMBITS, FEATURES} from "../Constants";
 import {StructureLottieAnimationSVG} from "../art_rendering/lottie/StructureLottieAnimationSVG";
 
 const instance = new Instance();
@@ -22,6 +22,7 @@ const station1 = DummyUtil.getDummyStructure(
 station1.build_rate = 1;
 
 const stationLottieAnimation = new StructureLottieAnimationSVG(
+  'LOTTIE_DEMO',
   station1,
   'lottie-demo',
   {
@@ -33,9 +34,10 @@ const stationLottieAnimation = new StructureLottieAnimationSVG(
   }
 );
 
-stationLottieAnimation.init(true);
+stationLottieAnimation.init(false, true);
 
 const stationIdleSpace = new StructureLottieAnimationSVG(
+  'STATION_IDLE_SPACE',
   station1,
   'idle-space',
   {
@@ -47,9 +49,8 @@ const stationIdleSpace = new StructureLottieAnimationSVG(
   }
 );
 
-stationIdleSpace.init(true);
-
 const stationIdleSky = new StructureLottieAnimationSVG(
+  'STATION_IDLE_SKY',
   station1,
   'idle-sky',
   {
@@ -61,9 +62,8 @@ const stationIdleSky = new StructureLottieAnimationSVG(
   }
 );
 
-stationIdleSky.init(true);
-
 const stationIdleLand = new StructureLottieAnimationSVG(
+  'STATION_IDLE_LAND',
   station1,
   'idle-land',
   {
@@ -75,9 +75,8 @@ const stationIdleLand = new StructureLottieAnimationSVG(
   }
 );
 
-stationIdleLand.init(true);
-
 const stationIdleWater = new StructureLottieAnimationSVG(
+  'STATION_IDLE_WATER',
   station1,
   'idle-water',
   {
@@ -89,7 +88,10 @@ const stationIdleWater = new StructureLottieAnimationSVG(
   }
 );
 
-stationIdleWater.init(true);
+stationIdleSpace.init(false, false);
+stationIdleSky.init(false, false);
+stationIdleLand.init(false, false);
+stationIdleWater.init(true, false);
 
 const footer = new Footer();
 footer.init('footer-wrapper');

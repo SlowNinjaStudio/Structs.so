@@ -666,8 +666,18 @@ img.structure-card-icon {
 /**
  * Lottie
  */
-.lottie-container {
+.lottie-custom-player {
+  position: relative;
+  height: 256px;
   width: 256px;
+}
+.lottie-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 256px;
+  width: 256px;
+  visibility: hidden;
 }
 
 /**

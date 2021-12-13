@@ -9,7 +9,7 @@ import {DroidUIStructureCondensed} from "./DroidUIStructureCondensed";
 import {AttackAnimationFactory} from "../../animations/AttackAnimationFactory";
 import {DroidUIArtOverlay} from "./DroidUIArtOverlay";
 import {AnimationEngine} from "../../vendor/animation/AnimationEngine";
-import {ANIMATION_EVENTS} from "../../constants";
+import {ANIMATION_EVENTS} from "../../Constants";
 
 export class DroidUIStructureAttackStatusModal {
 

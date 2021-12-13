@@ -1,4 +1,4 @@
-import {STRUCTURE_TYPES} from "../constants";
+import {STRUCTURE_TYPES} from "../Constants";
 import {StructureClassifier} from "./StructureClassifier";
 import {StructurePaletteMobileCar} from "./StructurePaletteMobileCar";
 import {StructurePaletteStaticCity} from "./StructurePaletteStaticCity";

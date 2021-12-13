@@ -1,5 +1,5 @@
 import {StructureClassifier} from "../StructureClassifier";
-import {STRUCTURE_TYPES} from "../../constants";
+import {STRUCTURE_TYPES} from "../../Constants";
 import {LottieArtConfiguratorCar} from "./LottieArtConfiguratorCar";
 import {LottieArtConfiguratorMech} from "./LottieArtConfiguratorMech";
 import {LottieArtConfiguratorStation} from "./LottieArtConfiguratorStation";

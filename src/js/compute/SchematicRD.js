@@ -1,4 +1,4 @@
-import {AMBITS, FEATURES} from "../constants";
+import {AMBITS, FEATURES} from "../Constants";
 import {decimalToHex} from "../vendor/DecimalToHex";
 import {DroidUIComputeStatus} from "../ui/components/DroidUIComputeStatus";
 import {processes} from "./Computer";

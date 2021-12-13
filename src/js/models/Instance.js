@@ -130,7 +130,7 @@ export class Instance {
         if ( mnemonic === '') {
             console.log('Generating new mnemonic because none was provided.');
 
-            // Add this constant (16) to the constants.js file
+            // Add this constant (16) to the Constants.js file
             const getNewRandom = Random.getBytes(16);
             mnemonic = Bip39.encode(getNewRandom).toString();
         }

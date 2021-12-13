@@ -1,6 +1,6 @@
 import {NotImplementedError} from "../vendor/NotImplementedError";
 import {AnimationEngine} from "../vendor/animation/AnimationEngine";
-import {ANIMATION_EVENTS} from "../constants";
+import {ANIMATION_EVENTS} from "../Constants";
 
 export class AttackAnimation {
 

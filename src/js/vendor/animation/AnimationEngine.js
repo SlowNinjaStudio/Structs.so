@@ -1,7 +1,7 @@
 /**
  * An animation engine to assist with canvas animation.
  */
-import {ANIMATION_EVENTS} from "../../constants";
+import {ANIMATION_EVENTS} from "../../Constants";
 
 export class AnimationEngine {
 
