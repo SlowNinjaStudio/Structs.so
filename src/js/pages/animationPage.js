@@ -4,6 +4,7 @@ import {Footer} from "./common/Footer";
 import {DummyUtil} from "../util/DummyUtil";
 import {AMBITS, FEATURES} from "../Constants";
 import {StructureLottieAnimationSVG} from "../art_rendering/lottie/StructureLottieAnimationSVG";
+import {LottieCustomPlayer} from "../art_rendering/lottie/LottieCustomPlayer";
 
 const instance = new Instance();
 await instance.init();
@@ -88,10 +89,18 @@ const stationIdleWater = new StructureLottieAnimationSVG(
   }
 );
 
-stationIdleSpace.init(false, false);
-stationIdleSky.init(false, false);
-stationIdleLand.init(false, false);
-stationIdleWater.init(true, false);
+const lottiePlayer = new LottieCustomPlayer();
+lottiePlayer.registerAnimation(stationIdleSpace);
+lottiePlayer.registerAnimation(stationIdleSky);
+lottiePlayer.registerAnimation(stationIdleLand);
+lottiePlayer.registerAnimation(stationIdleWater);
+lottiePlayer.registerPlayAnimationButton('playSpaceIdle', 'STATION_IDLE_SPACE');
+lottiePlayer.registerPlayAnimationButton('playSkyIdle', 'STATION_IDLE_SKY');
+lottiePlayer.registerPlayAnimationButton('playLandIdle', 'STATION_IDLE_LAND');
+lottiePlayer.registerPlayAnimationButton('playWaterIdle', 'STATION_IDLE_WATER');
+lottiePlayer.registerPlayRandomButton('playRandomIdle');
+lottiePlayer.registerPlayNextButton('playNextIdle');
+lottiePlayer.init('', true);
 
 const footer = new Footer();
 footer.init('footer-wrapper');
