@@ -1,6 +1,6 @@
 import {Computer} from "../../compute/Computer";
 import {StructureBuild} from "../../compute/StructureBuild";
-import {CONFIG} from "../../constants";
+import {CONFIG} from "../../Constants";
 import {secondsToString} from "../../vendor/SecondsToString"
 
 import {DroidUIComputeStatus} from "./DroidUIComputeStatus"

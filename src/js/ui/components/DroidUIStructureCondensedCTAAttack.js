@@ -1,5 +1,5 @@
 import {StructureAttack} from "../../compute/StructureAttack";
-import {CTA_TYPES} from "../../constants";
+import {CTA_TYPES} from "../../Constants";
 
 export class DroidUIStructureCondensedCTAAttack {
 

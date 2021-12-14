@@ -1,5 +1,5 @@
 import {EmptyProgram} from "../../compute/EmptyProgram";
-import {CTA_TYPES} from "../../constants";
+import {CTA_TYPES} from "../../Constants";
 
 export class DroidUIStructureCondensedCTANone {
   render() {

@@ -1,7 +1,7 @@
 import {AnimatedImage} from "../vendor/animation/AnimatedImage";
 import {AnimatedEffect} from "../vendor/animation/AnimatedEffect";
 import {StructureArtSet} from "../art_rendering/StructureArtSet";
-import {FEATURES} from "../constants";
+import {FEATURES} from "../Constants";
 import {AbstractStructureAnimator} from "./AbstractStructureAnimator";
 
 export class CarShootingAnimator extends AbstractStructureAnimator {

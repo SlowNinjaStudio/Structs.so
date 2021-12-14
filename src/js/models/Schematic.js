@@ -1,4 +1,4 @@
-import {AMBITS, FEATURES} from "../constants";
+import {AMBITS, FEATURES} from "../Constants";
 import {ColorRGB} from "../vendor/ColorRGB";
 
 /**

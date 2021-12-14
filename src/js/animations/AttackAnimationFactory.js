@@ -1,5 +1,5 @@
 import {StructureClassifier} from "../art_rendering/StructureClassifier";
-import {STRUCTURE_TYPES} from "../constants";
+import {STRUCTURE_TYPES} from "../Constants";
 import {CarAttackAnimation} from "./CarAttackAnimation";
 import {MechAttackAnimation} from "./MechAttackAnimation";
 import {StationAttackAnimation} from "./StationAttackAnimation";

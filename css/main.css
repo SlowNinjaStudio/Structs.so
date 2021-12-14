@@ -663,6 +663,46 @@ img.structure-card-icon {
   color: #FFFFFF;
 }
 
+/**
+ * Lottie
+ */
+.lottie-custom-player {
+  position: relative;
+  height: 256px;
+  width: 256px;
+}
+.lottie-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 256px;
+  width: 256px;
+  visibility: hidden;
+}
+a.ambit-button img {
+  width: 59px;
+}
+a.ambit-button:hover img, a.ambit-button:active img {
+  filter: brightness(1.5);
+}
+a.ambit-button {
+  box-sizing: border-box;
+  border-left: 4px solid rgb(38,38,38);
+  border-bottom: 4px solid rgb(38,38,38);
+  border-top: 4px solid rgb(38,38,38);
+  display: inline-block;
+}
+a.ambit-button.last-ambit-button {
+  border-right: 4px solid rgb(38,38,38);
+}
+a.ambit-button.disabled img,
+a.ambit-button.disabled:link img,
+a.ambit-button.disabled:hover img,
+a.ambit-button.disabled:visited img,
+a.ambit-button.disabled:active img
+{
+  filter: grayscale(1) !important;
+}
 
 /**
  * Responsive Styling Page Overrides

@@ -3,7 +3,7 @@ import {StructureArtGeneratorMobileMech} from "./StructureArtGeneratorMobileMech
 import {StructureArtGeneratorStaticStation} from "./StructureArtGeneratorStaticStation";
 import {StructureArtGeneratorStaticCity} from "./StructureArtGeneratorStaticCity";
 import {StructureClassifier} from "./StructureClassifier";
-import {STRUCTURE_TYPES} from "../constants";
+import {STRUCTURE_TYPES} from "../Constants";
 
 export class StructureArtGeneratorFactory {
   constructor() {

@@ -1,4 +1,4 @@
-import {STRUCTURE_TYPES} from "../constants";
+import {STRUCTURE_TYPES} from "../Constants";
 
 export class StructureClassifier {
 

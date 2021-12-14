@@ -1,4 +1,4 @@
-import {AMBITS, FEATURES} from "../constants";
+import {AMBITS, FEATURES} from "../Constants";
 import {Structure} from "../models/Structure";
 
 export class DummyUtil {

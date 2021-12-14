@@ -1,5 +1,5 @@
 import {CosmosHashUtil} from "../vendor/CosmosHashUtil";
-import {DROID_HASH, DROID_TYPES} from "../constants";
+import {DROID_HASH, DROID_TYPES} from "../Constants";
 
 export class Droid {
 

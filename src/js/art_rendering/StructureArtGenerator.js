@@ -3,7 +3,7 @@
  */
 import {StructureArtGeneratorBackground} from "./StructureArtGeneratorBackground";
 import {StructureArtGeneratorFactory} from "./StructureArtGeneratorFactory";
-import {FEATURES} from "../constants";
+import {FEATURES} from "../Constants";
 
 export class StructureArtGenerator {
   constructor() {
