@@ -5,6 +5,7 @@ import {DummyUtil} from "../util/DummyUtil";
 import {AMBITS, FEATURES} from "../Constants";
 import {StructureLottieAnimationSVG} from "../art_rendering/lottie/StructureLottieAnimationSVG";
 import {LottieCustomPlayer} from "../art_rendering/lottie/LottieCustomPlayer";
+import {DroidUIAmbitButtonPanel} from "../ui/components/DroidUIAmbitButtonPanel";
 
 const instance = new Instance();
 await instance.init();
@@ -16,8 +17,8 @@ navbar.init('nav-wrapper');
 
 const station1 = DummyUtil.getDummyStructure(
   false,
-  [AMBITS.WATER, AMBITS.LAND, AMBITS.SKY, AMBITS.SPACE],
-  [FEATURES.ATTACK, FEATURES.POWER, FEATURES.ENGINEERING, FEATURES.DEFENSIVE],
+  [AMBITS.WATER, AMBITS.SPACE],
+  [FEATURES.ATTACK, FEATURES.ENGINEERING, FEATURES.DEFENSIVE],
   10
 );
 station1.build_rate = 1;
@@ -90,17 +91,25 @@ const stationIdleWater = new StructureLottieAnimationSVG(
 );
 
 const lottiePlayer = new LottieCustomPlayer();
-lottiePlayer.registerAnimation(stationIdleSpace);
-lottiePlayer.registerAnimation(stationIdleSky);
-lottiePlayer.registerAnimation(stationIdleLand);
-lottiePlayer.registerAnimation(stationIdleWater);
-lottiePlayer.registerPlayAnimationButton('playSpaceIdle', 'STATION_IDLE_SPACE');
-lottiePlayer.registerPlayAnimationButton('playSkyIdle', 'STATION_IDLE_SKY');
-lottiePlayer.registerPlayAnimationButton('playLandIdle', 'STATION_IDLE_LAND');
-lottiePlayer.registerPlayAnimationButton('playWaterIdle', 'STATION_IDLE_WATER');
-lottiePlayer.registerPlayRandomButton('playRandomIdle');
-lottiePlayer.registerPlayNextButton('playNextIdle');
+if (station1.hasAmbitSpace()) {
+  lottiePlayer.registerAnimation(stationIdleSpace);
+}
+if (station1.hasAmbitSky()) {
+  lottiePlayer.registerAnimation(stationIdleSky);
+}
+if (station1.hasAmbitLand()) {
+  lottiePlayer.registerAnimation(stationIdleLand);
+}
+if (station1.hasAmbitWater()) {
+  lottiePlayer.registerAnimation(stationIdleWater);
+}
 lottiePlayer.init('', true);
+
+const panel = new DroidUIAmbitButtonPanel(
+  station1,
+  lottiePlayer
+);
+panel.init('ambitButtonPanel');
 
 const footer = new Footer();
 footer.init('footer-wrapper');
