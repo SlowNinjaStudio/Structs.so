@@ -1,14 +1,28 @@
-import {ANIMATION_NAMES} from "../../AnimationNameConstants";
-
 export class DroidUIAmbitButtonPanel {
 
   /**
    * @param {Structure} structure
-   * @param {LottieCustomPlayer} lottieCustomPlayer
+   * @param {string} spaceAnimationName
+   * @param {string} skyAnimationName
+   * @param {string} landAnimationName
+   * @param {string} waterAnimationName
    */
-  constructor(structure, lottieCustomPlayer) {
+  constructor(
+    structure,
+    spaceAnimationName,
+    skyAnimationName,
+    landAnimationName,
+    waterAnimationName
+  ) {
     this.structure = structure;
-    this.lottieCustomPlayer = lottieCustomPlayer;
+    this.spaceAnimationName = spaceAnimationName;
+    this.skyAnimationName = skyAnimationName;
+    this.landAnimationName = landAnimationName;
+    this.waterAnimationName = waterAnimationName;
+    this.spaceButtonId = 'ambitSpaceButton';
+    this.skyButtonId = 'ambitSkyButton';
+    this.landButtonId = 'ambitLandButton';
+    this.waterButtonId = 'ambitWaterButton';
   }
 
   render() {
@@ -17,7 +31,7 @@ export class DroidUIAmbitButtonPanel {
         <div class="row justify-content-center">
           <div class="col p-0">
             <a
-              id="ambitSpaceButton"
+              id="${this.spaceButtonId}"
               href="javascript: void(0)"
               class="ambit-button ${ this.structure.hasAmbitSpace() ? '' : 'disabled' }"
             >
@@ -26,7 +40,7 @@ export class DroidUIAmbitButtonPanel {
           </div>
           <div class="col p-0">
             <a
-              id="ambitSkyButton"
+              id="${this.skyButtonId}"
               href="javascript: void(0)"
               class="ambit-button ${ this.structure.hasAmbitSky() ? '' : 'disabled' }"
             >
@@ -35,7 +49,7 @@ export class DroidUIAmbitButtonPanel {
           </div>
           <div class="col p-0">
             <a
-              id="ambitLandButton"
+              id="${this.landButtonId}"
               href="javascript: void(0)"
               class="ambit-button ${ this.structure.hasAmbitLand() ? '' : 'disabled' }"
             >
@@ -44,7 +58,7 @@ export class DroidUIAmbitButtonPanel {
           </div>
           <div class="col p-0">
             <a
-              id="ambitWaterButton"
+              id="${this.waterButtonId}"
               href="javascript: void(0)"
               class="ambit-button last-ambit-button ${ this.structure.hasAmbitWater() ? '' : 'disabled' }"
             >
@@ -54,24 +68,5 @@ export class DroidUIAmbitButtonPanel {
         </div>
       </div>
     `;
-  }
-
-  /**
-   * @param {string} targetElementId
-   */
-  init(targetElementId) {
-    document.getElementById(targetElementId).innerHTML = this.render();
-    if (this.structure.hasAmbitSpace()) {
-      this.lottieCustomPlayer.registerPlayAnimationButton('ambitSpaceButton', ANIMATION_NAMES.STATION.IDLE.SPACE);
-    }
-    if (this.structure.hasAmbitSky()) {
-      this.lottieCustomPlayer.registerPlayAnimationButton('ambitSkyButton', ANIMATION_NAMES.STATION.IDLE.SKY);
-    }
-    if (this.structure.hasAmbitLand()) {
-      this.lottieCustomPlayer.registerPlayAnimationButton('ambitLandButton', ANIMATION_NAMES.STATION.IDLE.LAND);
-    }
-    if (this.structure.hasAmbitWater()) {
-      this.lottieCustomPlayer.registerPlayAnimationButton('ambitWaterButton', ANIMATION_NAMES.STATION.IDLE.WATER);
-    }
   }
 }

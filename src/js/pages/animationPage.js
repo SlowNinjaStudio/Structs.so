@@ -6,6 +6,7 @@ import {AMBITS, FEATURES} from "../Constants";
 import {StructureLottieAnimationSVG} from "../art_rendering/lottie/StructureLottieAnimationSVG";
 import {LottieCustomPlayer} from "../art_rendering/lottie/LottieCustomPlayer";
 import {DroidUIAmbitButtonPanel} from "../ui/components/DroidUIAmbitButtonPanel";
+import {ANIMATION_NAMES} from "../AnimationNameConstants";
 
 const instance = new Instance();
 await instance.init();
@@ -38,8 +39,8 @@ const stationLottieAnimation = new StructureLottieAnimationSVG(
 
 stationLottieAnimation.init(false, true);
 
-const stationIdleSpace = new StructureLottieAnimationSVG(
-  'STATION_IDLE_SPACE',
+const idleSpace = new StructureLottieAnimationSVG(
+  ANIMATION_NAMES.STATION.IDLE.SPACE,
   station1,
   'idle-space',
   {
@@ -51,8 +52,8 @@ const stationIdleSpace = new StructureLottieAnimationSVG(
   }
 );
 
-const stationIdleSky = new StructureLottieAnimationSVG(
-  'STATION_IDLE_SKY',
+const idleSky = new StructureLottieAnimationSVG(
+  ANIMATION_NAMES.STATION.IDLE.SKY,
   station1,
   'idle-sky',
   {
@@ -64,8 +65,8 @@ const stationIdleSky = new StructureLottieAnimationSVG(
   }
 );
 
-const stationIdleLand = new StructureLottieAnimationSVG(
-  'STATION_IDLE_LAND',
+const idleLand = new StructureLottieAnimationSVG(
+  ANIMATION_NAMES.STATION.IDLE.LAND,
   station1,
   'idle-land',
   {
@@ -77,8 +78,8 @@ const stationIdleLand = new StructureLottieAnimationSVG(
   }
 );
 
-const stationIdleWater = new StructureLottieAnimationSVG(
-  'STATION_IDLE_WATER',
+const idleWater = new StructureLottieAnimationSVG(
+  ANIMATION_NAMES.STATION.IDLE.WATER,
   station1,
   'idle-water',
   {
@@ -92,24 +93,40 @@ const stationIdleWater = new StructureLottieAnimationSVG(
 
 const lottiePlayer = new LottieCustomPlayer();
 if (station1.hasAmbitSpace()) {
-  lottiePlayer.registerAnimation(stationIdleSpace);
+  lottiePlayer.registerAnimation(idleSpace);
 }
 if (station1.hasAmbitSky()) {
-  lottiePlayer.registerAnimation(stationIdleSky);
+  lottiePlayer.registerAnimation(idleSky);
 }
 if (station1.hasAmbitLand()) {
-  lottiePlayer.registerAnimation(stationIdleLand);
+  lottiePlayer.registerAnimation(idleLand);
 }
 if (station1.hasAmbitWater()) {
-  lottiePlayer.registerAnimation(stationIdleWater);
+  lottiePlayer.registerAnimation(idleWater);
 }
 lottiePlayer.init('', true);
 
 const panel = new DroidUIAmbitButtonPanel(
   station1,
-  lottiePlayer
+  idleSpace.animationName,
+  idleSky.animationName,
+  idleLand.animationName,
+  idleWater.animationName
 );
-panel.init('ambitButtonPanel');
+
+document.getElementById('ambitButtonPanel').innerHTML = panel.render();
+if (station1.hasAmbitSpace()) {
+  lottiePlayer.registerPlayAnimationButton(panel.spaceButtonId, panel.spaceAnimationName);
+}
+if (station1.hasAmbitSky()) {
+  lottiePlayer.registerPlayAnimationButton(panel.skyButtonId, panel.skyAnimationName);
+}
+if (station1.hasAmbitLand()) {
+  lottiePlayer.registerPlayAnimationButton(panel.landButtonId, panel.landAnimationName);
+}
+if (station1.hasAmbitWater()) {
+  lottiePlayer.registerPlayAnimationButton(panel.waterButtonId, panel.waterAnimationName);
+}
 
 const footer = new Footer();
 footer.init('footer-wrapper');
