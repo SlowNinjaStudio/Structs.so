@@ -16,6 +16,7 @@ const structureId = urlParams.get('structure_id');
 
 const droidUi = new DroidUI();
 droidUi.loadSingleStructure('structure', structureId, instance.address);
+// droidUi.loadStructureView('structure', structureId, instance.address);
 
 const footer = new Footer();
 footer.init('footer-wrapper');
