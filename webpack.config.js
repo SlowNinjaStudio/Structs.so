@@ -9,6 +9,7 @@ module.exports = {
     structureViewPage: './src/js/pages/structureViewPage.js',
     structuresPage: './src/js/pages/structuresPage.js',
     researchPage: './src/js/pages/researchPage.js',
+    wattPage: './src/js/pages/wattPage.js',
   },
   output: {
     filename: '[name].js',

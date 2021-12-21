@@ -203,4 +203,31 @@ export class DroidApi {
     return instances;
   }
 
+
+  /**
+   * @returns {Promise<Instance[]>}
+   */
+  getWattTotal() {
+    return this.ajax.get(`${this.scheme}${this.domain}/api/cosmos/bank/v1beta1/supply`)
+      .then(this.wattTotalResponseHandler.bind(this));
+  }
+
+  /**
+   * @param data response data
+   * @returns {object}
+   */
+  wattTotalResponseHandler(data) {
+
+    const stake = parseInt(data.supply[0].amount)
+    const watt = parseInt(data.supply[1].amount)
+    const total = stake + watt
+
+    const result = {
+      "denom": "watt",
+      "amount": total
+    }
+
+    return result;
+  }
+
 }

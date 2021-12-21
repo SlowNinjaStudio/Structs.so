@@ -16,7 +16,7 @@ export class DroidUIDroid {
 
     this.instance;
     this.droidUi = new DroidUI();
-    this.droidAPI = this.droidUi.droidApi;
+
 
     const seedPhraseFileName = this.getSeedPhraseFileName();
 
