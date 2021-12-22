@@ -23,6 +23,9 @@ const droidId = (urlParams.get('droid_id') === '') ? instance.address : urlParam
 
 
 
+// rank
+const wattRank = new DroidUIWattRank(instance);
+await wattRank.init('watt_rank_container');
 
 // load main watt display
 const wattAmount = new DroidUIWattAmount(instance);
@@ -33,9 +36,6 @@ const wattAmountTotal = new DroidUIWattAmountTotal(instance);
 await wattAmountTotal.init('watt_amount_total_container');
 
 
-// rank
-const wattRank = new DroidUIWattRank(instance);
-await wattRank.init('watt_rank_container');
 
 
 

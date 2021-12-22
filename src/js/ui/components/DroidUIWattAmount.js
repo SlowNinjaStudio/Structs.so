@@ -4,6 +4,7 @@
 import {DroidUI} from "../DroidUI";
 import {Instance} from "../../models/Instance";
 import {WattToString} from "../../vendor/WattToString";
+import {REFRESH_TIME} from "../../Constants";
 
 
 export class DroidUIWattAmount {
@@ -14,6 +15,13 @@ export class DroidUIWattAmount {
     this.instance = instance;
 
     this.currentBalance = 0;
+    this.lastBalance = 0;
+    this.changeRate = 0;
+
+    this.refresher;
+
+    this.initiated = false;
+
     this.sectionWrapper;
   }
 
@@ -23,7 +31,11 @@ export class DroidUIWattAmount {
         <div class="nes-container schematic-design-card">
           <section class="nes-container with-title">
             <p class="title">Droid Watt</p>
-            ⚡️${WattToString(this.currentBalance.amount)}
+            ⚡️${(this.initiated) ? WattToString(this.currentBalance.amount) : 'Loading...'}
+           </section>
+           <section class="nes-container with-title">
+            <p class="title">Change Rate</p>
+            ⚡️${(this.initiated) ? WattToString((this.changeRate  / REFRESH_TIME.WATT_AMOUNT) * 3.6e+6, true) : 'Calculating...'}
             </section>
         </div>
       </div>
@@ -31,16 +43,26 @@ export class DroidUIWattAmount {
     `;
   }
 
-  async init(id) {
+  init(id) {
     this.sectionWrapper = document.getElementById(id);
-
-    await this.reload()
+    this.sectionWrapper.innerHTML = this.render();
+    this.refresher =  setInterval(this.reload.bind(this), REFRESH_TIME.WATT_AMOUNT);
   }
 
   async reload() {
+
     this.currentBalance = await this.instance.queryBalance();
+
     this.sectionWrapper.innerHTML = this.render();
 
-    setTimeout(this.reload.bind(this));
+    if (this.initiated) {
+      this.lastBalance    = (parseInt(this.currentBalance.amount) + parseInt(this.lastBalance)) / 2
+      this.changeRate     = (this.currentBalance.amount - this.lastBalance)
+
+    } else {
+      this.lastBalance = this.currentBalance.amount
+      this.initiated = true;
+    }
+
   }
 }

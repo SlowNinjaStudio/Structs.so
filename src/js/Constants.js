@@ -50,5 +50,11 @@ export const
     REPAIR: 'repair',
     DRAIN: 'drain',
     BUILD: 'build'
+  },
+  REFRESH_TIME = {
+    WATT_AMOUNT: 3000,
+    WATT_AMOUNT_TOTAL: 3000,
+    WATT_RANK: 5000,
+
   }
 ;
