@@ -265,4 +265,26 @@ export class DroidApi {
     return result;
   }
 
+
+  /**
+   * @param string address
+   * @returns {Promise<Instance[]>}
+   */
+  getWattGridTotal(address) {
+    return this.ajax.get(`${this.scheme}${this.domain}/api/di/wum/${address}`)
+      .then(this.wattGridTotalResponseHandler.bind(this));
+  }
+
+  /**
+   * @param data response data
+   * @returns {object}
+   */
+  wattGridTotalResponseHandler(data) {
+    const result = {
+      "denom": "watt",
+      "amount": data.watt_under_management.amount
+    }
+
+    return result;
+  }
 }

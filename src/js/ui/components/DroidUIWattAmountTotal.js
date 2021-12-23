@@ -31,7 +31,7 @@ export class DroidUIWattAmountTotal {
       <div class="col">
         <div class="nes-container schematic-design-card">
           <section class="nes-container with-title">
-            <p class="title">Total Watt Across Network</p>
+            <p class="title">Network Load</p>
             ⚡️${(this.initiated) ? WattToString(this.currentBalance) : 'Loading...'}
           </section>
           <section class="nes-container with-title">

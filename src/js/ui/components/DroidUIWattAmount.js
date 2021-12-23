@@ -30,7 +30,7 @@ export class DroidUIWattAmount {
       <div class="col">
         <div class="nes-container schematic-design-card">
           <section class="nes-container with-title">
-            <p class="title">Droid Watt</p>
+            <p class="title">Droid Battery</p>
             ⚡️${(this.initiated) ? WattToString(this.currentBalance.amount) : 'Loading...'}
            </section>
            <section class="nes-container with-title">
