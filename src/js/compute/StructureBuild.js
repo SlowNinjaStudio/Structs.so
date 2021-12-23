@@ -407,6 +407,34 @@ export class StructureBuild {
   }
 
   /**
+   * @param {Object} result
+   */
+  processResult(result) {
+    let processedResult = {
+      performingStructureEnergyUse: 0,
+      performingStructureID: 0,
+      targetBuiltID: false,
+    };
+
+    for (let i = 0; i < result.events.length; i++ ) {
+      for (let x = 0; x < result.events[i].attributes.length; x++) {
+        switch(result.events[i].attributes[x].key) {
+          case "performing_structure_energy_use":
+            processedResult.performingStructureEnergyUse = result.events[i].attributes[x].value;
+            break;
+          case "built_target_id":
+            processedResult.targetBuiltID = result.events[i].attributes[x].value;
+            break;
+          case "performing_structure_id":
+            processedResult.performingStructureID = result.events[i].attributes[x].value;
+            break;
+        }
+      }
+    }
+    return processedResult;
+  }
+
+  /**
    * Result payload from Compute Worker engine
    *
    * @param {ComputeProcess} processState
@@ -445,8 +473,10 @@ export class StructureBuild {
           let tx_result_parsed = JSON.parse(tx_result.rawLog)
           let new_structure_id = tx_result.data[0].data[1];
 
+          let tx_result_processed = (new StructureBuild()).processResult(tx_result_parsed[0]);
+
           // Gross, move elsewhere.
-          document.getElementById('build-status-dialog-view-button').href = '/structure.html?structure_id=' + new_structure_id;
+          document.getElementById('build-status-dialog-view-button').href = '/structure.html?structure_id=' + tx_result_processed.targetBuiltID;
           document.getElementById('build-status-dialog-view-button').disabled = ""
           document.getElementById('build-status-dialog-view-button').classList.remove('is-disabled')
           document.getElementById('build-status-dialog-view-button').classList.add('is-success')
