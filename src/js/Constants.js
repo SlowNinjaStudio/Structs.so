@@ -55,6 +55,7 @@ export const
     WATT_AMOUNT: 3000,
     WATT_AMOUNT_TOTAL: 3000,
     WATT_RANK: 5000,
+    WATT_STRUCTURE_RANK: 10000,
 
   }
 ;

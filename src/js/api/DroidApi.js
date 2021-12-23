@@ -203,6 +203,41 @@ export class DroidApi {
     return instances;
   }
 
+  /**
+   * @returns {Promise<Structure[]>}
+   */
+  getTopTenStructures() {
+    return this.ajax.get(`${this.scheme}${this.domain}/api/di/Structure/search/`)
+      .then(this.topTenStructureResponseHandler.bind(this));
+  }
+
+  /**
+   * @param data response data
+   * @returns {Structure[]}
+   */
+  topTenStructureResponseHandler(data) {
+    const structureFactory = new StructureFactory();
+
+    let structures = [];
+    const rawStructures = Array.isArray(data.Structure) ? data.Structure: [data.Structure];
+
+    for (let i = 0; i < rawStructures.length; i ++) {
+      structures[i] = structureFactory.make(rawStructures[i])
+    }
+
+    structures.sort(function(a, b) {
+      if (parseInt(a.battery.amount) > parseInt(b.battery.amount)) {
+        return -1;
+      }
+      if (parseInt(a.battery.amount) < parseInt(b.battery.amount)) {
+        return 1;
+      }
+      // names must be equal
+      return 0;
+    })
+
+    return structures.slice(0,10);
+  }
 
   /**
    * @returns {Promise<Instance[]>}

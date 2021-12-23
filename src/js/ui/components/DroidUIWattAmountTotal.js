@@ -32,7 +32,7 @@ export class DroidUIWattAmountTotal {
         <div class="nes-container schematic-design-card">
           <section class="nes-container with-title">
             <p class="title">Total Watt Across Network</p>
-            ⚡️${(this.initiated) ? WattToString(this.currentBalance.amount) : 'Loading...'}
+            ⚡️${(this.initiated) ? WattToString(this.currentBalance) : 'Loading...'}
           </section>
           <section class="nes-container with-title">
             <p class="title">Change Rate</p>
@@ -52,16 +52,26 @@ export class DroidUIWattAmountTotal {
   }
 
   async reload() {
-    this.currentBalance = await this.droidUi.droidApi.getWattTotal();
+
+    // Get the wallet balances
+    const walletBalances = await this.droidUi.droidApi.getWattTotal();
+    this.currentBalance = parseInt(walletBalances.amount)
+    // Then add all the structure balances
+    const instanceBalances =  await this.droidUi.droidApi.getInstancesByAWUM();
+    if (typeof instanceBalances != '' && instanceBalances != null) {
+      for (let x = 0; x < instanceBalances.length; x++) {
+        this.currentBalance += parseInt(instanceBalances[x].wattUnderManagement)
+      }
+    }
 
     this.sectionWrapper.innerHTML = this.render();
 
     if (this.initiated) {
-      this.lastBalance    = (parseInt(this.currentBalance.amount) + parseInt(this.lastBalance)) / 2
-      this.changeRate     = (this.currentBalance.amount - this.lastBalance)
+      this.lastBalance    = (parseInt(this.currentBalance) + parseInt(this.lastBalance)) / 2
+      this.changeRate     = (this.currentBalance - this.lastBalance)
 
     } else {
-      this.lastBalance = this.currentBalance.amount
+      this.lastBalance = this.currentBalance
       this.initiated = true;
     }
 

@@ -3,6 +3,7 @@ import {StringToFile} from "../../vendor/StringToFile";
 import {BIP39SeedPhraseValidator} from "../../vendor/BIP39/BIP39SeedPhraseValidator";
 import {DroidUI} from "../DroidUI";
 import {DroidApi} from "../../api/DroidApi";
+import {WattToString} from "../../vendor/WattToString";
 
 export class DroidUIDroid {
   /**
@@ -33,7 +34,7 @@ export class DroidUIDroid {
 
       // document.getElementById('droid_panel_name').innerHTML = this.instance.name;
       // document.getElementById('droid_panel_mood').innerHTML = this.instance.mood;
-      document.getElementById('droid_panel_battery').innerHTML = (current_balance.amount) + ' ' + current_balance.denom;
+      document.getElementById('droid_panel_battery').innerHTML = WattToString(current_balance.amount);
 
       // shhhh don't loook here, kthnx.
       if (current_balance.amount == 0) {
