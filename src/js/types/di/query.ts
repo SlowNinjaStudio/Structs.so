@@ -1,15 +1,15 @@
 /* eslint-disable */
 import { Reader, util, configure, Writer } from "protobufjs/minimal";
 import * as Long from "long";
-import { Reactor } from "../di/Reactor";
+import { Reactor } from "./Reactor";
 import {
   PageRequest,
   PageResponse,
-} from "../cosmos/base/query/v1beta1/pagination";
-import { Instance } from "../di/Instance";
-import { Structure } from "../di/Structure";
-import { Schematic } from "../di/Schematic";
-import { Coin } from "../cosmos/base/v1beta1/coin";
+} from "../../cosmos/base/query/v1beta1/pagination";
+import { Instance } from "./Instance";
+import { Structure } from "./Structure";
+import { Schematic } from "./Schematic";
+import { Coin } from "../../cosmos/base/v1beta1/coin";
 
 export const protobufPackage = "di";
 
@@ -48,6 +48,11 @@ export interface QueryAllInstanceResponse {
   pagination: PageResponse | undefined;
 }
 
+export interface QuerySearchInstanceRequest {
+  pagination: PageRequest | undefined;
+  query: string;
+}
+
 export interface QueryGetStructureRequest {
   id: number;
 }
@@ -68,6 +73,21 @@ export interface QueryCreatorStructureRequest {
 export interface QuerySearchStructureRequest {
   pagination: PageRequest | undefined;
   query: string;
+}
+
+export interface QuerySearchPerformingStructureRequest {
+  pagination: PageRequest | undefined;
+  query: string;
+  actionType: string;
+  target: string;
+  instance: string;
+}
+
+export interface QuerySearchTargetingStructureRequest {
+  pagination: PageRequest | undefined;
+  query: string;
+  actionType: string;
+  performing: number;
 }
 
 export interface QueryAllStructureResponse {
@@ -725,6 +745,95 @@ export const QueryAllInstanceResponse = {
   },
 };
 
+const baseQuerySearchInstanceRequest: object = { query: "" };
+
+export const QuerySearchInstanceRequest = {
+  encode(
+    message: QuerySearchInstanceRequest,
+    writer: Writer = Writer.create()
+  ): Writer {
+    if (message.pagination !== undefined) {
+      PageRequest.encode(message.pagination, writer.uint32(10).fork()).ldelim();
+    }
+    if (message.query !== "") {
+      writer.uint32(18).string(message.query);
+    }
+    return writer;
+  },
+
+  decode(
+    input: Reader | Uint8Array,
+    length?: number
+  ): QuerySearchInstanceRequest {
+    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = {
+      ...baseQuerySearchInstanceRequest,
+    } as QuerySearchInstanceRequest;
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.pagination = PageRequest.decode(reader, reader.uint32());
+          break;
+        case 2:
+          message.query = reader.string();
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): QuerySearchInstanceRequest {
+    const message = {
+      ...baseQuerySearchInstanceRequest,
+    } as QuerySearchInstanceRequest;
+    if (object.pagination !== undefined && object.pagination !== null) {
+      message.pagination = PageRequest.fromJSON(object.pagination);
+    } else {
+      message.pagination = undefined;
+    }
+    if (object.query !== undefined && object.query !== null) {
+      message.query = String(object.query);
+    } else {
+      message.query = "";
+    }
+    return message;
+  },
+
+  toJSON(message: QuerySearchInstanceRequest): unknown {
+    const obj: any = {};
+    message.pagination !== undefined &&
+      (obj.pagination = message.pagination
+        ? PageRequest.toJSON(message.pagination)
+        : undefined);
+    message.query !== undefined && (obj.query = message.query);
+    return obj;
+  },
+
+  fromPartial(
+    object: DeepPartial<QuerySearchInstanceRequest>
+  ): QuerySearchInstanceRequest {
+    const message = {
+      ...baseQuerySearchInstanceRequest,
+    } as QuerySearchInstanceRequest;
+    if (object.pagination !== undefined && object.pagination !== null) {
+      message.pagination = PageRequest.fromPartial(object.pagination);
+    } else {
+      message.pagination = undefined;
+    }
+    if (object.query !== undefined && object.query !== null) {
+      message.query = object.query;
+    } else {
+      message.query = "";
+    }
+    return message;
+  },
+};
+
 const baseQueryGetStructureRequest: object = { id: 0 };
 
 export const QueryGetStructureRequest = {
@@ -1111,6 +1220,278 @@ export const QuerySearchStructureRequest = {
       message.query = object.query;
     } else {
       message.query = "";
+    }
+    return message;
+  },
+};
+
+const baseQuerySearchPerformingStructureRequest: object = {
+  query: "",
+  actionType: "",
+  target: "",
+  instance: "",
+};
+
+export const QuerySearchPerformingStructureRequest = {
+  encode(
+    message: QuerySearchPerformingStructureRequest,
+    writer: Writer = Writer.create()
+  ): Writer {
+    if (message.pagination !== undefined) {
+      PageRequest.encode(message.pagination, writer.uint32(10).fork()).ldelim();
+    }
+    if (message.query !== "") {
+      writer.uint32(18).string(message.query);
+    }
+    if (message.actionType !== "") {
+      writer.uint32(26).string(message.actionType);
+    }
+    if (message.target !== "") {
+      writer.uint32(34).string(message.target);
+    }
+    if (message.instance !== "") {
+      writer.uint32(42).string(message.instance);
+    }
+    return writer;
+  },
+
+  decode(
+    input: Reader | Uint8Array,
+    length?: number
+  ): QuerySearchPerformingStructureRequest {
+    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = {
+      ...baseQuerySearchPerformingStructureRequest,
+    } as QuerySearchPerformingStructureRequest;
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.pagination = PageRequest.decode(reader, reader.uint32());
+          break;
+        case 2:
+          message.query = reader.string();
+          break;
+        case 3:
+          message.actionType = reader.string();
+          break;
+        case 4:
+          message.target = reader.string();
+          break;
+        case 5:
+          message.instance = reader.string();
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): QuerySearchPerformingStructureRequest {
+    const message = {
+      ...baseQuerySearchPerformingStructureRequest,
+    } as QuerySearchPerformingStructureRequest;
+    if (object.pagination !== undefined && object.pagination !== null) {
+      message.pagination = PageRequest.fromJSON(object.pagination);
+    } else {
+      message.pagination = undefined;
+    }
+    if (object.query !== undefined && object.query !== null) {
+      message.query = String(object.query);
+    } else {
+      message.query = "";
+    }
+    if (object.actionType !== undefined && object.actionType !== null) {
+      message.actionType = String(object.actionType);
+    } else {
+      message.actionType = "";
+    }
+    if (object.target !== undefined && object.target !== null) {
+      message.target = String(object.target);
+    } else {
+      message.target = "";
+    }
+    if (object.instance !== undefined && object.instance !== null) {
+      message.instance = String(object.instance);
+    } else {
+      message.instance = "";
+    }
+    return message;
+  },
+
+  toJSON(message: QuerySearchPerformingStructureRequest): unknown {
+    const obj: any = {};
+    message.pagination !== undefined &&
+      (obj.pagination = message.pagination
+        ? PageRequest.toJSON(message.pagination)
+        : undefined);
+    message.query !== undefined && (obj.query = message.query);
+    message.actionType !== undefined && (obj.actionType = message.actionType);
+    message.target !== undefined && (obj.target = message.target);
+    message.instance !== undefined && (obj.instance = message.instance);
+    return obj;
+  },
+
+  fromPartial(
+    object: DeepPartial<QuerySearchPerformingStructureRequest>
+  ): QuerySearchPerformingStructureRequest {
+    const message = {
+      ...baseQuerySearchPerformingStructureRequest,
+    } as QuerySearchPerformingStructureRequest;
+    if (object.pagination !== undefined && object.pagination !== null) {
+      message.pagination = PageRequest.fromPartial(object.pagination);
+    } else {
+      message.pagination = undefined;
+    }
+    if (object.query !== undefined && object.query !== null) {
+      message.query = object.query;
+    } else {
+      message.query = "";
+    }
+    if (object.actionType !== undefined && object.actionType !== null) {
+      message.actionType = object.actionType;
+    } else {
+      message.actionType = "";
+    }
+    if (object.target !== undefined && object.target !== null) {
+      message.target = object.target;
+    } else {
+      message.target = "";
+    }
+    if (object.instance !== undefined && object.instance !== null) {
+      message.instance = object.instance;
+    } else {
+      message.instance = "";
+    }
+    return message;
+  },
+};
+
+const baseQuerySearchTargetingStructureRequest: object = {
+  query: "",
+  actionType: "",
+  performing: 0,
+};
+
+export const QuerySearchTargetingStructureRequest = {
+  encode(
+    message: QuerySearchTargetingStructureRequest,
+    writer: Writer = Writer.create()
+  ): Writer {
+    if (message.pagination !== undefined) {
+      PageRequest.encode(message.pagination, writer.uint32(10).fork()).ldelim();
+    }
+    if (message.query !== "") {
+      writer.uint32(18).string(message.query);
+    }
+    if (message.actionType !== "") {
+      writer.uint32(26).string(message.actionType);
+    }
+    if (message.performing !== 0) {
+      writer.uint32(32).uint64(message.performing);
+    }
+    return writer;
+  },
+
+  decode(
+    input: Reader | Uint8Array,
+    length?: number
+  ): QuerySearchTargetingStructureRequest {
+    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = {
+      ...baseQuerySearchTargetingStructureRequest,
+    } as QuerySearchTargetingStructureRequest;
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.pagination = PageRequest.decode(reader, reader.uint32());
+          break;
+        case 2:
+          message.query = reader.string();
+          break;
+        case 3:
+          message.actionType = reader.string();
+          break;
+        case 4:
+          message.performing = longToNumber(reader.uint64() as Long);
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): QuerySearchTargetingStructureRequest {
+    const message = {
+      ...baseQuerySearchTargetingStructureRequest,
+    } as QuerySearchTargetingStructureRequest;
+    if (object.pagination !== undefined && object.pagination !== null) {
+      message.pagination = PageRequest.fromJSON(object.pagination);
+    } else {
+      message.pagination = undefined;
+    }
+    if (object.query !== undefined && object.query !== null) {
+      message.query = String(object.query);
+    } else {
+      message.query = "";
+    }
+    if (object.actionType !== undefined && object.actionType !== null) {
+      message.actionType = String(object.actionType);
+    } else {
+      message.actionType = "";
+    }
+    if (object.performing !== undefined && object.performing !== null) {
+      message.performing = Number(object.performing);
+    } else {
+      message.performing = 0;
+    }
+    return message;
+  },
+
+  toJSON(message: QuerySearchTargetingStructureRequest): unknown {
+    const obj: any = {};
+    message.pagination !== undefined &&
+      (obj.pagination = message.pagination
+        ? PageRequest.toJSON(message.pagination)
+        : undefined);
+    message.query !== undefined && (obj.query = message.query);
+    message.actionType !== undefined && (obj.actionType = message.actionType);
+    message.performing !== undefined && (obj.performing = message.performing);
+    return obj;
+  },
+
+  fromPartial(
+    object: DeepPartial<QuerySearchTargetingStructureRequest>
+  ): QuerySearchTargetingStructureRequest {
+    const message = {
+      ...baseQuerySearchTargetingStructureRequest,
+    } as QuerySearchTargetingStructureRequest;
+    if (object.pagination !== undefined && object.pagination !== null) {
+      message.pagination = PageRequest.fromPartial(object.pagination);
+    } else {
+      message.pagination = undefined;
+    }
+    if (object.query !== undefined && object.query !== null) {
+      message.query = object.query;
+    } else {
+      message.query = "";
+    }
+    if (object.actionType !== undefined && object.actionType !== null) {
+      message.actionType = object.actionType;
+    } else {
+      message.actionType = "";
+    }
+    if (object.performing !== undefined && object.performing !== null) {
+      message.performing = object.performing;
+    } else {
+      message.performing = 0;
     }
     return message;
   },
@@ -2214,6 +2595,9 @@ export interface Query {
   InstanceAll(
     request: QueryAllInstanceRequest
   ): Promise<QueryAllInstanceResponse>;
+  InstanceSearch(
+    request: QuerySearchInstanceRequest
+  ): Promise<QueryAllInstanceResponse>;
   Structure(
     request: QueryGetStructureRequest
   ): Promise<QueryGetStructureResponse>;
@@ -2225,6 +2609,12 @@ export interface Query {
   ): Promise<QueryAllStructureResponse>;
   StructureSearch(
     request: QuerySearchStructureRequest
+  ): Promise<QueryAllStructureResponse>;
+  StructureSearchForPerforming(
+    request: QuerySearchPerformingStructureRequest
+  ): Promise<QueryAllStructureResponse>;
+  StructureSearchForTargeting(
+    request: QuerySearchTargetingStructureRequest
   ): Promise<QueryAllStructureResponse>;
   Schematic(
     request: QueryGetSchematicRequest
@@ -2295,6 +2685,16 @@ export class QueryClientImpl implements Query {
     );
   }
 
+  InstanceSearch(
+    request: QuerySearchInstanceRequest
+  ): Promise<QueryAllInstanceResponse> {
+    const data = QuerySearchInstanceRequest.encode(request).finish();
+    const promise = this.rpc.request("di.Query", "InstanceSearch", data);
+    return promise.then((data) =>
+      QueryAllInstanceResponse.decode(new Reader(data))
+    );
+  }
+
   Structure(
     request: QueryGetStructureRequest
   ): Promise<QueryGetStructureResponse> {
@@ -2330,6 +2730,34 @@ export class QueryClientImpl implements Query {
   ): Promise<QueryAllStructureResponse> {
     const data = QuerySearchStructureRequest.encode(request).finish();
     const promise = this.rpc.request("di.Query", "StructureSearch", data);
+    return promise.then((data) =>
+      QueryAllStructureResponse.decode(new Reader(data))
+    );
+  }
+
+  StructureSearchForPerforming(
+    request: QuerySearchPerformingStructureRequest
+  ): Promise<QueryAllStructureResponse> {
+    const data = QuerySearchPerformingStructureRequest.encode(request).finish();
+    const promise = this.rpc.request(
+      "di.Query",
+      "StructureSearchForPerforming",
+      data
+    );
+    return promise.then((data) =>
+      QueryAllStructureResponse.decode(new Reader(data))
+    );
+  }
+
+  StructureSearchForTargeting(
+    request: QuerySearchTargetingStructureRequest
+  ): Promise<QueryAllStructureResponse> {
+    const data = QuerySearchTargetingStructureRequest.encode(request).finish();
+    const promise = this.rpc.request(
+      "di.Query",
+      "StructureSearchForTargeting",
+      data
+    );
     return promise.then((data) =>
       QueryAllStructureResponse.decode(new Reader(data))
     );

@@ -1,6 +1,6 @@
 import {Computer} from "../../compute/Computer";
 import {StructureBuild} from "../../compute/StructureBuild";
-import {CONFIG} from "../../constants";
+import {CONFIG} from "../../Constants";
 import {secondsToString} from "../../vendor/SecondsToString"
 
 import {DroidUIComputeStatus} from "./DroidUIComputeStatus"
@@ -43,6 +43,14 @@ export class DroidUISchematicCondensed {
       this.compute_status = computeStatus;
     }
   }
+
+  /**
+   * @return {Schematic|Structure}
+   */
+  getDisplayObject() {
+    return this.schematic;
+  }
+
   getCanvasId() {
     return `${this.idPrefix}schematic-list-item-${this.schematic.getId()}`;
   }
@@ -189,7 +197,7 @@ export class DroidUISchematicCondensed {
         window.bootstrap.Offcanvas.getInstance(document.getElementById('offcanvas')).hide();
 
         let instance = new Instance();
-        await instance.init();
+        instance.lazyLoad();
         this.program.instance = instance.address;
 
         let new_process_id = this.computer.add_process(this.program);

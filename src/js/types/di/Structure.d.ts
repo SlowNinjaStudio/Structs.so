@@ -42,6 +42,7 @@ export interface Structure {
     reactor: string;
     primaryColor: string;
     secondaryColor: string;
+    builtBy: number;
 }
 export declare enum Structure_Feature {
     PAPER_WEIGHT = 0,

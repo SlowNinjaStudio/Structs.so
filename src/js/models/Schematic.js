@@ -1,4 +1,5 @@
-import {AMBITS, FEATURES} from "../constants";
+import {AMBITS, FEATURES} from "../Constants";
+import {ColorRGB} from "../vendor/ColorRGB";
 
 /**
  * Schematic Model
@@ -86,6 +87,9 @@ export class Schematic {
   }
   getPrimaryColor() {
     return this.primary_color;
+  }
+  getPrimaryColorRGB() {
+    return ColorRGB.hexToRgb(this.getPrimaryColor());
   }
 
   isMobile() {
@@ -233,11 +237,10 @@ export class Schematic {
 
     // These could theoretically be skipped if wanting to do faster
     // hashing but for the sake of prettier pictures let's do it
-    if (this.mass == 0) { console.log('this schema sucks')}
-    if (this.strength == 0) { console.log('this schema sucks')}
-    if ((this.mass + this.accuracy) == 0) { console.log('this schema sucks')}
-    if ((this.mass + this.strength) == 0) { console.log('this schema sucks')}
-    if ((this.speed * this.accuracy) == 0)  { console.log('this schema sucks')}
+    this.mass 		= Math.max(this.mass,1)
+    this.accuracy = Math.max(this.accuracy, 1)
+    this.strength = Math.max(this.strength, 1)
+    this.speed 		= Math.max(this.speed, 1)
 
     if (this.is_mobile) {
       this.melee_attack  = (this.strength * this.mass) % (this.speed * this.accuracy)

@@ -1,4 +1,4 @@
-import {DROID_HASH} from "../constants";
+import {DROID_HASH} from "../Constants";
 
 export class CosmosHashUtil {
 

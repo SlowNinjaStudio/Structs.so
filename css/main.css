@@ -368,6 +368,9 @@ textarea.custom-nes-text-area.is-invalid {
   color: #dc3545 !important;
   font-family: sans-serif;
 }
+.animation-wrapper {
+  height: 256px;
+}
 
 /* Account Menu */
 #account-menu-profile-image .game-asset-wrapper {
@@ -393,9 +396,24 @@ textarea.custom-nes-text-area.is-invalid {
 .battery-container {
   background: url(/img/background/power-background.gif);
   background-size: 512px 16px;
+  max-width: 320px;
   padding: 4px 16px;
 }
 .battery-text-container {
+  background: #000000;
+  border: 4px solid #000000;
+  color: #ffffff;
+  font-size: 14px;
+  text-align: center;
+}
+
+.rank-container {
+  background: url(/img/background/power-background.gif);
+  background-size: 512px 16px;
+  max-width: 320px;
+  padding: 4px 16px;
+}
+.rank-text-container {
   background: #000000;
   border: 4px solid #000000;
   color: #ffffff;
@@ -613,6 +631,77 @@ img.structure-card-icon {
  */
 .droid-ui-generic-modal.modal .modal-body {
   font-family: sans-serif;
+}
+
+/**
+ * Art Overlay
+ */
+ .art-overlay {
+   display: none;
+   background-color: black;
+   color: white;
+   height: 256px;
+   left: 0;
+   opacity: 0;
+   position: relative;
+   width: 256px;
+   text-align: center;
+   top: -256px;
+   transition: opacity 1s ease-in;
+ }
+.art-overlay-vertical-align-helper {
+  display: inline-block;
+  height: 100%;
+  width: 0;
+  vertical-align: middle;
+}
+.art-overlay-body {
+  display: inline-block;
+  vertical-align: middle;
+}
+.art-overlay a, .art-overlay a:link, .art-overlay a:visited {
+  color: #FFFFFF;
+}
+
+/**
+ * Lottie
+ */
+.lottie-custom-player {
+  position: relative;
+  height: 256px;
+  width: 256px;
+}
+.lottie-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 256px;
+  width: 256px;
+  visibility: hidden;
+}
+a.ambit-button img {
+  width: 59px;
+}
+a.ambit-button:hover img, a.ambit-button:active img {
+  filter: brightness(1.5);
+}
+a.ambit-button {
+  box-sizing: border-box;
+  border-left: 4px solid rgb(38,38,38);
+  border-bottom: 4px solid rgb(38,38,38);
+  border-top: 4px solid rgb(38,38,38);
+  display: inline-block;
+}
+a.ambit-button.last-ambit-button {
+  border-right: 4px solid rgb(38,38,38);
+}
+a.ambit-button.disabled img,
+a.ambit-button.disabled:link img,
+a.ambit-button.disabled:hover img,
+a.ambit-button.disabled:visited img,
+a.ambit-button.disabled:active img
+{
+  filter: grayscale(1) !important;
 }
 
 /**

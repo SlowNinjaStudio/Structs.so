@@ -1,6 +1,7 @@
 import {JsonAjaxer} from "../vendor/JsonAjaxer";
 import {StructureFactory} from "../models/StructureFactory";
 import {SchematicFactory} from "../models/SchematicFactory";
+import {InstanceFactory} from "../models/InstanceFactory";
 
 /**
  * API Gateway for the Droid API
@@ -120,13 +121,40 @@ export class DroidApi {
    */
   searchStructuresBySchematic(schematicId, searchString, creator) {
     // TODO: Add real endpoint call once created
-    const searchWithCreator = `${searchString} ${creator}`;
+    const searchWithCreator = `${searchString} ${creator} engineering`;
     return this.ajax.get(`${this.scheme}${this.domain}/api/di/Structure/search/${encodeURIComponent(searchWithCreator)}`)
       .then(this.structureResponseHandler.bind(this));
   }
 
   /**
-   * @param {obj} request
+   * @param {string} actionType
+   * @param {string} target
+   * @param {string} supervisor
+   * @param {string} searchString
+   * @returns {Promise<Structure[]>}
+   */
+  searchStructuresByPerforming(actionType, target, supervisor, searchString) {
+    const searchWithCreator = `${searchString}`;
+    ///di/Structure/search/performing/{action_type}/{target}/{instance}/{query}
+    return this.ajax.get(`${this.scheme}${this.domain}/api/di/Structure/search/performing/${encodeURIComponent(actionType)}/${encodeURIComponent(target)}/${encodeURIComponent(supervisor)}/${encodeURIComponent(searchWithCreator)}`)
+      .then(this.structureResponseHandler.bind(this));
+  }
+
+  /**
+   * @param {string} actionType
+   * @param {string} performing
+   * @param {string} searchString
+   * @returns {Promise<Structure[]>}
+   */
+  searchStructuresByTargeting(actionType, performing, searchString) {
+    const searchWithCreator = `${searchString}`;
+    ///di/Structure/search/targeting/{action_type}/{performing}/{query}
+    return this.ajax.get(`${this.scheme}${this.domain}/api/di/Structure/search/targeting/${encodeURIComponent(actionType)}/${encodeURIComponent(performing)}/${encodeURIComponent(searchWithCreator)}`)
+      .then(this.structureResponseHandler.bind(this));
+  }
+
+  /**
+   * @param {object} request
    * @returns {Promise<string>}
    */
   performFaucetRequest(request) {
@@ -137,5 +165,126 @@ export class DroidApi {
   faucetRequestResponseHandler(response) {
     return response.transfers[0].coin;
 
+  }
+
+  /**
+   * @returns {Promise<Instance[]>}
+   */
+  getInstancesByAWUM() {
+    return this.ajax.get(`${this.scheme}${this.domain}/api/di/awum`)
+      .then(this.instanceResponseHandler.bind(this));
+  }
+
+  /**
+   * @param data response data
+   * @returns {Instance[]}
+   */
+  instanceResponseHandler(data) {
+    const instanceFactory = new InstanceFactory();
+
+    let instances = [];
+    const rawInstances = Array.isArray(data.watt_under_management) ? data.watt_under_management : [data.watt_under_management];
+
+    for (let i = 0; i < rawInstances.length; i ++) {
+      instances[i] = instanceFactory.make(rawInstances[i])
+    }
+
+    instances.sort(function(a, b) {
+      if (a.wattUnderManagement > b.wattUnderManagement) {
+        return -1;
+      }
+      if (a.wattUnderManagement < b.wattUnderManagement) {
+        return 1;
+      }
+      // names must be equal
+      return 0;
+    })
+
+    return instances;
+  }
+
+  /**
+   * @returns {Promise<Structure[]>}
+   */
+  getTopTenStructures() {
+    return this.ajax.get(`${this.scheme}${this.domain}/api/di/Structure/search/`)
+      .then(this.topTenStructureResponseHandler.bind(this));
+  }
+
+  /**
+   * @param data response data
+   * @returns {Structure[]}
+   */
+  topTenStructureResponseHandler(data) {
+    const structureFactory = new StructureFactory();
+
+    let structures = [];
+    const rawStructures = Array.isArray(data.Structure) ? data.Structure: [data.Structure];
+
+    for (let i = 0; i < rawStructures.length; i ++) {
+      structures[i] = structureFactory.make(rawStructures[i])
+    }
+
+    structures.sort(function(a, b) {
+      if (parseInt(a.battery.amount) > parseInt(b.battery.amount)) {
+        return -1;
+      }
+      if (parseInt(a.battery.amount) < parseInt(b.battery.amount)) {
+        return 1;
+      }
+      // names must be equal
+      return 0;
+    })
+
+    return structures.slice(0,10);
+  }
+
+  /**
+   * @returns {Promise<Instance[]>}
+   */
+  getWattTotal() {
+    return this.ajax.get(`${this.scheme}${this.domain}/api/cosmos/bank/v1beta1/supply`)
+      .then(this.wattTotalResponseHandler.bind(this));
+  }
+
+  /**
+   * @param data response data
+   * @returns {object}
+   */
+  wattTotalResponseHandler(data) {
+
+    const stake = parseInt(data.supply[0].amount)
+    const watt = parseInt(data.supply[1].amount)
+    const total = stake + watt
+
+    const result = {
+      "denom": "watt",
+      "amount": total
+    }
+
+    return result;
+  }
+
+
+  /**
+   * @param string address
+   * @returns {Promise<Instance[]>}
+   */
+  getWattGridTotal(address) {
+    return this.ajax.get(`${this.scheme}${this.domain}/api/di/wum/${address}`)
+      .then(this.wattGridTotalResponseHandler.bind(this));
+  }
+
+  /**
+   * @param data response data
+   * @returns {object}
+   */
+  wattGridTotalResponseHandler(data) {
+    const result = {
+      "denom": "watt",
+      "amount": data.watt_under_management.amount
+    }
+
+    return result;
   }
 }

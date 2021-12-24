@@ -9,14 +9,17 @@ import {Computer} from "../../compute/Computer";
 
 export class DroidUIStructureBuildStatusModal {
   /**
-   * @param {number} amount
+   * @param {Schematic} schematic
+   * @param {Structure} structure
+   * @param {StructureBuild} program
+   * @param {number} processId
    */
-  constructor(schematic, structure, program, process_id) {
+  constructor(schematic, structure, program, processId) {
 
     this.schematic = schematic;
     this.structure = structure;
     this.program = program;
-    this.process_id = process_id;
+    this.process_id = processId;
 
     this.uiSchematic = new DroidUISchematicCondensed(
       this.schematic,
@@ -26,6 +29,8 @@ export class DroidUIStructureBuildStatusModal {
     );
 
     this.computeStatus = new DroidUIComputeStatus(true);
+
+    this.backdrop = document.getElementById("backdrop");
   }
 
   render() {
@@ -34,7 +39,7 @@ export class DroidUIStructureBuildStatusModal {
         <div class="modal-dialog">
           <div class="modal-content ">
             <div class="modal-header">
-               <h6 class="modal-title">🏭 Building Structure 🏭️</h6>
+               <h6 class="modal-title">Building Structure</h6>
             </div>
             <div class="modal-body">
               ${this.uiSchematic.render()}
@@ -61,15 +66,19 @@ export class DroidUIStructureBuildStatusModal {
     this.computeStatus.setProgram(this.program);
     this.computeStatus.setProcessID(this.process_id);
 
-    document.getElementById("backdrop").style.display = "block"
-    document.getElementById("build-status-dialog").style.display = "block"
-    document.getElementById("build-status-dialog").classList.add("show")
+    this.backdrop.style.display = "block"
+
+    const buildStatusDialog = document.getElementById("build-status-dialog")
+    buildStatusDialog.style.display = "block"
+    buildStatusDialog.classList.add("show")
   }
 
   destroyModal() {
-    document.getElementById("backdrop").style.display = "none"
-    document.getElementById("build-status-dialog").style.display = "none"
-    document.getElementById("build-status-dialog").classList.remove("show")
+    this.backdrop.style.display = "none"
+
+    const buildStatusDialog = document.getElementById("build-status-dialog")
+    buildStatusDialog.style.display = "none"
+    buildStatusDialog.classList.remove("show")
 
     document.getElementById("modal-container").innerHTML  = ""
   }

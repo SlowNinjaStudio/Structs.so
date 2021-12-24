@@ -1,22 +1,25 @@
 import {ColorRGB} from "../vendor/ColorRGB";
 import {StructureRanks} from "../models/StructureRanks";
 
-/**
- * Generates palettes for mobile structures.
- */
-export class StructureMobilePalette {
+export class StructurePaletteMobileMech {
   constructor() {
-    this.chassisTop = new ColorRGB(255, 152, 0);
-    this.chassisBottom = new ColorRGB(255, 87, 34);
-    this.waterFin = new ColorRGB(255, 186, 0);
-    this.landTire = new ColorRGB(88, 88, 88);
-    this.landHubCap = new ColorRGB(192, 192, 192);
-    this.skyWing = new ColorRGB(244, 67, 54);
-    this.spaceFlameCore = new ColorRGB(254, 254, 254);
-    this.spaceInnerFlame = new ColorRGB(255, 213, 79);
-    this.spaceOuterFlame = new ColorRGB(255, 61, 0);
-    this.attackGunBarrel = new ColorRGB(158, 158, 158);
-    this.attackGunAccent = new ColorRGB(255, 179, 0);
+    this.mechBody1 = new ColorRGB(255, 201, 122);
+    this.mechBody2 = new ColorRGB(255, 152, 0);
+    this.mechBody3 = new ColorRGB(194, 116, 0);
+    this.mechBody4 = new ColorRGB(143, 85, 0);
+
+    this.mechGlass1 = new ColorRGB(168, 202, 252);
+    this.mechGlass2 = new ColorRGB(118, 173, 255);
+    this.mechGlass3 = new ColorRGB(53, 134, 255);
+
+    this.attackGunBarrel = new ColorRGB(212, 0, 0);
+
+    this.defenseInnerShield = new ColorRGB(58, 138, 255);
+    this.defenseOuterShield = new ColorRGB(199, 222, 255);
+
+    this.engineeringCraneArm = new ColorRGB(255, 210, 0);
+    this.engineeringCraneClaw = new ColorRGB(122, 122, 122);
+
     this.powerLightColor = [
       new ColorRGB(118, 251, 3),
       new ColorRGB(118, 252, 3),
@@ -24,41 +27,37 @@ export class StructureMobilePalette {
       new ColorRGB(118, 254, 3),
       new ColorRGB(118, 255, 3)
     ];
-    this.engineeringCraneArm = new ColorRGB(132, 175, 196);
-    this.engineeringCraneClaw = new ColorRGB(220, 232, 238);
-    this.defenseInnerShield = new ColorRGB(128, 216, 255);
-    this.defenseOuterShield = new ColorRGB(224, 247, 250);
   }
 
   /**
    * @param {Array.<Array>} paletteSwap
    * @param {ColorRGB} primaryColor
    */
-  generateChassisPaletteSwap(paletteSwap, primaryColor) {
-    const adjustedColor = primaryColor.clampAvgBrightness(40, 255);
-    const shades = adjustedColor.getShades(2);
-    paletteSwap.push([this.chassisTop, shades[0]]);
-    paletteSwap.push([this.chassisBottom, shades[1]]);
+  generateMechBodyPaletteSwap(paletteSwap, primaryColor) {
+    const adjustedColor = primaryColor.clampAvgBrightness(80, 255);
+    const white = new ColorRGB(255, 255, 255);
+    const lighterShade = adjustedColor.mixColors(white, 0.5);
+    const shades = adjustedColor.getShades(3);
+    paletteSwap.push([this.mechBody1, lighterShade]);
+    paletteSwap.push([this.mechBody2, shades[0]]);
+    paletteSwap.push([this.mechBody3, shades[1]]);
+    paletteSwap.push([this.mechBody4, shades[2]]);
   }
 
   /**
    * @param {Array.<Array>} paletteSwap
    * @param {ColorRGB} primaryColor
    */
-  generateSkyPaletteSwap(paletteSwap, primaryColor) {
-    const adjustedColor = primaryColor.clampAvgBrightness(250, 255);
-    const shades = adjustedColor.getShades(2);
-    paletteSwap.push([this.skyWing, shades[1]]);
-  }
-
-  /**
-   * @param {Array.<Array>} paletteSwap
-   * @param {ColorRGB} primaryColor
-   */
-  generateWaterPaletteSwap(paletteSwap, primaryColor) {
-    const adjustedColor = primaryColor.clampAvgBrightness(250, 255);
-    const shades = adjustedColor.getShades(2);
-    paletteSwap.push([this.waterFin, shades[1]]);
+  generateMechGlassPaletteSwap(paletteSwap, primaryColor) {
+    const white = new ColorRGB(255, 255, 255);
+    const shades = primaryColor
+      .getComplimentaryColor()
+      .maxIntensity()
+      .clampAvgBrightness(100, 200)
+      .getMixedColorShades(5, white);
+    paletteSwap.push([this.mechGlass3, shades[0]]);
+    paletteSwap.push([this.mechGlass2, shades[1]]);
+    paletteSwap.push([this.mechGlass1, shades[2]]);
   }
 
   /**
@@ -69,23 +68,20 @@ export class StructureMobilePalette {
   generateAttackPaletteSwap(paletteSwap, primaryColor, structure) {
     const ranks = (new StructureRanks()).getAttackRanks();
 
-    let gunAccentColor = new ColorRGB(255, 0, 0);
     let gunBarrelColor = this.attackGunBarrel;
     if (structure.getRangeAttack() > ranks.rankS) {
-      gunAccentColor = new ColorRGB(255, 255, 255);
       gunBarrelColor = new ColorRGB(255, 255, 255);
     } else if (structure.getRangeAttack() > ranks.rankA) {
-      gunAccentColor = new ColorRGB(0, 186, 255);
+      gunBarrelColor = new ColorRGB(0, 186, 255);
     } else if (structure.getRangeAttack() > ranks.rankB) {
-      gunAccentColor = new ColorRGB(0, 255, 174);
+      gunBarrelColor = new ColorRGB(0, 255, 174);
     } else if (structure.getRangeAttack() > ranks.rankC) {
-      gunAccentColor = new ColorRGB(255, 252, 0);
+      gunBarrelColor = new ColorRGB(255, 252, 0);
     } else if (structure.getRangeAttack() > ranks.rankD) {
-      gunAccentColor = new ColorRGB(255, 179, 0);
+      gunBarrelColor = new ColorRGB(255, 179, 0);
     }
 
     paletteSwap.push([this.attackGunBarrel, gunBarrelColor]);
-    paletteSwap.push([this.attackGunAccent, gunAccentColor]);
   }
 
   /**
@@ -134,7 +130,7 @@ export class StructureMobilePalette {
     if (structure.getBuildRate() > ranks.rankS) {
       color = new ColorRGB(20, 20, 20);
     } else if (structure.getBuildRate() > ranks.rankA) {
-      color = this.engineeringCraneArm;
+      color = new ColorRGB(132, 175, 196);
     } else if (structure.getBuildRate() > ranks.rankB) {
       color = new ColorRGB(82, 148, 68);
     } else if (structure.getBuildRate() > ranks.rankC) {
@@ -166,9 +162,8 @@ export class StructureMobilePalette {
    */
   generatePaletteSwap(primaryColor, structure) {
     const paletteSwap = [];
-    this.generateChassisPaletteSwap(paletteSwap, primaryColor);
-    this.generateSkyPaletteSwap(paletteSwap, primaryColor);
-    this.generateWaterPaletteSwap(paletteSwap, primaryColor);
+    this.generateMechBodyPaletteSwap(paletteSwap, primaryColor);
+    this.generateMechGlassPaletteSwap(paletteSwap, primaryColor);
     this.generateAttackPaletteSwap(paletteSwap, primaryColor, structure);
     this.generateDefensivePaletteSwap(paletteSwap, primaryColor, structure);
     this.generateEngineeringPaletteSwap(paletteSwap, primaryColor, structure);

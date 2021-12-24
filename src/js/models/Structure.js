@@ -1,4 +1,5 @@
-import {AMBITS, FEATURES} from "../constants";
+import {AMBITS, FEATURES} from "../Constants";
+import {ColorRGB} from "../vendor/ColorRGB";
 
 /**
  * Structure Model
@@ -96,6 +97,9 @@ export class Structure {
   getPrimaryColor() {
     return this.primary_color;
   }
+  getPrimaryColorRGB() {
+    return ColorRGB.hexToRgb(this.getPrimaryColor());
+  }
 
   isMobile() {
     return this.is_mobile;
@@ -120,7 +124,7 @@ export class Structure {
   sharesAmbit(other_ambits) {
     for (var i = 0; i < other_ambits.length; i++) {
 
-      if (this.ambits.includes(other_ambits[i])) { return true }; 
+      if (this.ambits.includes(other_ambits[i])) { return true };
     }
     return false;
   }

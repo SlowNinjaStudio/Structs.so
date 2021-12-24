@@ -1,7 +1,7 @@
 /* eslint-disable */
 import * as Long from "long";
 import { util, configure, Writer, Reader } from "protobufjs/minimal";
-import { Coin } from "../cosmos/base/v1beta1/coin";
+import { Coin } from "../../cosmos/base/v1beta1/coin";
 export const protobufPackage = "di";
 export var Schematic_Feature;
 (function (Schematic_Feature) {

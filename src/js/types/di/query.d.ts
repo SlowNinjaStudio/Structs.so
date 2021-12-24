@@ -33,6 +33,10 @@ export interface QueryAllInstanceResponse {
     Instance: Instance[];
     pagination: PageResponse | undefined;
 }
+export interface QuerySearchInstanceRequest {
+    pagination: PageRequest | undefined;
+    query: string;
+}
 export interface QueryGetStructureRequest {
     id: number;
 }
@@ -49,6 +53,19 @@ export interface QueryCreatorStructureRequest {
 export interface QuerySearchStructureRequest {
     pagination: PageRequest | undefined;
     query: string;
+}
+export interface QuerySearchPerformingStructureRequest {
+    pagination: PageRequest | undefined;
+    query: string;
+    actionType: string;
+    target: string;
+    instance: string;
+}
+export interface QuerySearchTargetingStructureRequest {
+    pagination: PageRequest | undefined;
+    query: string;
+    actionType: string;
+    performing: number;
 }
 export interface QueryAllStructureResponse {
     Structure: Structure[];
@@ -152,6 +169,13 @@ export declare const QueryAllInstanceResponse: {
     toJSON(message: QueryAllInstanceResponse): unknown;
     fromPartial(object: DeepPartial<QueryAllInstanceResponse>): QueryAllInstanceResponse;
 };
+export declare const QuerySearchInstanceRequest: {
+    encode(message: QuerySearchInstanceRequest, writer?: Writer): Writer;
+    decode(input: Reader | Uint8Array, length?: number): QuerySearchInstanceRequest;
+    fromJSON(object: any): QuerySearchInstanceRequest;
+    toJSON(message: QuerySearchInstanceRequest): unknown;
+    fromPartial(object: DeepPartial<QuerySearchInstanceRequest>): QuerySearchInstanceRequest;
+};
 export declare const QueryGetStructureRequest: {
     encode(message: QueryGetStructureRequest, writer?: Writer): Writer;
     decode(input: Reader | Uint8Array, length?: number): QueryGetStructureRequest;
@@ -186,6 +210,20 @@ export declare const QuerySearchStructureRequest: {
     fromJSON(object: any): QuerySearchStructureRequest;
     toJSON(message: QuerySearchStructureRequest): unknown;
     fromPartial(object: DeepPartial<QuerySearchStructureRequest>): QuerySearchStructureRequest;
+};
+export declare const QuerySearchPerformingStructureRequest: {
+    encode(message: QuerySearchPerformingStructureRequest, writer?: Writer): Writer;
+    decode(input: Reader | Uint8Array, length?: number): QuerySearchPerformingStructureRequest;
+    fromJSON(object: any): QuerySearchPerformingStructureRequest;
+    toJSON(message: QuerySearchPerformingStructureRequest): unknown;
+    fromPartial(object: DeepPartial<QuerySearchPerformingStructureRequest>): QuerySearchPerformingStructureRequest;
+};
+export declare const QuerySearchTargetingStructureRequest: {
+    encode(message: QuerySearchTargetingStructureRequest, writer?: Writer): Writer;
+    decode(input: Reader | Uint8Array, length?: number): QuerySearchTargetingStructureRequest;
+    fromJSON(object: any): QuerySearchTargetingStructureRequest;
+    toJSON(message: QuerySearchTargetingStructureRequest): unknown;
+    fromPartial(object: DeepPartial<QuerySearchTargetingStructureRequest>): QuerySearchTargetingStructureRequest;
 };
 export declare const QueryAllStructureResponse: {
     encode(message: QueryAllStructureResponse, writer?: Writer): Writer;
@@ -278,10 +316,13 @@ export interface Query {
     ReactorAll(request: QueryAllReactorRequest): Promise<QueryAllReactorResponse>;
     Instance(request: QueryGetInstanceRequest): Promise<QueryGetInstanceResponse>;
     InstanceAll(request: QueryAllInstanceRequest): Promise<QueryAllInstanceResponse>;
+    InstanceSearch(request: QuerySearchInstanceRequest): Promise<QueryAllInstanceResponse>;
     Structure(request: QueryGetStructureRequest): Promise<QueryGetStructureResponse>;
     StructureAll(request: QueryAllStructureRequest): Promise<QueryAllStructureResponse>;
     StructureByCreator(request: QueryCreatorStructureRequest): Promise<QueryAllStructureResponse>;
     StructureSearch(request: QuerySearchStructureRequest): Promise<QueryAllStructureResponse>;
+    StructureSearchForPerforming(request: QuerySearchPerformingStructureRequest): Promise<QueryAllStructureResponse>;
+    StructureSearchForTargeting(request: QuerySearchTargetingStructureRequest): Promise<QueryAllStructureResponse>;
     Schematic(request: QueryGetSchematicRequest): Promise<QueryGetSchematicResponse>;
     SchematicByHash(request: QueryGetSchematicRequest): Promise<QueryGetSchematicResponse>;
     SchematicSearch(request: QuerySearchSchematicRequest): Promise<QueryAllSchematicResponse>;
@@ -298,10 +339,13 @@ export declare class QueryClientImpl implements Query {
     ReactorAll(request: QueryAllReactorRequest): Promise<QueryAllReactorResponse>;
     Instance(request: QueryGetInstanceRequest): Promise<QueryGetInstanceResponse>;
     InstanceAll(request: QueryAllInstanceRequest): Promise<QueryAllInstanceResponse>;
+    InstanceSearch(request: QuerySearchInstanceRequest): Promise<QueryAllInstanceResponse>;
     Structure(request: QueryGetStructureRequest): Promise<QueryGetStructureResponse>;
     StructureAll(request: QueryAllStructureRequest): Promise<QueryAllStructureResponse>;
     StructureByCreator(request: QueryCreatorStructureRequest): Promise<QueryAllStructureResponse>;
     StructureSearch(request: QuerySearchStructureRequest): Promise<QueryAllStructureResponse>;
+    StructureSearchForPerforming(request: QuerySearchPerformingStructureRequest): Promise<QueryAllStructureResponse>;
+    StructureSearchForTargeting(request: QuerySearchTargetingStructureRequest): Promise<QueryAllStructureResponse>;
     Schematic(request: QueryGetSchematicRequest): Promise<QueryGetSchematicResponse>;
     SchematicByHash(request: QueryGetSchematicRequest): Promise<QueryGetSchematicResponse>;
     SchematicSearch(request: QuerySearchSchematicRequest): Promise<QueryAllSchematicResponse>;

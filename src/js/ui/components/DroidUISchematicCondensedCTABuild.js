@@ -1,3 +1,5 @@
+import {StructureBuild} from "../../compute/StructureBuild";
+
 export class DroidUISchematicCondensedCTABuild {
 
   /**
@@ -5,6 +7,10 @@ export class DroidUISchematicCondensedCTABuild {
    */
   constructor(schematic) {
     this.schematic = schematic;
+  }
+
+  initProgram() {
+    return (new StructureBuild())
   }
 
   render() {

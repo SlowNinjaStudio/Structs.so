@@ -1,6 +1,6 @@
 import {Computer, processes, next_process_id} from "../../compute/Computer";
 import {SchematicRD} from "../../compute/SchematicRD";
-import {AMBITS, FEATURES} from "../../constants";
+import {AMBITS, FEATURES} from "../../Constants";
 import {secondsToString} from "../../vendor/SecondsToString"
 import {Instance} from "../../models/Instance"
 
@@ -116,7 +116,7 @@ export class DroidUISchematicRDForm {
     this.compute_status.setProgram(this.program)
 
     this.instance = new Instance();
-    await this.instance.init();
+    await this.instance.initActive();
   }
 
 

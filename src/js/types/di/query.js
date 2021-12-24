@@ -2,11 +2,11 @@
 import { Reader, util, configure, Writer } from "protobufjs/minimal";
 import * as Long from "long";
 import { Reactor } from "../di/Reactor";
-import { PageRequest, PageResponse, } from "../cosmos/base/query/v1beta1/pagination";
+import { PageRequest, PageResponse, } from "../../cosmos/base/query/v1beta1/pagination";
 import { Instance } from "../di/Instance";
 import { Structure } from "../di/Structure";
 import { Schematic } from "../di/Schematic";
-import { Coin } from "../cosmos/base/v1beta1/coin";
+import { Coin } from "../../cosmos/base/v1beta1/coin";
 export const protobufPackage = "di";
 const baseQueryGetReactorRequest = { id: 0 };
 export const QueryGetReactorRequest = {
@@ -520,6 +520,85 @@ export const QueryAllInstanceResponse = {
         return message;
     },
 };
+const baseQuerySearchInstanceRequest = { query: "" };
+export const QuerySearchInstanceRequest = {
+    encode(message, writer = Writer.create()) {
+        if (message.pagination !== undefined) {
+            PageRequest.encode(message.pagination, writer.uint32(10).fork()).ldelim();
+        }
+        if (message.query !== "") {
+            writer.uint32(18).string(message.query);
+        }
+        return writer;
+    },
+    decode(input, length) {
+        const reader = input instanceof Uint8Array ? new Reader(input) : input;
+        let end = length === undefined ? reader.len : reader.pos + length;
+        const message = {
+            ...baseQuerySearchInstanceRequest,
+        };
+        while (reader.pos < end) {
+            const tag = reader.uint32();
+            switch (tag >>> 3) {
+                case 1:
+                    message.pagination = PageRequest.decode(reader, reader.uint32());
+                    break;
+                case 2:
+                    message.query = reader.string();
+                    break;
+                default:
+                    reader.skipType(tag & 7);
+                    break;
+            }
+        }
+        return message;
+    },
+    fromJSON(object) {
+        const message = {
+            ...baseQuerySearchInstanceRequest,
+        };
+        if (object.pagination !== undefined && object.pagination !== null) {
+            message.pagination = PageRequest.fromJSON(object.pagination);
+        }
+        else {
+            message.pagination = undefined;
+        }
+        if (object.query !== undefined && object.query !== null) {
+            message.query = String(object.query);
+        }
+        else {
+            message.query = "";
+        }
+        return message;
+    },
+    toJSON(message) {
+        const obj = {};
+        message.pagination !== undefined &&
+            (obj.pagination = message.pagination
+                ? PageRequest.toJSON(message.pagination)
+                : undefined);
+        message.query !== undefined && (obj.query = message.query);
+        return obj;
+    },
+    fromPartial(object) {
+        const message = {
+            ...baseQuerySearchInstanceRequest,
+        };
+        if (object.pagination !== undefined && object.pagination !== null) {
+            message.pagination = PageRequest.fromPartial(object.pagination);
+        }
+        else {
+            message.pagination = undefined;
+        }
+        if (object.query !== undefined && object.query !== null) {
+            message.query = object.query;
+        }
+        else {
+            message.query = "";
+        }
+        return message;
+    },
+};
 const baseQueryGetStructureRequest = { id: 0 };
 export const QueryGetStructureRequest = {
     encode(message, writer = Writer.create()) {
@@ -851,6 +930,268 @@ export const QuerySearchStructureRequest = {
         }
         else {
             message.query = "";
+        }
+        return message;
+    },
+};
+const baseQuerySearchPerformingStructureRequest = {
+    query: "",
+    actionType: "",
+    target: "",
+    instance: "",
+};
+export const QuerySearchPerformingStructureRequest = {
+    encode(message, writer = Writer.create()) {
+        if (message.pagination !== undefined) {
+            PageRequest.encode(message.pagination, writer.uint32(10).fork()).ldelim();
+        }
+        if (message.query !== "") {
+            writer.uint32(18).string(message.query);
+        }
+        if (message.actionType !== "") {
+            writer.uint32(26).string(message.actionType);
+        }
+        if (message.target !== "") {
+            writer.uint32(34).string(message.target);
+        }
+        if (message.instance !== "") {
+            writer.uint32(42).string(message.instance);
+        }
+        return writer;
+    },
+    decode(input, length) {
+        const reader = input instanceof Uint8Array ? new Reader(input) : input;
+        let end = length === undefined ? reader.len : reader.pos + length;
+        const message = {
+            ...baseQuerySearchPerformingStructureRequest,
+        };
+        while (reader.pos < end) {
+            const tag = reader.uint32();
+            switch (tag >>> 3) {
+                case 1:
+                    message.pagination = PageRequest.decode(reader, reader.uint32());
+                    break;
+                case 2:
+                    message.query = reader.string();
+                    break;
+                case 3:
+                    message.actionType = reader.string();
+                    break;
+                case 4:
+                    message.target = reader.string();
+                    break;
+                case 5:
+                    message.instance = reader.string();
+                    break;
+                default:
+                    reader.skipType(tag & 7);
+                    break;
+            }
+        }
+        return message;
+    },
+    fromJSON(object) {
+        const message = {
+            ...baseQuerySearchPerformingStructureRequest,
+        };
+        if (object.pagination !== undefined && object.pagination !== null) {
+            message.pagination = PageRequest.fromJSON(object.pagination);
+        }
+        else {
+            message.pagination = undefined;
+        }
+        if (object.query !== undefined && object.query !== null) {
+            message.query = String(object.query);
+        }
+        else {
+            message.query = "";
+        }
+        if (object.actionType !== undefined && object.actionType !== null) {
+            message.actionType = String(object.actionType);
+        }
+        else {
+            message.actionType = "";
+        }
+        if (object.target !== undefined && object.target !== null) {
+            message.target = String(object.target);
+        }
+        else {
+            message.target = "";
+        }
+        if (object.instance !== undefined && object.instance !== null) {
+            message.instance = String(object.instance);
+        }
+        else {
+            message.instance = "";
+        }
+        return message;
+    },
+    toJSON(message) {
+        const obj = {};
+        message.pagination !== undefined &&
+            (obj.pagination = message.pagination
+                ? PageRequest.toJSON(message.pagination)
+                : undefined);
+        message.query !== undefined && (obj.query = message.query);
+        message.actionType !== undefined && (obj.actionType = message.actionType);
+        message.target !== undefined && (obj.target = message.target);
+        message.instance !== undefined && (obj.instance = message.instance);
+        return obj;
+    },
+    fromPartial(object) {
+        const message = {
+            ...baseQuerySearchPerformingStructureRequest,
+        };
+        if (object.pagination !== undefined && object.pagination !== null) {
+            message.pagination = PageRequest.fromPartial(object.pagination);
+        }
+        else {
+            message.pagination = undefined;
+        }
+        if (object.query !== undefined && object.query !== null) {
+            message.query = object.query;
+        }
+        else {
+            message.query = "";
+        }
+        if (object.actionType !== undefined && object.actionType !== null) {
+            message.actionType = object.actionType;
+        }
+        else {
+            message.actionType = "";
+        }
+        if (object.target !== undefined && object.target !== null) {
+            message.target = object.target;
+        }
+        else {
+            message.target = "";
+        }
+        if (object.instance !== undefined && object.instance !== null) {
+            message.instance = object.instance;
+        }
+        else {
+            message.instance = "";
+        }
+        return message;
+    },
+};
+const baseQuerySearchTargetingStructureRequest = {
+    query: "",
+    actionType: "",
+    performing: 0,
+};
+export const QuerySearchTargetingStructureRequest = {
+    encode(message, writer = Writer.create()) {
+        if (message.pagination !== undefined) {
+            PageRequest.encode(message.pagination, writer.uint32(10).fork()).ldelim();
+        }
+        if (message.query !== "") {
+            writer.uint32(18).string(message.query);
+        }
+        if (message.actionType !== "") {
+            writer.uint32(26).string(message.actionType);
+        }
+        if (message.performing !== 0) {
+            writer.uint32(32).uint64(message.performing);
+        }
+        return writer;
+    },
+    decode(input, length) {
+        const reader = input instanceof Uint8Array ? new Reader(input) : input;
+        let end = length === undefined ? reader.len : reader.pos + length;
+        const message = {
+            ...baseQuerySearchTargetingStructureRequest,
+        };
+        while (reader.pos < end) {
+            const tag = reader.uint32();
+            switch (tag >>> 3) {
+                case 1:
+                    message.pagination = PageRequest.decode(reader, reader.uint32());
+                    break;
+                case 2:
+                    message.query = reader.string();
+                    break;
+                case 3:
+                    message.actionType = reader.string();
+                    break;
+                case 4:
+                    message.performing = longToNumber(reader.uint64());
+                    break;
+                default:
+                    reader.skipType(tag & 7);
+                    break;
+            }
+        }
+        return message;
+    },
+    fromJSON(object) {
+        const message = {
+            ...baseQuerySearchTargetingStructureRequest,
+        };
+        if (object.pagination !== undefined && object.pagination !== null) {
+            message.pagination = PageRequest.fromJSON(object.pagination);
+        }
+        else {
+            message.pagination = undefined;
+        }
+        if (object.query !== undefined && object.query !== null) {
+            message.query = String(object.query);
+        }
+        else {
+            message.query = "";
+        }
+        if (object.actionType !== undefined && object.actionType !== null) {
+            message.actionType = String(object.actionType);
+        }
+        else {
+            message.actionType = "";
+        }
+        if (object.performing !== undefined && object.performing !== null) {
+            message.performing = Number(object.performing);
+        }
+        else {
+            message.performing = 0;
+        }
+        return message;
+    },
+    toJSON(message) {
+        const obj = {};
+        message.pagination !== undefined &&
+            (obj.pagination = message.pagination
+                ? PageRequest.toJSON(message.pagination)
+                : undefined);
+        message.query !== undefined && (obj.query = message.query);
+        message.actionType !== undefined && (obj.actionType = message.actionType);
+        message.performing !== undefined && (obj.performing = message.performing);
+        return obj;
+    },
+    fromPartial(object) {
+        const message = {
+            ...baseQuerySearchTargetingStructureRequest,
+        };
+        if (object.pagination !== undefined && object.pagination !== null) {
+            message.pagination = PageRequest.fromPartial(object.pagination);
+        }
+        else {
+            message.pagination = undefined;
+        }
+        if (object.query !== undefined && object.query !== null) {
+            message.query = object.query;
+        }
+        else {
+            message.query = "";
+        }
+        if (object.actionType !== undefined && object.actionType !== null) {
+            message.actionType = object.actionType;
+        }
+        else {
+            message.actionType = "";
+        }
+        if (object.performing !== undefined && object.performing !== null) {
+            message.performing = object.performing;
+        }
+        else {
+            message.performing = 0;
         }
         return message;
     },
@@ -1807,6 +2148,11 @@ export class QueryClientImpl {
         const promise = this.rpc.request("di.Query", "InstanceAll", data);
         return promise.then((data) => QueryAllInstanceResponse.decode(new Reader(data)));
     }
+    InstanceSearch(request) {
+        const data = QuerySearchInstanceRequest.encode(request).finish();
+        const promise = this.rpc.request("di.Query", "InstanceSearch", data);
+        return promise.then((data) => QueryAllInstanceResponse.decode(new Reader(data)));
+    }
     Structure(request) {
         const data = QueryGetStructureRequest.encode(request).finish();
         const promise = this.rpc.request("di.Query", "Structure", data);
@@ -1825,6 +2171,16 @@ export class QueryClientImpl {
     StructureSearch(request) {
         const data = QuerySearchStructureRequest.encode(request).finish();
         const promise = this.rpc.request("di.Query", "StructureSearch", data);
+        return promise.then((data) => QueryAllStructureResponse.decode(new Reader(data)));
+    }
+    StructureSearchForPerforming(request) {
+        const data = QuerySearchPerformingStructureRequest.encode(request).finish();
+        const promise = this.rpc.request("di.Query", "StructureSearchForPerforming", data);
+        return promise.then((data) => QueryAllStructureResponse.decode(new Reader(data)));
+    }
+    StructureSearchForTargeting(request) {
+        const data = QuerySearchTargetingStructureRequest.encode(request).finish();
+        const promise = this.rpc.request("di.Query", "StructureSearchForTargeting", data);
         return promise.then((data) => QueryAllStructureResponse.decode(new Reader(data)));
     }
     Schematic(request) {

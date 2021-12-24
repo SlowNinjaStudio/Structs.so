@@ -2,6 +2,7 @@
  * Web UI component for structures.
  */
 import {DroidUICommandMenu} from "./DroidUICommandMenu";
+import {WattToString} from "../../vendor/WattToString";
 
 export class DroidUIStructureCommandView {
   /**
@@ -17,19 +18,19 @@ export class DroidUIStructureCommandView {
     this.droidUICommandMenu = new DroidUICommandMenu(structure);
   }
 
+  /**
+   * @return {Schematic|Structure}
+   */
+  getDisplayObject() {
+    return this.structure;
+  }
+
   getCanvasId() {
     return `${this.idPrefix}structure-${this.structure.getId()}`;
   }
 
   isCreator() {
     return  this.structure.getCreator() === '' || this.structure.getCreator() === this.creator;
-  }
-
-  initMainMenuEventListeners() {
-    if (this.isCreator()) {
-      const commandMenu = new DroidUICommandMenu(this.structure);
-      commandMenu.initMainMenuEventListeners();
-    }
   }
 
   render() {
@@ -90,7 +91,7 @@ export class DroidUIStructureCommandView {
               </div>
               <div>
                 <img src="/img/icons/icon-battery-charge.png" alt="Battery Charge Icon" class="structure-card-icon">
-                <span class="attribute-label">Battery Charge:</span> ${this.structure.getBatteryAmount()} ${this.structure.getBatteryDenom()}
+                <span class="attribute-label">Battery Charge:</span> ${WattToString(this.structure.getBatteryAmount())}
               </div>
               <br>
               <div>

@@ -1,57 +1,49 @@
 import {Computer} from "../../compute/Computer";
-import {StructureBuild} from "../../compute/StructureBuild";
-import {CONFIG} from "../../constants";
+import {CONFIG} from "../../Constants";
 import {secondsToString} from "../../vendor/SecondsToString"
-
-import {DroidUIComputeStatus} from "./DroidUIComputeStatus"
 import {DroidUIStructureCondensedCTANone} from "./DroidUIStructureCondensedCTANone";
-import {DroidUI} from "../DroidUI";
-
-import {Instance} from "../../models/Instance"
 import {DroidUIStructureCondensedCTAAttack} from "./DroidUIStructureCondensedCTAAttack";
-import {StructureAttack} from "../../compute/StructureAttack";
 import {DroidUIStructureCondensedCTABuild} from "./DroidUIStructureCondensedCTABuild";
-
+import {DroidUIStructureCondensedCTARepair} from "./DroidUIStructureCondensedCTARepair";
 
 export class DroidUIStructureCondensed {
 
   /**
-   * @param {Structure} structure
-   * @param {Schematic|Structure} baseObject
-   * @param {DroidUIStructureCondensedCTANone|DroidUIStructureCondensedCTABuild|DroidUIStructureCondensedCTAAttack} callToAction
+   * @param {Structure} displayStructure
+   * @param {Structure} performingStructure
+   * @param {Schematic|Structure} targetObject
+   * @param {DroidUIStructureCondensedCTANone|DroidUIStructureCondensedCTABuild|DroidUIStructureCondensedCTAAttack|DroidUIStructureCondensedCTARepair|DroidUIStructureCondensedCTADrain} callToAction
    * @param {string} idPrefix
-   * @param {DroidUIComputeStatus} computeStatus
    */
   constructor(
-    structure,
-    baseObject,
+    displayStructure,
+    performingStructure,
+    targetObject,
     callToAction = new DroidUIStructureCondensedCTANone(),
-    idPrefix = '',
-    computeStatus = null
+    idPrefix = ''
   ) {
-    this.structure = structure;
+    this.structure = displayStructure;
+    this.baseObject = targetObject;
 
     this.idPrefix = idPrefix;
     this.callToAction = callToAction;
 
     this.computer = new Computer();
 
-    if (callToAction instanceof DroidUIStructureCondensedCTABuild) {
-      this.schematic = baseObject;
-      this.program = new StructureBuild();
-      this.program.setSchematic(baseObject);
-      this.program.setPerformingStructure(structure);
+    this.program = this.callToAction.initProgram();
 
-      this.compute_status = computeStatus;
+    this.program.setPerformingStructure(performingStructure);
+    this.program.setTargetObject(targetObject);
 
-    } else if  (callToAction instanceof DroidUIStructureCondensedCTAAttack) {
-      this.program = new StructureAttack();
-      this.program.setPerformingStructure(baseObject);
-      this.program.setTargetStructure(structure)
-
-      this.compute_status = computeStatus;
-    }
   }
+
+  /**
+   * @return {Schematic|Structure}
+   */
+  getDisplayObject() {
+    return this.structure;
+  }
+
   getCanvasId() {
     return `${this.idPrefix}structure-condensed-${this.structure.getId()}`;
   }
@@ -183,47 +175,5 @@ export class DroidUIStructureCondensed {
         ${this.callToAction.render()}
       </div>
     `;
-  }
-
-  initMainBuildEventListeners() {
-
-      document.getElementById('structure_list_build_' + this.structure.getId()).addEventListener('click', async function() {
-        // Hide the selector
-        // Move this into the DroidUI if it's not already there.
-        window.bootstrap.Offcanvas.getInstance(document.getElementById('offcanvas')).hide();
-
-        let instance = new Instance();
-        await instance.init();
-        this.program.instance = instance.address;
-
-        let new_process_id = this.computer.add_process(this.program);
-
-        (new DroidUI()).loadStructureBuildStatusModal(this.schematic, this.structure, this.program, new_process_id)
-
-        this.computer.run_process(new_process_id);
-
-      }.bind(this));
-
-  }
-
-  initMainAttackEventListeners() {
-
-    document.getElementById('structure_list_attack_' + this.structure.getId()).addEventListener('click', async function() {
-      // Hide the selector
-      // Move this into the DroidUI if it's not already there.
-      window.bootstrap.Offcanvas.getInstance(document.getElementById('offcanvas')).hide();
-
-      let instance = new Instance();
-      await instance.init();
-      this.program.instance = instance.address;
-
-      let new_process_id = this.computer.add_process(this.program);
-
-
-      (new DroidUI()).loadStructureAttackStatusModal(this.program, new_process_id)
-      this.computer.run_process(new_process_id);
-
-    }.bind(this));
-
   }
 }

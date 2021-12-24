@@ -5,6 +5,9 @@ export const
     SPACE: 'SPACE',
     WATER: 'WATER',
   },
+  ANIMATION_EVENTS = {
+    END: 'ANIMATION_END'
+  },
   FEATURES = {
     ATTACK: 'ATTACK_SYSTEM',
     DEFENSIVE: 'DEFENSIVE_SYSTEM',
@@ -34,5 +37,26 @@ export const
     BLOCKY: 'BLOCKY',
     HUMANOID: 'HUMANOID',
     SCREEN: 'SCREEN',
+  },
+  STRUCTURE_TYPES = {
+    CAR: 'CAR',
+    CITY: 'CITY',
+    MECH: 'MECH',
+    STATION: 'STATION'
+  },
+  CTA_TYPES = {
+    NONE: '',
+    ATTACK: 'attack',
+    REPAIR: 'repair',
+    DRAIN: 'drain',
+    BUILD: 'build'
+  },
+  REFRESH_TIME = {
+    WATT_AMOUNT: 3000,
+    WATT_AMOUNT_TOTAL: 3000,
+    WATT_RANK: 5000,
+    WATT_STRUCTURE_RANK: 10000,
+    WATT_GRID_AMOUNT: 10000,
+
   }
 ;

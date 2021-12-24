@@ -1,10 +1,7 @@
 import {ColorRGB} from "../vendor/ColorRGB";
 import {StructureRanks} from "../models/StructureRanks";
 
-/**
- * Generates palettes for static structures.
- */
-export class StructureStaticPalette {
+export class StructurePaletteStaticCity {
   constructor() {
     this.buildingsLeft = new ColorRGB(224, 224, 224);
     this.buildingsCenterLeft = new ColorRGB(158, 158, 158);

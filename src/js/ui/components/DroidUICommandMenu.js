@@ -21,7 +21,7 @@ export class DroidUICommandMenu {
               href="#offcanvas"
               data-bs-toggle="offcanvas"
               role="button"
-              class="nes-btn ${this.structure.hasFeatureAttack() ? 'is-warning' : 'is-disabled' } nes-btn-fluid"
+              class="nes-btn ${this.structure.hasFeatureAttack() ? 'is-error' : 'is-disabled' } nes-btn-fluid"
             >
               Attack
             </a>
@@ -43,7 +43,7 @@ export class DroidUICommandMenu {
             <a
               id="power-command"
               href="javascript:void(0)"
-              class="nes-btn ${ this.structure.hasFeaturePower() ? 'is-disabled' : 'is-disabled' } nes-btn-fluid"
+              class="nes-btn ${ this.structure.hasFeaturePower() ? 'is-success' : 'is-disabled' } nes-btn-fluid"
             >
               Power
             </a>
@@ -70,11 +70,56 @@ export class DroidUICommandMenu {
       <div class="row">
         <div class="col">
             <a
-              id="build-from-schematic-command"
-              href="javascript:void(0)"
-              class="nes-btn is-disabled nes-btn-fluid"
+              id="repair-structure-command"
+              href="#offcanvas"
+              data-bs-toggle="offcanvas"
+              role="button"
+              class="nes-btn is-warning nes-btn-fluid"
             >
               Repair Target
+            </a>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col">
+            <a
+              id="main-menu-command"
+              href="javascript:void(0)"
+              class="nes-btn nes-btn-fluid"
+            >
+              Back
+            </a>
+        </div>
+      </div>
+    `;
+  }
+
+
+  renderPowerSubmenu() {
+    return `
+      <div class="row">
+        <div class="col">
+            <a
+              id="drain-structure-command"
+              href="#offcanvas"
+              class="nes-btn is-success nes-btn-fluid"
+              data-bs-toggle="offcanvas"
+              role="button"
+            >
+              Drain Target
+            </a>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col">
+            <a
+              id="charge-command"
+              href="#offcanvas"
+              data-bs-toggle="offcanvas"
+              role="button"
+              class="nes-btn is-disabled nes-btn-fluid"
+            >
+              Charging Ports
             </a>
         </div>
       </div>
@@ -101,22 +146,29 @@ export class DroidUICommandMenu {
       }.bind(this));
     }
 
+    if (this.structure.hasFeaturePower()) {
+      document.getElementById('power-command').addEventListener('click', function() {
+        const commandMenu = new DroidUICommandMenu(this.structure);
+        document.getElementById('command-container').innerHTML = commandMenu.renderPowerSubmenu();
+        commandMenu.initPowerSubmenuEventListeners();
+      }.bind(this));
+    }
+
     if (this.structure.hasFeatureAttack()) {
       document.getElementById('attack-command').addEventListener('click', function() {
         const droidUi = new DroidUI();
 
         const searchHandler = async function() {
-          const instance = new Instance();
-          await instance.init();
-
           const searchString = document.getElementById('offcanvas-search-input').value;
-          droidUi.loadStructureSelectionList(
+          droidUi.loadStructureSelectionListFromTargeting(
             'offcanvas-body',
             'offcanvas-title',
             this.structure,
+            'attack',
             searchString
           );
         }.bind(this);
+
         document.getElementById('offcanvas-search-btn').addEventListener('click', searchHandler);
         document.getElementById('offcanvas-search-input').addEventListener('keypress', (event) => {
           if (event.key === 'Enter') {
@@ -124,8 +176,7 @@ export class DroidUICommandMenu {
           }
         });
 
-
-        droidUi.loadStructureSelectionList('offcanvas-body', 'offcanvas-title', this.structure);
+        droidUi.loadStructureSelectionListFromTargeting('offcanvas-body', 'offcanvas-title', this.structure, 'attack');
 
       }.bind(this));
     }
@@ -135,11 +186,9 @@ export class DroidUICommandMenu {
   initEngineeringSubmenuEventListeners() {
     const droidUi = new DroidUI();
 
-
-
     const searchHandler = async function() {
       const instance = new Instance();
-      await instance.init();
+      await instance.lazyLoad();
 
       const searchString = document.getElementById('offcanvas-search-input').value;
       droidUi.loadSchematicSelectionList(
@@ -168,5 +217,93 @@ export class DroidUICommandMenu {
       document.getElementById('command-container').innerHTML = commandMenu.renderMainMenu();
       commandMenu.initMainMenuEventListeners();
     }.bind(this));
+
+
+    document.getElementById('repair-structure-command').addEventListener('click', function() {
+      const droidUi = new DroidUI();
+
+      const searchHandler = async function() {
+        const searchString = document.getElementById('offcanvas-search-input').value;
+        droidUi.loadStructureSelectionListFromTargeting(
+          'offcanvas-body',
+          'offcanvas-title',
+          this.structure,
+          'repair',
+          searchString
+        );
+      }.bind(this);
+
+      document.getElementById('offcanvas-search-btn').addEventListener('click', searchHandler);
+      document.getElementById('offcanvas-search-input').addEventListener('keypress', (event) => {
+        if (event.key === 'Enter') {
+          searchHandler(event);
+        }
+      });
+
+      droidUi.loadStructureSelectionListFromTargeting('offcanvas-body', 'offcanvas-title', this.structure, 'repair');
+
+    }.bind(this));
   }
+
+
+  initPowerSubmenuEventListeners() {
+    const droidUi = new DroidUI();
+
+    const searchHandler = async function() {
+      const searchString = document.getElementById('offcanvas-search-input').value;
+      droidUi.loadStructureSelectionListFromTargeting(
+        'offcanvas-body',
+        'offcanvas-title',
+        this.structure,
+        'drain',
+        searchString
+      );
+    }.bind(this);
+
+    document.getElementById('offcanvas-search-btn').addEventListener('click', searchHandler);
+    document.getElementById('offcanvas-search-input').addEventListener('keypress', (event) => {
+      if (event.key === 'Enter') {
+        searchHandler(event);
+      }
+    });
+
+    const instance = new Instance();
+    instance.lazyLoad();
+
+    document.getElementById('charge-command').addEventListener('click', function() {
+      droidUi.loadSchematicSelectionList('offcanvas-body', 'offcanvas-title', this.structure, instance.address);
+    }.bind(this));
+
+    document.getElementById('main-menu-command').addEventListener('click', function() {
+      const commandMenu = new DroidUICommandMenu(this.structure);
+      document.getElementById('command-container').innerHTML = commandMenu.renderMainMenu();
+      commandMenu.initMainMenuEventListeners();
+    }.bind(this));
+
+
+    document.getElementById('drain-structure-command').addEventListener('click', function() {
+      const droidUi = new DroidUI();
+
+      const searchHandler = async function() {
+        const searchString = document.getElementById('offcanvas-search-input').value;
+        droidUi.loadStructureSelectionListFromTargeting(
+          'offcanvas-body',
+          'offcanvas-title',
+          this.structure,
+          'drain',
+          searchString
+        );
+      }.bind(this);
+      document.getElementById('offcanvas-search-btn').addEventListener('click', searchHandler);
+      document.getElementById('offcanvas-search-input').addEventListener('keypress', (event) => {
+        if (event.key === 'Enter') {
+          searchHandler(event);
+        }
+      });
+
+      droidUi.loadStructureSelectionListFromTargeting('offcanvas-body', 'offcanvas-title', this.structure, 'drain');
+
+    }.bind(this));
+  }
+
 }

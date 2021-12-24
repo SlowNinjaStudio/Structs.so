@@ -9,21 +9,56 @@ import {assertIsBroadcastTxSuccess} from "@cosmjs/stargate";
  */
 export class Instance {
     constructor() {
-        this.name = '';
-        this.mood = '';
+      this.active = false;
+      this.server;
 
-        this.wallet;
-        this.address = '';
+      this.name = '';
+      this.mood = '';
 
-        this.mnemonic;
+      this.wallet;
+      this.address = '';
+
+      this.wattUnderManagement = 0;
+
+      this.mnemonic;
+
+      this.fee = {
+        amount: [
+          {
+            denom: "watt",
+            amount: "1",
+          },
+        ],
+        gas: "180000",
+      };
     }
 
-    /*
-     * force = true //destroys old account!
+    /**
+     * Used when instantiating a non-signing Instance object
      *
-     * Should probably create some sort of account
-     * graveyard instead of just saving over the old one
+     * @param {string} address
+     * @param {string} name
+     * @param {string} mood
+     * @param {numeric} wattUnderManagement
      */
+    stub(address, name, mood, wattUnderManagement) {
+      this.address = address;
+      this.name = name;
+      this.mood = mood;
+      this.wattUnderManagement = wattUnderManagement;
+
+      return this;
+    }
+
+  /**
+   * force = true //destroys old account!
+   *
+   * Should probably create some sort of account
+   * graveyard instead of just saving over the old one
+   *
+   * @param {string} mnemonic
+   * @param {boolean} force
+   */
    async init(mnemonic = '', force = false) {
        let identity = JSON.parse(localStorage.getItem('identity'));
 
@@ -38,6 +73,37 @@ export class Instance {
         this.address = identity.address;
 
     }
+
+
+  /**
+   * force = true //destroys old account!
+   *
+   * Should probably create some sort of account
+   * graveyard instead of just saving over the old one
+   *
+   * @param {string} mnemonic
+   * @param {boolean} force
+   */
+  async initActive(mnemonic = '', force = false) {
+    let identity = JSON.parse(localStorage.getItem('identity'));
+
+    if (identity === null || (typeof identity === 'undefined') || force) {
+      identity = await this.createIdentity(mnemonic);
+    }
+
+    console.log(identity.address)
+    this.name = identity.name;
+    this.mood = identity.mood;
+    this.mnemonic = identity.mnemonic;
+    this.address = identity.address;
+
+    this.server = new Server();
+    await this.server.init(await this.getWallet());
+
+    this.active = true;
+
+  }
+
 
     /*
      * Used if you just want to pull from the local storage without the
@@ -56,12 +122,15 @@ export class Instance {
       }
     }
 
+  /**
+   * @param {string} mnemonic
+   */
     async createIdentity(mnemonic) {
 
         if ( mnemonic === '') {
             console.log('Generating new mnemonic because none was provided.');
 
-            // Add this constant (16) to the constants.js file
+            // Add this constant (16) to the Constants.js file
             const getNewRandom = Random.getBytes(16);
             mnemonic = Bip39.encode(getNewRandom).toString();
         }
@@ -96,41 +165,43 @@ export class Instance {
         return this.wallet;
     }
 
-    async setName(new_name, fee) {
-        let server = new Server();
-        await server.init(await this.getWallet());
+  /**
+   * @param {string} newName
+   */
+    async setName(newName) {
 
         const msgRename = {
             typeUrl: "/di.MsgUpdateInstanceName",
             value: {
                 creator: this.address,
-                name: new_name
+                name: newName
             }
         };
 
-        let result = await server.client.signAndBroadcast(this.address, [msgRename], fee);
+        let result = await this.server.client.signAndBroadcast(this.address, [msgRename], this.fee);
         assertIsBroadcastTxSuccess(result);
 
-        this.name = new_name;
+        this.name = newName;
         this.saveLocalInstance();
     }
 
-    async setMood(new_mood, fee) {
-        let server = new Server();
-        await server.init(await this.getWallet());
+  /**
+   * @param {string} newMood
+   */
+    async setMood(newMood) {
 
         const msgRemood = {
             typeUrl: "/di.MsgUpdateInstanceMood",
             value: {
                 creator: this.address,
-                mood: new_mood
+                mood: newMood
             }
         };
 
-        let result = await server.client.signAndBroadcast(this.address, [msgRemood], fee);
+        let result = await this.server.client.signAndBroadcast(this.address, [msgRemood], this.fee);
         assertIsBroadcastTxSuccess(result);
 
-        this.mood = new_mood;
+        this.mood = newMood;
         this.saveLocalInstance();
     }
 
@@ -161,11 +232,13 @@ export class Instance {
         return this.wallet.getAccounts();
     }
 
-
-    async performPatent(compute_result, personalization, fee) {
+  /**
+   * @param {Object} computeResult
+   * @param {Object} personalization
+   */
+    async performPatent(computeResult, personalization) {
        console.log("Patenting")
-        let server = new Server();
-        await server.init(await this.getWallet());
+
 
         const msgCreateSchematic = {
             typeUrl: "/di.MsgCreateSchematic",
@@ -173,14 +246,14 @@ export class Instance {
                 creator: this.address,
                 name:personalization.name,
                 description:personalization.description,
-                hash:compute_result.hash,
-                input:compute_result.input,
+                hash:computeResult.hash,
+                input:computeResult.input,
                 owner: this.address
             }
         };
 
 
-        let result = await server.client.signAndBroadcast(this.address, [msgCreateSchematic], fee);
+        let result = await this.server.client.signAndBroadcast(this.address, [msgCreateSchematic], this.fee);
         console.log(result)
         //assertIsBroadcastTxSuccess(result);
 
@@ -188,11 +261,13 @@ export class Instance {
 
     }
 
-    async performBuild(compute_result, personalization, fee) {
-        let server = new Server();
-        await server.init(await this.getWallet());
+  /**
+   * @param {Object} computeResult
+   * @param {Object} personalization
+   */
+    async performBuild(computeResult, personalization) {
 
-        console.log(compute_result)
+        console.log(computeResult)
 
         const msgCreateStructure = {
             typeUrl: "/di.MsgCreateStructure",
@@ -200,17 +275,17 @@ export class Instance {
                 creator: this.address,
                 name:personalization.name,
                 description:personalization.description,
-                hash:compute_result.hash,
-                input:compute_result.input,
-                schematic: compute_result.compute_process.program.schematic.hash,
-                performingStructure: compute_result.compute_process.program.performing_structure.id,
+                hash:computeResult.hash,
+                input:computeResult.input,
+                schematic: computeResult.compute_process.program.schematic.hash,
+                performingStructure: computeResult.compute_process.program.performing_structure.id,
                 owner: this.address
             }
         };
 
         console.log(msgCreateStructure)
 
-        let result = await server.client.signAndBroadcast(this.address, [msgCreateStructure], fee);
+        let result = await this.server.client.signAndBroadcast(this.address, [msgCreateStructure], this.fee);
         console.log(result)
 
         //assertIsBroadcastTxSuccess(result);
@@ -218,27 +293,27 @@ export class Instance {
         return result;
 
     }
+  /**
+   * @param {Object} computeResult
+   */
+  async performAttack(computeResult) {
 
-  async performAttack(compute_result, fee) {
-    let server = new Server();
-    await server.init(await this.getWallet());
-
-    console.log(compute_result)
+    console.log(computeResult)
 
     const msgAttackStructure = {
       typeUrl: "/di.MsgAttackStructure",
       value: {
         creator: this.address,
-        aimCalculationHash:compute_result.hash,
-        aimCalculationInput:compute_result.input,
-        targetStructure: compute_result.compute_process.program.target_structure.id,
-        performingStructure: compute_result.compute_process.program.performing_structure.id
+        aimCalculationHash:computeResult.hash,
+        aimCalculationInput:computeResult.input,
+        targetStructure: computeResult.compute_process.program.target_structure.id,
+        performingStructure: computeResult.compute_process.program.performing_structure.id
       }
     };
 
     console.log(msgAttackStructure)
 
-    let result = await server.client.signAndBroadcast(this.address, [msgAttackStructure], fee);
+    let result = await this.server.client.signAndBroadcast(this.address, [msgAttackStructure], this.fee);
     console.log(result)
 
     //assertIsBroadcastTxSuccess(result);
@@ -247,14 +322,63 @@ export class Instance {
 
   }
 
+  /**
+   * @param {StructureRepair} program
+   */
+  async performRepair(program) {
+
+    const msgRepairStructure = {
+      typeUrl: "/di.MsgRepairStructure",
+      value: {
+        creator: this.address,
+        targetStructure: program.target_structure.id,
+        performingStructure: program.performing_structure.id
+      }
+    };
+
+    console.log(msgRepairStructure)
+
+    let result = await this.server.client.signAndBroadcast(this.address, [msgRepairStructure], this.fee);
+    console.log(result)
+
+    //assertIsBroadcastTxSuccess(result);
+
+    return result;
+
+  }
+
+  /**
+   * @param {StructureDrain} program
+   */
+  async performDrain(program) {
+
+    const msgDrainStructure = {
+      typeUrl: "/di.MsgDrainStructure",
+      value: {
+        creator: this.address,
+        targetStructure: program.target_structure.id,
+        performingStructure: program.performing_structure.id
+      }
+    };
+
+    console.log(msgDrainStructure)
+
+    let result = await this.server.client.signAndBroadcast(this.address, [msgDrainStructure], this.fee);
+    console.log(result)
+
+    //assertIsBroadcastTxSuccess(result);
+
+    return result;
+
+  }
+
+
     /*
      *
      */
     async queryBalance() {
-      let server = new Server();
-      await server.init(await this.getWallet());
 
-      let balance_query_result = await server.client.getBalance(this.address, "watt")
+      let balance_query_result = await this.server.client.getBalance(this.address, "watt")
 
       if (typeof balance_query_result == 'undefined' || balance_query_result == null){
         balance_query_result = {amount: 0, denom:'watt'}
@@ -262,5 +386,13 @@ export class Instance {
 
       return balance_query_result;
     }
+
+
 }
 
+
+/*      // We cannot get both in one request (see https://github.com/cosmos/gaia/issues/75)
+      const sentQuery = withFilters(`message.module=bank&message.sender=${query.sentFromOrTo}`);
+      const receivedQuery = withFilters(`message.module=bank&transfer.recipient=${query.sentFromOrTo}`);
+      const sent = await this.txsQuery(sentQuery);
+*/

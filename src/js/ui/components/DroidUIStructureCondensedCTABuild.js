@@ -1,3 +1,6 @@
+import {StructureBuild} from "../../compute/StructureBuild";
+import {CTA_TYPES} from "../../Constants";
+
 export class DroidUIStructureCondensedCTABuild {
 
   /**
@@ -6,6 +9,12 @@ export class DroidUIStructureCondensedCTABuild {
   constructor(structure) {
     this.structure = structure;
   }
+
+  initProgram() {
+    return (new StructureBuild())
+  }
+
+  getCTAType() { return CTA_TYPES.BUILD}
 
   render() {
     return `
