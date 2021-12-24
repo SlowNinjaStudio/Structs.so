@@ -1,6 +1,8 @@
 /**
  * Web UI component for structures.
  */
+import {WattToString} from "../../vendor/WattToString";
+
 export class DroidUIStructure {
   /**
    *
@@ -74,7 +76,7 @@ export class DroidUIStructure {
               </div>
               <div>
                 <img src="/img/icons/icon-battery-charge.png" alt="Battery Charge Icon" class="structure-card-icon">
-                <span class="attribute-label">Battery Charge:</span> ${this.structure.getBatteryAmount()} ${this.structure.getBatteryDenom()}
+                <span class="attribute-label">Battery Charge:</span> ${WattToString(this.structure.getBatteryAmount())}
               </div>
               <br>
               <div>
