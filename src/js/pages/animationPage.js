@@ -29,7 +29,15 @@ const car1 = DummyUtil.getDummyStructure(
 );
 car1.build_rate = 1;
 
-const structureViewPlayer = new DroidUIStructureViewPlayer(car1, 'structureViewPlayer');
+const city1 = DummyUtil.getDummyStructure(
+  false,
+  [AMBITS.WATER, AMBITS.LAND, AMBITS.SKY, AMBITS.SPACE],
+  [FEATURES.ATTACK, FEATURES.ENGINEERING, FEATURES.DEFENSIVE, FEATURES.POWER],
+  250
+);
+station1.build_rate = 100;
+
+const structureViewPlayer = new DroidUIStructureViewPlayer(city1, 'structureViewPlayer');
 structureViewPlayer.init();
 
 const footer = new Footer();
