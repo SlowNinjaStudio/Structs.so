@@ -12,7 +12,7 @@ import {DroidUIWattGridAmount} from "../ui/components/DroidUIWattGridAmount";
 const instance = new Instance();
 await instance.initActive();
 
-const page = 'schematics';
+const page = 'watt';
 
 const navbar = new Navbar(page, { searchEnabled: true, droidHash: instance.address});
 navbar.init('nav-wrapper');
