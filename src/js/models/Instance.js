@@ -372,7 +372,33 @@ export class Instance {
 
   }
 
+  /**
+   * @param {Structure} structure
+   * @param {number} slowNumber
+   * @param {string} droidID
+   */
+  async performConnectChargeSlot(structure, slotNumber, droidID) {
 
+    const msgConnectChargeSlotStructure = {
+      typeUrl: "/di.MsgStructureChargeSlot",
+      value: {
+        creator: this.address,
+        targetAddress: droidID,
+        performingStructure: structure.id,
+        chargeSlot: slotNumber
+      }
+    };
+
+    console.log(msgConnectChargeSlotStructure)
+
+    let result = await this.server.client.signAndBroadcast(this.address, [msgConnectChargeSlotStructure], this.fee);
+    console.log(result)
+
+    //assertIsBroadcastTxSuccess(result);
+
+    return result;
+
+  }
     /*
      *
      */

@@ -11,7 +11,8 @@ import {
     MsgUpdateInstance,
     MsgUpdateInstanceMood,
     MsgUpdateInstanceName, MsgUpdateReactor, MsgUpdateSchematic,
-    MsgUpdateStructure
+    MsgUpdateStructure,
+    MsgStructureChargeSlot
 } from "../types/di/tx";
 
 /**
@@ -37,6 +38,7 @@ export class Server {
             ["/di.MsgUpdateSchematic", MsgUpdateSchematic],
             ["/di.MsgUpdateReactor", MsgUpdateReactor],
             ["/di.MsgCreateStructure", MsgCreateStructure],
+            ["/di.MsgStructureChargeSlot", MsgStructureChargeSlot]
         ]);
 
         this.rpcEndpoint = "wss://droid.sh:3000";
