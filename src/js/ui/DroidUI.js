@@ -553,4 +553,20 @@ export class DroidUI {
     const palette = this.droidPalette.generatePaletteSwap(ColorRGB.hexToRgb(droid.getPrimaryColor()));
     new PixelArtViewer(canvas, layers, palette);
   }
+
+  /**
+   * @param {string} targetElementId
+   * @param {string} droidHash
+   */
+  loadDroidToTarget(targetElementId, droidHash) {
+    const droid = new Droid(droidHash);
+    const layers = this.droidArtGenerator.generate(droid);
+
+
+    /** @type {HTMLCanvasElement} */
+    const canvas = document.getElementById(targetElementId);
+
+    const palette = this.droidPalette.generatePaletteSwap(ColorRGB.hexToRgb(droid.getPrimaryColor()));
+    new PixelArtViewer(canvas, layers, palette);
+  }
 }
