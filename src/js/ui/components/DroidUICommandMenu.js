@@ -3,6 +3,8 @@
  */
 import {DroidUI} from "../DroidUI";
 import {Instance} from "../../models/Instance";
+import {DroidUIModelInput} from "./DroidUIModalInput";
+
 
 export class DroidUICommandMenu {
   /**
@@ -10,6 +12,32 @@ export class DroidUICommandMenu {
    */
   constructor(structure) {
     this.structure = structure;
+
+    this.ChargeSlotConnectCallBack = async function(){
+      let instance = new Instance()
+      await instance.initActive()
+      let droidID = document.getElementById('modal_input').value
+
+      await instance.performConnectChargeSlot(this.structure, this.structure.charging_slot.filter(x => x!="").length, droidID)
+
+      // Reload the page with fresh structure data
+      const droidUi = new DroidUI();
+      droidUi.loadStructureView('structure', this.structure.id, instance.address);
+    }
+
+    this.ChargeSlotDisconnectCallBack = async function(){
+      let instance = new Instance()
+      await instance.initActive()
+      let droidID = document.getElementById('modal_input').value
+
+      await instance.performConnectChargeSlot(this.structure, this.structure.charging_slot.indexOf(droidID), "")
+
+      // Reload the page with fresh structure data
+      const droidUi = new DroidUI();
+      droidUi.loadStructureView('structure', this.structure.id, instance.address);
+
+    }
+
   }
 
   renderMainMenu() {
@@ -114,10 +142,8 @@ export class DroidUICommandMenu {
         <div class="col">
             <a
               id="charge-command"
-              href="#offcanvas"
-              data-bs-toggle="offcanvas"
-              role="button"
-              class="nes-btn is-disabled nes-btn-fluid"
+              href="javascript:void(0)"
+              class="nes-btn is-success nes-btn-fluid"
             >
               Charging Ports
             </a>
@@ -135,6 +161,75 @@ export class DroidUICommandMenu {
         </div>
       </div>
     `;
+  }
+
+  renderPowerSlotSubmenu() {
+    let menu = '';
+
+    if (this.structure.charging_slot.filter(x => x!="").length < this.structure.charging_slot_count) {
+      menu += `
+        <div class="row">
+          <div class="col">
+              <a
+                id="charge-slot-connect-command"
+                href="javascript:void(0)"
+                class="nes-btn is-success nes-btn-fluid"
+              >
+                Connect Slot
+              </a>
+          </div>
+        </div>
+      `;
+    } else {
+      menu += `
+        <div class="row">
+          <div class="col">
+              <a
+                id="no-charging-slots-command"
+
+                class="nes-btn is-disabled nes-btn-fluid"
+               >
+                No Slot Available
+              </a>
+          </div>
+        </div>
+      `;
+    }
+
+    for (let x = 0; x < this.structure.charging_slot.length; x++) {
+      if (this.structure.charging_slot[x] != "") {
+        menu += `
+        <div class="row">
+          <div class="col">
+              <a
+                id="charge-slot-disconnect-command-${x}-${ this.structure.charging_slot[x] }"
+                title = "${x}"
+                href="javascript:void(0)"
+                class="nes-btn is-error nes-btn-fluid"
+              >
+                ${ this.structure.charging_slot[x].substring(0,10) }...
+              </a>
+          </div>
+        </div>
+      `;
+      }
+    }
+
+    menu += `
+      <div class="row">
+        <div class="col">
+            <a
+              id="main-menu-command"
+              href="javascript:void(0)"
+              class="nes-btn nes-btn-fluid"
+            >
+              Back
+            </a>
+        </div>
+      </div>
+    `;
+
+    return menu;
   }
 
   initMainMenuEventListeners() {
@@ -243,6 +338,7 @@ export class DroidUICommandMenu {
       droidUi.loadStructureSelectionListFromTargeting('offcanvas-body', 'offcanvas-title', this.structure, 'repair');
 
     }.bind(this));
+
   }
 
 
@@ -304,6 +400,60 @@ export class DroidUICommandMenu {
       droidUi.loadStructureSelectionListFromTargeting('offcanvas-body', 'offcanvas-title', this.structure, 'drain');
 
     }.bind(this));
+
+    document.getElementById('charge-command').addEventListener('click', function() {
+      const commandMenu = new DroidUICommandMenu(this.structure);
+      document.getElementById('command-container').innerHTML = commandMenu.renderPowerSlotSubmenu();
+      commandMenu.initPowerSlotSubmenuEventListeners();
+    }.bind(this));
+
   }
+
+
+  initPowerSlotSubmenuEventListeners() {
+
+    document.getElementById('main-menu-command').addEventListener('click', function() {
+      const commandMenu = new DroidUICommandMenu(this.structure);
+      document.getElementById('command-container').innerHTML = commandMenu.renderMainMenu();
+      commandMenu.initMainMenuEventListeners();
+    }.bind(this));
+
+    if (this.structure.charging_slot.filter(x => x!="").length < this.structure.charging_slot_count) {
+      // button to connect a new slot
+      document.getElementById('charge-slot-connect-command').addEventListener('click', function () {
+        let instance = new Instance();
+        instance.lazyLoad();
+
+        let slotInputModal = new DroidUIModelInput('connect-charge-slot-modal', 'Connect Charging Slot', '', '<h5 class="modal-title">Droid ID</h5>', instance.address, 'Connect', 'Cancel', this.ChargeSlotConnectCallBack.bind(this))
+        // confirmButtonCallback = null,
+        // cancelButtonCallback = null
+        slotInputModal.init('modal-container');
+        slotInputModal.show();
+
+      }.bind(this));
+    }
+
+    for (let x = 0; x < this.structure.charging_slot.length; x++) {
+      if (this.structure.charging_slot[x] != "") {
+        document.getElementById("charge-slot-disconnect-command-" + x + '-' + this.structure.charging_slot[x]).addEventListener('click', function (event) {
+          let instance = new Instance();
+          instance.lazyLoad();
+
+          let slotInputModal = new DroidUIModelInput('connect-charge-slot-modal', 'Disconnect Slot', '', '<h5 class="modal-title">Droid ID</h5>', this.structure.charging_slot[x], 'Disconnect', 'Cancel', this.ChargeSlotDisconnectCallBack.bind(this))
+          // confirmButtonCallback = null,
+          // cancelButtonCallback = null
+          slotInputModal.init('modal-container');
+          slotInputModal.show();
+
+        }.bind(this));
+
+      }
+    }
+
+  }
+
+
+
+
 
 }

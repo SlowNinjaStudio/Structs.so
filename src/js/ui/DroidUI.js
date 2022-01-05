@@ -26,6 +26,7 @@ import {DroidUIEmptyListHelperStructureSelection} from "./components/DroidUIEmpt
 import {DroidUIStructureCondensedBuildListener} from "./listeners/DroidUIStructureCondensedBuildListener";
 import {DroidUIStructureCondensedSubEventListener} from "./listeners/DroidUIStructureCondensedSubEventListener";
 import {Instance} from "../models/Instance";
+import {DroidUIStructureViewPlayer} from "./components/DroidUIStructureViewPlayer";
 
 /**
  * Web App
@@ -106,6 +107,29 @@ export class DroidUI {
   }
 
   /**
+   *
+   * @param {Structure|Schematic} structure
+   * @param {string} targetElementId
+   * @param {array} componentParams
+   */
+  handleLoadStructureView(
+    structure,
+    targetElementId,
+    componentParams
+  ) {
+    // Add structure component to DOM
+    const component = this.droidUIComponentFactory.make('StructureCommandView', structure, componentParams);
+    document.getElementById(targetElementId).innerHTML = component.render();
+
+    // Load the pixel art
+    const structureViewPlayer = new DroidUIStructureViewPlayer(structure, 'structureViewPlayer');
+    structureViewPlayer.init();
+
+    // Add command button listeners
+    (new DroidUIStructureCommandViewListener(component)).init();
+  }
+
+  /**
    * @param {Array.<Structure>}structures
    * @param {string} targetElementId
    * @param {string} creator
@@ -169,6 +193,7 @@ export class DroidUI {
 
   /**
    * Load structure a by structure ID.
+   * Static pixel art rendering.
    *
    * @param {string} targetElementId
    * @param {string} structureId
@@ -177,6 +202,20 @@ export class DroidUI {
   loadSingleStructure(targetElementId, structureId, creator = '') {
     this.droidApi.getSingleStructure(structureId).then((structures) => {
       this.handleLoadSingleStructure(structures.shift(), targetElementId, creator);
+    });
+  }
+
+  /**
+   * Load structure view by structure ID.
+   * Animated pixel art rendering.
+   *
+   * @param {string} targetElementId
+   * @param {string} structureId
+   * @param {string} creator
+   */
+  loadStructureView(targetElementId, structureId, creator = '') {
+    this.droidApi.getSingleStructure(structureId).then((structures) => {
+      this.handleLoadStructureView(structures.shift(), targetElementId, [creator]);
     });
   }
 

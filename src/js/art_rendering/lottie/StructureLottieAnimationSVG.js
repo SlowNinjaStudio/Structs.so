@@ -43,13 +43,20 @@ export class StructureLottieAnimationSVG {
    *
    * @return {Promise<void>}
    */
-  async paletteSwapLottie() {
+  async paletteSwapLottie(gContainers = null) {
 
     // Fetch all the SVG groups containing structure art images
-    const gContainers = document.querySelectorAll(`#${this.lottieContainerId} g g`);
+    gContainers = gContainers || document.querySelectorAll(`#${this.lottieContainerId} g g`);
 
     for (let i = 0; i < gContainers.length; i++) {
       const gContainer = gContainers[i];
+
+      // If it's a precomp, need to go deeper into the element
+      if (gContainer.childElementCount > 1) {
+        await this.paletteSwapLottie(gContainer.children);
+        continue;
+      }
+
       const originalSVGImages = gContainer.querySelectorAll('image');
       const htmlImages = [];
 
