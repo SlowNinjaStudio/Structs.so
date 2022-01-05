@@ -703,6 +703,14 @@ a.ambit-button.disabled:active img
 {
   filter: grayscale(1) !important;
 }
+a.ambit-button.disabled#ambitSpaceButton img,
+a.ambit-button.disabled#ambitSpaceButton:link img,
+a.ambit-button.disabled#ambitSpaceButton:hover img,
+a.ambit-button.disabled#ambitSpaceButton:visited img,
+a.ambit-button.disabled#ambitSpaceButton:active img
+{
+  filter: grayscale(1) invert(100) !important;
+}
 
 /**
  * Responsive Styling Page Overrides
