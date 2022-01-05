@@ -15,7 +15,12 @@ const urlParams = new URLSearchParams(window.location.search);
 const structureId = urlParams.get('structure_id');
 
 const droidUi = new DroidUI();
-droidUi.loadSingleStructure('structure', structureId, instance.address);
+
+// Static Viewer
+// droidUi.loadSingleStructure('structure', structureId, instance.address);
+
+// Animation Viewer
+droidUi.loadStructureView('structure', structureId, instance.address);
 
 const footer = new Footer();
 footer.init('footer-wrapper');

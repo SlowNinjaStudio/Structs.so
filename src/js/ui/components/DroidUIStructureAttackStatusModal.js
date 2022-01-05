@@ -119,14 +119,16 @@ export class DroidUIStructureAttackStatusModal {
       (new Computer()).stop_process(this.process_id);
     }.bind(this));
 
-    const attackEndOverlayId = this.attackEndOverlay.id;
+
     document.addEventListener(
       AnimationEngine.eventName(ANIMATION_EVENTS.END,`ATTACK_POST_DAMAGE_${this.target_structure.id}`),
       function () {
-        const overlay = document.getElementById(attackEndOverlayId);
-        overlay.style.display = 'block';
-        overlay.style.opacity = '0.8';
-      }
+        const overlay = document.getElementById(this.attackEndOverlay.id);
+        if ((typeof overlay != 'undefined') && overlay != null) {
+          overlay.style.display = 'block';
+          overlay.style.opacity = '0.8';
+        }
+      }.bind(this)
     );
   }
 }

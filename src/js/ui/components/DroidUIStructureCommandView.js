@@ -37,11 +37,12 @@ export class DroidUIStructureCommandView {
     return `
       <div class="structure-card-wrapper col-sm-12 col-md-6 col-lg-4">
         <div class="nes-container structure-card">
-          <div class="game-asset-wrapper">
+          <div id="structureViewPlayer"></div>
+          <!-- Static Viewer div class="game-asset-wrapper">
             <canvas id="${this.getCanvasId()}" class="pixel-art-viewer" width="64" height="64">
               Your browser does not support the canvas element.
             </canvas>
-          </div>
+          </div -->
           ${this.isCreator() ? `
             <div class="commands nes-container with-title">
               <h3 class="title">Command Menu</h3>

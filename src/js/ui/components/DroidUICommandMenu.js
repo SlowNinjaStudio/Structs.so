@@ -22,7 +22,7 @@ export class DroidUICommandMenu {
 
       // Reload the page with fresh structure data
       const droidUi = new DroidUI();
-      droidUi.loadSingleStructure('structure', this.structure.id, instance.address);
+      droidUi.loadStructureView('structure', this.structure.id, instance.address);
     }
 
     this.ChargeSlotDisconnectCallBack = async function(){
@@ -34,7 +34,7 @@ export class DroidUICommandMenu {
 
       // Reload the page with fresh structure data
       const droidUi = new DroidUI();
-      droidUi.loadSingleStructure('structure', this.structure.id, instance.address);
+      droidUi.loadStructureView('structure', this.structure.id, instance.address);
 
     }
 
@@ -411,6 +411,12 @@ export class DroidUICommandMenu {
 
 
   initPowerSlotSubmenuEventListeners() {
+
+    document.getElementById('main-menu-command').addEventListener('click', function() {
+      const commandMenu = new DroidUICommandMenu(this.structure);
+      document.getElementById('command-container').innerHTML = commandMenu.renderMainMenu();
+      commandMenu.initMainMenuEventListeners();
+    }.bind(this));
 
     if (this.structure.charging_slot.filter(x => x!="").length < this.structure.charging_slot_count) {
       // button to connect a new slot
