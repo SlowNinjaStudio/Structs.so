@@ -3,6 +3,7 @@
  */
 import {DroidUICommandMenu} from "./DroidUICommandMenu";
 import {WattToString} from "../../vendor/WattToString";
+import {DroidUITargetMenu} from "./DroidUITargetMenu";
 
 export class DroidUIStructureCommandView {
   /**
@@ -15,7 +16,8 @@ export class DroidUIStructureCommandView {
     this.structure = structure;
     this.creator = creator;
     this.idPrefix = idPrefix;
-    this.droidUICommandMenu = new DroidUICommandMenu(structure);
+    this.droidUICommandMenu = new DroidUICommandMenu(this.structure);
+    this.droidUITargetMenu = new DroidUITargetMenu(this.structure);
   }
 
   /**
@@ -185,6 +187,17 @@ export class DroidUIStructureCommandView {
               </div>
             </div>
           ` : ''}
+        </div>
+      </div>
+
+      <div class="structure-card-wrapper col-sm-12 col-md-6 col-lg-4">
+        <div class="nes-container structure-card">
+          <div class="commands nes-container with-title">
+            <h3 class="title">Target</h3>
+            <div id="target-container">
+              ${this.droidUITargetMenu.renderMainMenu()}
+            </div>
+          </div>
         </div>
       </div>
     `;
