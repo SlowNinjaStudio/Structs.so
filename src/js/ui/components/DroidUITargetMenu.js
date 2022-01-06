@@ -25,7 +25,8 @@ export class DroidUITargetMenu {
               href="#offcanvas"
               data-bs-toggle="offcanvas"
               role="button"
-              class="nes-btn is-error nes-btn-fluid"
+              class="nes-btn ${ (this.structure.health_current > 0) ? 'is-error' : 'is-disabled' } nes-btn-fluid"
+              ${ (this.structure.health_current > 0) ? '' : 'disabled=disabled' }
             >
               Attack This
             </a>
@@ -38,7 +39,7 @@ export class DroidUITargetMenu {
               href="#offcanvas"
               data-bs-toggle="offcanvas"
               role="button"
-              class="nes-btn is-warning ${ (this.structure.health_current < this.structure.health_max) ? '' : 'is-disabled' } nes-btn-fluid"
+              class="nes-btn ${ (this.structure.health_current < this.structure.health_max) ? 'is-warning' : 'is-disabled' } nes-btn-fluid"
               ${ (this.structure.health_current < this.structure.health_max) ? '' : 'disabled=disabled' }
             >
               Repair This
@@ -50,7 +51,7 @@ export class DroidUITargetMenu {
             <a
               id="target-drain-structure-command"
               href="#offcanvas"
-              class="nes-btn is-success ${ (this.structure.health_current == 0) ? '' : 'is-disabled' } nes-btn-fluid"
+              class="nes-btn  ${ (this.structure.health_current == 0) ? 'is-success' : 'is-disabled' } nes-btn-fluid"
               data-bs-toggle="offcanvas"
               role="button"
               ${ (this.structure.health_current == 0) ? '' : 'disabled=disabled' }
