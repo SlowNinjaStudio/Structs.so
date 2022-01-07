@@ -45,8 +45,16 @@ const mech1 = DummyUtil.getDummyStructure(
 );
 mech1.build_rate = 100;
 
-const structureViewPlayer = new DroidUIStructureViewPlayer(mech1, 'structureViewPlayer');
-structureViewPlayer.init();
+// const structureViewPlayer = new DroidUIStructureViewPlayer(mech1, 'structureViewPlayer');
+// structureViewPlayer.init();
+
+window.lottie.loadAnimation({
+  container: document.getElementById('structureViewPlayer'), // the dom element that will contain the animation
+  renderer: 'svg',
+  loop: true,
+  autoplay: true,
+  path: '/lottie/test/defensive-test.json' // the path to the animation json
+});
 
 const footer = new Footer();
 footer.init('footer-wrapper');
