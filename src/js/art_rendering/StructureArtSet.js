@@ -1,6 +1,7 @@
 import {StructureArtGenerator} from "./StructureArtGenerator";
 import {StructurePaletteFactory} from "./StructurePaletteFactory";
 import {CanvasUtil} from "../vendor/CanvasUtil";
+import {ColorRGB} from "../vendor/ColorRGB";
 
 /**
  * The art components need to display a structure.
@@ -52,6 +53,42 @@ export class StructureArtSet {
     canvas.remove();
 
     return images;
+  }
+
+  /**
+   * Given a list of SVG path elements, swap the current color with the new color for each element that
+   * matches the target color.
+   * Modes:
+   *   DEFAULT - Swaps the current color with the new color
+   *   EXCEPT_TARGET - Swaps all colors except the target color with the new color
+   * @param {NodeListOf<SVGPathElement>}svgPathElements
+   */
+  paletteSwapSVGPaths(svgPathElements) {
+    const colorSwapList = this.getPalette();
+
+    for (let i = 0; i < svgPathElements.length; i++) {
+      const fill = svgPathElements[i].getAttribute('fill');
+      const currentColor = ColorRGB.makeFromRGBString(fill);
+
+      for (let j = 0; j < colorSwapList.length; j++) {
+        const targetColor = colorSwapList[j][0];
+        const newColor = colorSwapList[j][1];
+
+        let swapMode = 'DEFAULT';
+        if (colorSwapList[j].length > 2 && colorSwapList[j][2] === 'EXCEPT_TARGET') {
+          swapMode = 'EXCEPT_TARGET';
+        }
+
+        if (
+          swapMode === 'DEFAULT' && currentColor.isEqual(targetColor) ||
+          swapMode === 'EXCEPT_TARGET' && !currentColor.isEqual(targetColor)
+        ) {
+          svgPathElements[i].setAttribute('fill', newColor.toString());
+          break;
+        }
+      }
+
+    }
   }
 
   /**

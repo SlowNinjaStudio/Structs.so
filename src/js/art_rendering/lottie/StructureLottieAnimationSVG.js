@@ -81,11 +81,24 @@ export class StructureLottieAnimationSVG {
 
   /**
    * Replace the color of the structure art given the specific structure.
+   * Used for vector images.
+   *
+   * @return {Promise<void>}
+   */
+  paletteSwapSVGPaths() {
+    /** @var {NodeListOf<SVGPathElement>} svgPaths */
+    const svgPaths = document.querySelectorAll(`#${this.lottieContainerId} g g path`);
+    this.structureArtSet.paletteSwapSVGPaths(svgPaths);
+  }
+
+  /**
+   * Replace the color of the structure art given the specific structure.
    *
    * @return {Promise<void>}
    */
   async paletteSwapLottie() {
     await this.paletteSwapLottieImages();
+    await this.paletteSwapSVGPaths();
   }
 
   show() {
