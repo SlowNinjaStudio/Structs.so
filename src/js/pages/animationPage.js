@@ -24,10 +24,11 @@ station1.build_rate = 1;
 const car1 = DummyUtil.getDummyStructure(
   true,
   [AMBITS.WATER, AMBITS.LAND, AMBITS.SKY, AMBITS.SPACE],
-  [FEATURES.ATTACK, FEATURES.ENGINEERING, FEATURES.DEFENSIVE, FEATURES.POWER],
+  [FEATURES.DEFENSIVE],
   10
 );
 car1.build_rate = 1;
+car1.range_defense = 450;
 
 const city1 = DummyUtil.getDummyStructure(
   false,
@@ -45,8 +46,16 @@ const mech1 = DummyUtil.getDummyStructure(
 );
 mech1.build_rate = 100;
 
-const structureViewPlayer = new DroidUIStructureViewPlayer(mech1, 'structureViewPlayer');
+const structureViewPlayer = new DroidUIStructureViewPlayer(car1, 'structureViewPlayer');
 structureViewPlayer.init();
+
+// window.lottie.loadAnimation({
+//   container: document.getElementById('structureViewPlayer'), // the dom element that will contain the animation
+//   renderer: 'svg',
+//   loop: true,
+//   autoplay: true,
+//   path: '/lottie/test/defensive-test.json' // the path to the animation json
+// });
 
 const footer = new Footer();
 footer.init('footer-wrapper');
