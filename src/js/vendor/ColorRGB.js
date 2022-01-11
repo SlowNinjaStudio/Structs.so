@@ -1,3 +1,10 @@
+export class ColorRGBError extends Error {
+  constructor(message = '') {
+    super(message);
+    this.name = "ColorRGBError";
+  }
+}
+
 /**
  * Library for working with RGB colors
  */
@@ -6,6 +13,24 @@ export class ColorRGB {
     this.r = r;
     this.g = g;
     this.b = b;
+  }
+
+  /**
+   * @param rgbString rgb(\d, \d, \d)
+   * @return {ColorRGB}
+   */
+  static makeFromRGBString(rgbString) {
+    const matches = rgbString.match(/rgb\(\s*(\d+)\s*,\s*(\d+)\s*,\s*(\d+)\s*\)/);
+
+    if (matches.length < 4) {
+      throw new ColorRGBError('Invalid RGB string');
+    }
+
+    return new ColorRGB(
+      parseInt(matches[1]),
+      parseInt(matches[2]),
+      parseInt(matches[3])
+    );
   }
 
   /**
@@ -147,5 +172,19 @@ export class ColorRGB {
       this.clampChannel(this.g * adjustment),
       this.clampChannel(this.b * adjustment),
     );
+  }
+
+  toString() {
+    return `rgb(${this.r}, ${this.g}, ${this.b})`;
+  }
+
+  /**
+   * Whether or not two colors are the same.
+   *
+   * @param {ColorRGB} color
+   * @return {boolean}
+   */
+  isEqual(color) {
+    return (this.r === color.r && this.g === color.g && this.b === color.b);
   }
 }

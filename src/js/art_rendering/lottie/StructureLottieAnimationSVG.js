@@ -40,53 +40,65 @@ export class StructureLottieAnimationSVG {
 
   /**
    * Replace the color of the structure art given the specific structure.
+   * Used for raster images.
    *
    * @return {Promise<void>}
    */
-  async paletteSwapLottie(gContainers = null) {
-
+  async paletteSwapLottieImages() {
     // Fetch all the SVG groups containing structure art images
-    gContainers = gContainers || document.querySelectorAll(`#${this.lottieContainerId} g g`);
+    let originalSVGImages = document.querySelectorAll(`#${this.lottieContainerId} g g image`);
 
-    for (let i = 0; i < gContainers.length; i++) {
-      const gContainer = gContainers[i];
+    const htmlImages = [];
 
-      // If it's a precomp, need to go deeper into the element
-      if (gContainer.childElementCount > 1) {
-        await this.paletteSwapLottie(gContainer.children);
-        continue;
-      }
-
-      const originalSVGImages = gContainer.querySelectorAll('image');
-      const htmlImages = [];
-
-      // For each SVG image, load it into an HTML image object for easier processing
-      for (let j = 0; j < originalSVGImages.length; j++) {
-        const originalSVGImage = originalSVGImages[j];
-        const htmlImage = new Image();
-        htmlImage.decoding = 'sync';
-        htmlImage.src = originalSVGImage.href.baseVal;
-        await htmlImage.decode();
-        htmlImages.push(htmlImage);
-      }
-
-      // Palette swap the images
-      const swappedImages = this.structureArtSet.paletteSwapImages(htmlImages);
-
-      // Write the palette swapped images back to SVG image objects and replace the original SVG images
-      for (let j = 0; j < swappedImages.length; j++) {
-        const paletteSwapped = swappedImages[j];
-        gContainer.innerHTML = '';
-
-        const svgImage = document.createElementNS('http://www.w3.org/2000/svg','image');
-        svgImage.setAttributeNS(null,'height', `${paletteSwapped.height}`);
-        svgImage.setAttributeNS(null,'width', `${paletteSwapped.width}`);
-        svgImage.setAttributeNS('http://www.w3.org/1999/xlink','href', paletteSwapped.src);
-        svgImage.setAttributeNS(null, 'visibility', 'visible');
-
-        gContainer.append(svgImage);
-      }
+    // For each SVG image, load it into an HTML image object for easier processing
+    for (let j = 0; j < originalSVGImages.length; j++) {
+      const originalSVGImage = originalSVGImages[j];
+      const htmlImage = new Image();
+      htmlImage.decoding = 'sync';
+      htmlImage.src = originalSVGImage.href.baseVal;
+      await htmlImage.decode();
+      htmlImages.push(htmlImage);
     }
+
+    // Palette swap the images
+    const swappedImages = this.structureArtSet.paletteSwapImages(htmlImages);
+
+    // Write the palette swapped images back to SVG image objects and replace the original SVG images
+    for (let j = 0; j < swappedImages.length; j++) {
+      const paletteSwapped = swappedImages[j];
+      const gContainer = originalSVGImages[j].parentNode;
+      gContainer.innerHTML = '';
+
+      const svgImage = document.createElementNS('http://www.w3.org/2000/svg','image');
+      svgImage.setAttributeNS(null,'height', `${paletteSwapped.height}`);
+      svgImage.setAttributeNS(null,'width', `${paletteSwapped.width}`);
+      svgImage.setAttributeNS('http://www.w3.org/1999/xlink','href', paletteSwapped.src);
+      svgImage.setAttributeNS(null, 'visibility', 'visible');
+
+      gContainer.append(svgImage);
+    }
+  }
+
+  /**
+   * Replace the color of the structure art given the specific structure.
+   * Used for vector images.
+   *
+   * @return {Promise<void>}
+   */
+  paletteSwapSVGPaths() {
+    /** @var {NodeListOf<SVGPathElement>} svgPaths */
+    const svgPaths = document.querySelectorAll(`#${this.lottieContainerId} g g path`);
+    this.structureArtSet.paletteSwapSVGPaths(svgPaths);
+  }
+
+  /**
+   * Replace the color of the structure art given the specific structure.
+   *
+   * @return {Promise<void>}
+   */
+  async paletteSwapLottie() {
+    await this.paletteSwapLottieImages();
+    await this.paletteSwapSVGPaths();
   }
 
   show() {
