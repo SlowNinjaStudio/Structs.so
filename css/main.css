@@ -371,6 +371,15 @@ textarea.custom-nes-text-area.is-invalid {
 .animation-wrapper {
   height: 256px;
 }
+.nes-container {
+  padding: 1.5rem 1.5rem;
+}
+.nes-progress.is-small {
+  height: 16px;
+}
+.bt-1 {
+  border-top: 1px solid #CCCCCC;
+}
 
 /* Account Menu */
 #account-menu-profile-image .game-asset-wrapper {
@@ -447,6 +456,10 @@ footer {
   margin: 20px auto;
   vertical-align: top;
   text-align: left;
+}
+.structure-card-header {
+  font-size: 12px;
+  word-spacing: -9px;
 }
 .structure-card .solo-action-wrapper {
   padding-bottom: 20px;
