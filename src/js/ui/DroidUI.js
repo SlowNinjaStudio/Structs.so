@@ -357,7 +357,7 @@ export class DroidUI {
           this.handleLoadList(
             structures,
             targetElementId,
-            'StructureCondensedFactory',
+            'StructurePerformingCondensedFactory',
             [structure, callToActionType],
             new DroidUIEmptyListHelperStructureSelection(searchString),
             DroidUIStructureCondensedSubEventListener,
