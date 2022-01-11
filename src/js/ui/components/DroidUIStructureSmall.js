@@ -14,8 +14,6 @@ export class DroidUIStructureSmall {
     this.structure = structure;
     this.creator = creator;
     this.idPrefix = idPrefix;
-
-    this.structure.health_current = Math.round(this.structure.health_current * Math.random());
   }
 
   /**
