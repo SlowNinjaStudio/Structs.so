@@ -30,8 +30,8 @@ export class DroidUIStructureSmall {
     return  this.structure.getCreator() === '' || this.structure.getCreator() === this.creator;
   }
   getHealthBarClass() {
-    const health = (this.structure.getHealthCurrent() / this.structure.getHealthMax()) * 100;
-    if (health > 95) {
+    const health = Math.round((this.structure.getHealthCurrent() / this.structure.getHealthMax()) * 100);
+    if (health === 100) {
       return 'is-success';
     } else if (health > 50) {
       return 'is-warning';
