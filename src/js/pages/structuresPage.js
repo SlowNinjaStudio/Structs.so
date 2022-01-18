@@ -13,7 +13,15 @@ navbar.init('nav-wrapper');
 
 const droidUi = new DroidUI();
 
-droidUi.loadStructuresByCreator('structures-list', instance.address);
+droidUi.loadStructuresByCreator(
+  'structures-list',
+  'status-list-damaged',
+  'status-list-kilowatt',
+  'status-list-megawatt',
+  'status-list-gigawatt',
+  'status-list-terawatt',
+  instance.address
+);
 
 const footer = new Footer();
 footer.init('footer-wrapper');
