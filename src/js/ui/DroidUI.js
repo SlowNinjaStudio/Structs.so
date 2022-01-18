@@ -27,7 +27,7 @@ import {DroidUIStructureCondensedBuildListener} from "./listeners/DroidUIStructu
 import {DroidUIStructureCondensedSubEventListener} from "./listeners/DroidUIStructureCondensedSubEventListener";
 import {Instance} from "../models/Instance";
 import {DroidUIStructureViewPlayer} from "./components/DroidUIStructureViewPlayer";
-import {UNITS} from "../Constants";
+import {StructureCategorizer} from "../util/StructureCategorizer";
 
 /**
  * Web App
@@ -163,6 +163,29 @@ export class DroidUI {
   }
 
   /**
+   * @param {string} targetElementId
+   * @param {string} listType
+   * @param {string} artIdPrefix
+   * @param {string} creator
+   * @param {Structure[]} categoryStructures
+   * @param {Structure[]} allStructures
+   */
+  handleLoadStatusCategory(targetElementId, listType, artIdPrefix, creator, categoryStructures, allStructures) {
+    if (categoryStructures.length > 0) {
+      this.handleLoadList(
+        categoryStructures,
+        targetElementId,
+        listType,
+        [creator, artIdPrefix],
+        new DroidUIEmptyListHelper()
+      );
+      const statusHeaderText = document.querySelector(`#${targetElementId}-container .status-container-header-text`);
+      statusHeaderText.innerText = `${categoryStructures.length}/${allStructures.length}`;
+      document.getElementById(`${targetElementId}-container`).style.display = 'block';
+    }
+  }
+
+  /**
    * Load all structures and display them in the target element.
    *
    * @param {string} targetElementId
@@ -198,91 +221,58 @@ export class DroidUI {
     creator
   ) {
     this.droidApi.getStructuresByCreator(creator).then((structures) => {
-      const damaged = [];
-      const teraWatt = [];
-      const gigaWatt = [];
-      const megaWatt = [];
-      const kiloWatt = [];
-      for (let i = 0; i < structures.length; i++) {
-        // Categorize damage structs
-        if (Math.round(structures[i].getHealthCurrent()) !== Math.round(structures[i].getHealthMax())) {
-          damaged.push(structures[i]);
-        }
+      const categorizer = new StructureCategorizer();
 
-        // Categorize structs by watt
-        const watt = structures[i].getBatteryAmount();
-        if (watt >= UNITS.TERA) {
-          teraWatt.push(structures[i]);
-        } else if (watt > UNITS.GIGA) {
-          gigaWatt.push(structures[i]);
-        } else if (watt > UNITS.MEGA) {
-          megaWatt.push(structures[i]);
-        } else if (watt > UNITS.KILO) {
-          kiloWatt.push(structures[i]);
-        }
-      }
+      const healthCategories = categorizer.categorizeByHealth(structures);
+      const [ damaged ] = healthCategories;
 
-      if (damaged.length > 0) {
-        this.handleLoadList(
-          damaged,
-          damagedListElementId,
-          'StructureStatusMiniHealth',
-          [creator, 'status-damaged-'],
-          new DroidUIEmptyListHelper()
-        );
-        const statusHeaderText = document.querySelector(`#${damagedListElementId}-container .status-container-header-text`);
-        statusHeaderText.innerText = `${damaged.length}/${structures.length}`;
-        document.getElementById(`${damagedListElementId}-container`).style.display = 'block';
-      }
+      const wattCategories = categorizer.categorizeByWatt(structures);
+      const [ kiloWatt, megaWatt, gigaWatt, teraWatt ] = wattCategories;
 
-      if (teraWatt.length > 0) {
-        this.handleLoadList(
-          teraWatt,
-          terawattListElementId,
-          'StructureStatusMiniBatteryCharge',
-          [creator, 'status-tera-'],
-          new DroidUIEmptyListHelper()
-        );
-        const statusHeaderText = document.querySelector(`#${terawattListElementId}-container .status-container-header-text`);
-        statusHeaderText.innerText = `${teraWatt.length}/${structures.length}`;
-        document.getElementById(`${terawattListElementId}-container`).style.display = 'block';
-      }
-      if (gigaWatt.length > 0) {
-        this.handleLoadList(
-          gigaWatt,
-          gigawattListElementId,
-          'StructureStatusMiniBatteryCharge',
-          [creator, 'status-giga-'],
-          new DroidUIEmptyListHelper()
-        );
-        const statusHeaderText = document.querySelector(`#${gigawattListElementId}-container .status-container-header-text`);
-        statusHeaderText.innerText = `${gigaWatt.length}/${structures.length}`;
-        document.getElementById(`${gigawattListElementId}-container`).style.display = 'block';
-      }
-      if (megaWatt.length > 0) {
-        this.handleLoadList(
-          megaWatt,
-          megawattListElementId,
-          'StructureStatusMiniBatteryCharge',
-          [creator, 'status-mega-'],
-          new DroidUIEmptyListHelper()
-        );
-        const statusHeaderText = document.querySelector(`#${megawattListElementId}-container .status-container-header-text`);
-        statusHeaderText.innerText = `${megaWatt.length}/${structures.length}`;
-        document.getElementById(`${megawattListElementId}-container`).style.display = 'block';
-      }
-      if (kiloWatt.length > 0) {
-        this.handleLoadList(
-          kiloWatt,
-          kilowattListElementId,
-          'StructureStatusMiniBatteryCharge',
-          [creator, 'status-kilo-'],
-          new DroidUIEmptyListHelper()
-        );
-        const statusHeaderText = document.querySelector(`#${kilowattListElementId}-container .status-container-header-text`);
-        statusHeaderText.innerText = `${kiloWatt.length}/${structures.length}`;
-        document.getElementById(`${kilowattListElementId}-container`).style.display = 'block';
-      }
+      this.handleLoadStatusCategory(
+        damagedListElementId,
+        'StructureStatusMiniHealth',
+        'status-damaged-',
+        creator,
+        damaged,
+        structures
+      );
+
+      this.handleLoadStatusCategory(
+        terawattListElementId,
+        'StructureStatusMiniBatteryCharge',
+        'status-tera-',
+        creator,
+        teraWatt,
+        structures
+      );
+
+      this.handleLoadStatusCategory(
+        gigawattListElementId,
+        'StructureStatusMiniBatteryCharge',
+        'status-giga-',
+        creator,
+        gigaWatt,
+        structures
+      );
+
+      this.handleLoadStatusCategory(
+        megawattListElementId,
+        'StructureStatusMiniBatteryCharge',
+        'status-mega-',
+        creator,
+        megaWatt,
+        structures
+      );
+
+      this.handleLoadStatusCategory(
+        kilowattListElementId,
+        'StructureStatusMiniBatteryCharge',
+        'status-kilo-',
+        creator,
+        kiloWatt,
+        structures
+      );
 
       this.handleLoadStructures(structures, allListElementId, creator, new DroidUIMessagePanel(
         'No Structures Available',
