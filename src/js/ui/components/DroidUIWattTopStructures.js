@@ -46,7 +46,7 @@ export class DroidUIWattTopStructures {
         rendered += `
           <li>
             <a href="/structure.html?structure_id=${this.structures[x].id}">
-                ${(this.structures[x].name == '') ? (this.structures[x].address).substring(5,15) : this.structures[x].name}
+                ${(this.structures[x].name == '') ? (this.structures[x].hash).substring(5,15) : this.structures[x].name}
 
                 (${WattToString(parseInt(this.structures[x].battery.amount))})
             </a>

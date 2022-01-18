@@ -285,7 +285,7 @@ export class Schematic {
       this.capacity_max  = 0
     }
 
-    this.health_max = this.mass + this.strength
+    this.health_max = (this.mass + this.strength) * 100
 
     this.primary_color   = hash.substring(52,58);
     this.secondary_color = hash.substring(58,64);
