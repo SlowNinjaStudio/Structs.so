@@ -27,6 +27,7 @@ import {DroidUIStructureCondensedBuildListener} from "./listeners/DroidUIStructu
 import {DroidUIStructureCondensedSubEventListener} from "./listeners/DroidUIStructureCondensedSubEventListener";
 import {Instance} from "../models/Instance";
 import {DroidUIStructureViewPlayer} from "./components/DroidUIStructureViewPlayer";
+import {StructureCategorizer} from "../util/StructureCategorizer";
 
 /**
  * Web App
@@ -162,6 +163,29 @@ export class DroidUI {
   }
 
   /**
+   * @param {string} targetElementId
+   * @param {string} listType
+   * @param {string} artIdPrefix
+   * @param {string} creator
+   * @param {Structure[]} categoryStructures
+   * @param {Structure[]} allStructures
+   */
+  handleLoadStatusCategory(targetElementId, listType, artIdPrefix, creator, categoryStructures, allStructures) {
+    if (categoryStructures.length > 0) {
+      this.handleLoadList(
+        categoryStructures,
+        targetElementId,
+        listType,
+        [creator, artIdPrefix],
+        new DroidUIEmptyListHelper()
+      );
+      const statusHeaderText = document.querySelector(`#${targetElementId}-container .status-container-header-text`);
+      statusHeaderText.innerText = `${categoryStructures.length}/${allStructures.length}`;
+      document.getElementById(`${targetElementId}-container`).style.display = 'block';
+    }
+  }
+
+  /**
    * Load all structures and display them in the target element.
    *
    * @param {string} targetElementId
@@ -179,12 +203,78 @@ export class DroidUI {
   /**
    * Load structures by the given creator and display them in the target element.
    *
-   * @param {string} targetElementId
+   * @param {string} allListElementId
+   * @param {string} damagedListElementId
+   * @param {string} kilowattListElementId
+   * @param {string} megawattListElementId
+   * @param {string} gigawattListElementId
+   * @param {string} terawattListElementId
    * @param {string} creator id
    */
-  loadStructuresByCreator(targetElementId, creator) {
+  loadStructuresByCreator(
+    allListElementId,
+    damagedListElementId,
+    kilowattListElementId,
+    megawattListElementId,
+    gigawattListElementId,
+    terawattListElementId,
+    creator
+  ) {
     this.droidApi.getStructuresByCreator(creator).then((structures) => {
-      this.handleLoadStructures(structures, targetElementId, creator, new DroidUIMessagePanel(
+      const categorizer = new StructureCategorizer();
+
+      const healthCategories = categorizer.categorizeByHealth(structures);
+      const [ damaged ] = healthCategories;
+
+      const wattCategories = categorizer.categorizeByWatt(structures);
+      const [ kiloWatt, megaWatt, gigaWatt, teraWatt ] = wattCategories;
+
+      this.handleLoadStatusCategory(
+        damagedListElementId,
+        'StructureStatusMiniHealth',
+        'status-damaged-',
+        creator,
+        damaged,
+        structures
+      );
+
+      this.handleLoadStatusCategory(
+        terawattListElementId,
+        'StructureStatusMiniBatteryCharge',
+        'status-tera-',
+        creator,
+        teraWatt,
+        structures
+      );
+
+      this.handleLoadStatusCategory(
+        gigawattListElementId,
+        'StructureStatusMiniBatteryCharge',
+        'status-giga-',
+        creator,
+        gigaWatt,
+        structures
+      );
+
+      this.handleLoadStatusCategory(
+        megawattListElementId,
+        'StructureStatusMiniBatteryCharge',
+        'status-mega-',
+        creator,
+        megaWatt,
+        structures
+      );
+
+      this.handleLoadStatusCategory(
+        kilowattListElementId,
+        'StructureStatusMiniBatteryCharge',
+        'status-kilo-',
+        creator,
+        kiloWatt,
+        structures
+      );
+
+      this.handleLoadStructures(structures, allListElementId, creator, new DroidUIMessagePanel(
         'No Structures Available',
         `You don't own any structures. Use the Genesis Library structure and a schematic to create your first structure.`
       ));

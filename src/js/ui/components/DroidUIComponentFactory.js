@@ -6,6 +6,8 @@ import {DroidUIStructureCondensed} from "./DroidUIStructureCondensed";
 import {DroidUIStructureCondensedCTABuild} from "./DroidUIStructureCondensedCTABuild";
 import {DroidUIStructureCTAFactory} from "./DroidUIStructureCTAFactory";
 import {DroidUIStructureSmall} from "./DroidUIStructureSmall";
+import {DroidUIStructureStatusMini} from "./DroidUIStructureStatusMini";
+import {STATUS_TYPES} from "../../Constants";
 
 export class DroidUIComponentFactoryError extends Error {
   constructor(message) {
@@ -56,6 +58,12 @@ export class DroidUIComponentFactory {
         break;
       case 'StructureCommandView':
         component = new DroidUIStructureCommandView(structure, ...params);
+        break;
+      case 'StructureStatusMiniHealth':
+        component = new DroidUIStructureStatusMini(structure, STATUS_TYPES.HEALTH, ...params);
+        break;
+      case 'StructureStatusMiniBatteryCharge':
+        component = new DroidUIStructureStatusMini(structure, STATUS_TYPES.BATTERY_CHARGE, ...params);
         break;
       default:
         throw new DroidUIComponentFactoryError(`DroidUI component with type: ${type}`);
