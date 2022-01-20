@@ -176,6 +176,16 @@ export class Structure {
   getChargingSlotCount () {
     return parseInt(this.charging_slot_count);
   }
+  getChargingSlotUsedCount() {
+    const slots = this.getChargingSlotCount();
+    let used = 0;
+    for (let i = 0; i < slots; i++) {
+      if (this.charging_slot[i].trim().length > 0) {
+        used++;
+      }
+    }
+    return used;
+  }
   getGenerationRate() {
     return this.generate_rate;
   }

@@ -150,6 +150,12 @@ export class DroidUISchematic {
             `<div class="nes-container with-title">
               <h3 class="title">Power Systems</h3>
               <div class="details">
+                ${this.schematic.getChargingSlotCount() > 0 ? `
+                  <div>
+                    <img src="/img/icons/icon-power-socket.png" alt="Power Socket Icon" class="structure-card-icon">
+                    <span class="attribute-label">Charging Slots:</span> ${this.schematic.getChargingSlotCount()}
+                  </div>
+                ` : ''}
                 <div>
                   <img src="/img/icons/icon-power-generate.png" alt="Generation Rate Icon" class="structure-card-icon">
                   <span class="attribute-label">Max Generation Rate:</span> ${this.schematic.getGenerationRate()}
