@@ -1,8 +1,10 @@
 import {ColorRGB} from "../vendor/ColorRGB";
 import {StructureRanks} from "../models/StructureRanks";
+import {AbstractStructurePalette} from "./AbstractStructurePalette";
 
-export class StructurePaletteMobileCar {
+export class StructurePaletteMobileCar extends AbstractStructurePalette {
   constructor() {
+    super();
     this.chassisTop = new ColorRGB(255, 152, 0);
     this.chassisBottom = new ColorRGB(255, 87, 34);
     this.waterFin = new ColorRGB(255, 186, 0);
@@ -141,20 +143,6 @@ export class StructurePaletteMobileCar {
     }
 
     paletteSwap.push([this.engineeringCraneArm, color]);
-  }
-
-  /**
-   * @param {Array.<Array>}paletteSwap
-   * @param {ColorRGB} primaryColor
-   * @param {Structure} structure
-   */
-  generatePowerPaletteSwap(paletteSwap, primaryColor, structure) {
-    const maxSlots = 5;
-    const slots = Math.min(structure.getChargingSlotCount(), maxSlots);
-    const offSlots = maxSlots - slots;
-    for (let i = 0; i < offSlots; i++) {
-      paletteSwap.push([this.powerLightColor[i], new ColorRGB(20, 44, 0)]);
-    }
   }
 
   /**
