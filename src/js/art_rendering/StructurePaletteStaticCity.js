@@ -1,8 +1,10 @@
 import {ColorRGB} from "../vendor/ColorRGB";
 import {StructureRanks} from "../models/StructureRanks";
+import {AbstractStructurePalette} from "./AbstractStructurePalette";
 
-export class StructurePaletteStaticCity {
+export class StructurePaletteStaticCity extends AbstractStructurePalette {
   constructor() {
+    super();
     this.buildingsLeft = new ColorRGB(224, 224, 224);
     this.buildingsCenterLeft = new ColorRGB(158, 158, 158);
     this.buildingsCenter = new ColorRGB(238, 238, 238);
@@ -121,20 +123,6 @@ export class StructurePaletteStaticCity {
     }
 
     paletteSwap.push([this.engineeringCraneTower, color]);
-  }
-
-  /**
-   * @param {Array.<Array>}paletteSwap
-   * @param {ColorRGB} primaryColor
-   * @param {Structure} structure
-   */
-  generatePowerPaletteSwap(paletteSwap, primaryColor, structure) {
-    const maxSlots = 5;
-    const slots = Math.min(structure.getChargingSlotCount(), maxSlots);
-    const offSlots = maxSlots - slots;
-    for (let i = 0; i < offSlots; i++) {
-      paletteSwap.push([this.powerLightColor[i], new ColorRGB(20, 44, 0)]);
-    }
   }
 
   /**

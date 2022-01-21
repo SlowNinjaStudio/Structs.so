@@ -86,9 +86,17 @@ export class DroidUIStructureSmall {
               ${this.structure.getHealthCurrent()} / ${this.structure.getHealthMax()}
               <progress class="nes-progress ${this.getHealthBarClass()} is-small" value="${this.structure.getHealthCurrent()}" max="${this.structure.getHealthMax()}"></progress>
             </div>
-            <div class="mb-2">
-              <img src="/img/icons/icon-battery-charge.png" alt="Battery Charge Icon" class="structure-card-icon">
-              ${WattToString(this.structure.getBatteryAmount())}
+            <div class="row mb-2">
+              <div class="col-9">
+                <img src="/img/icons/icon-battery-charge.png" alt="Battery Charge Icon" title="Battery Charge" class="structure-card-icon">
+                ${WattToString(this.structure.getBatteryAmount())}
+              </div>
+              ${this.structure.getChargingSlotCount() > 0 ? `
+                <div class="col text-end">
+                  <img src="/img/icons/icon-power-socket.png" alt="Power Socket Icon" title="Charging Slots Used" class="structure-card-icon">
+                  ${this.structure.getChargingSlotUsedCount()}/${this.structure.getChargingSlotCount()}
+                </div>
+              ` : ''}
             </div>
             <div class="row gx-2 text-center bt-1 pt-2">
               <div class="col-2">
