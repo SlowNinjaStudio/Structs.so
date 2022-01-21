@@ -166,6 +166,26 @@ export class DroidUIStructureSmall {
                   <div>${this.structure.getRestorationRate()}</div>
                 </div>
               ` : ''}
+              ${this.structure.hasFeaturePower() ? `
+                <div class="col-2">
+                  <div>
+                    <img src="/img/icons/icon-power-generate.png" alt="Generation Rate Icon" title="Generation Rate" class="structure-condensed-icon">
+                  </div>
+                  <div>${this.structure.getGenerationRate()}</div>
+                </div>
+                <div class="col-2">
+                  <div>
+                    <img src="/img/icons/icon-power-charge.png" alt="Charge Rate Icon" title="Charge Rate" class="structure-condensed-icon">
+                  </div>
+                  <div>${this.structure.getChargeRate()}</div>
+                </div>
+                <div class="col-2">
+                  <div>
+                    <img src="/img/icons/icon-power-drain.png" alt="Drain Rate Icon" title="Drain Rate" class="structure-condensed-icon">
+                  </div>
+                  <div>${this.structure.getDrainRate()}</div>
+                </div>
+              ` : ''}
             </div>
           </div>
         </div>
