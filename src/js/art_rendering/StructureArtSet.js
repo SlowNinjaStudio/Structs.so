@@ -68,6 +68,11 @@ export class StructureArtSet {
 
     for (let i = 0; i < svgPathElements.length; i++) {
       const fill = svgPathElements[i].getAttribute('fill');
+
+      if (typeof fill !== 'string') {
+        continue;
+      }
+
       const currentColor = ColorRGB.makeFromRGBString(fill);
 
       for (let j = 0; j < colorSwapList.length; j++) {
