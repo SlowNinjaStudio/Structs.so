@@ -10,13 +10,21 @@ export class StationLottieAnimationSet extends StructureLottieAnimationSet {
    * @param {string} idleSkyContainerId
    * @param {string} idleLandContainerId
    * @param {string} idleWaterContainerId
+   * @param {string} featureIdleAttackContainerId
+   * @param {string} featureIdleDefensiveContainerId
+   * @param {string} featureIdleEngineeringContainerId
+   * @param {string} featureIdlePowerContainerId
    */
   constructor(
     structure,
     idleSpaceContainerId,
     idleSkyContainerId,
     idleLandContainerId,
-    idleWaterContainerId
+    idleWaterContainerId,
+    featureIdleAttackContainerId,
+    featureIdleDefensiveContainerId,
+    featureIdleEngineeringContainerId,
+    featureIdlePowerContainerId
   ) {
     const idleSpace = new StructureLottieAnimationSVG(
       ANIMATION_NAMES.STATION.IDLE.SPACE,
@@ -70,6 +78,68 @@ export class StationLottieAnimationSet extends StructureLottieAnimationSet {
       }
     );
 
-    super(idleSpace, idleSky, idleLand, idleWater);
+    /** TODO: Change feature idle paths to real paths */
+    const featureIdleAttack = new StructureLottieAnimationSVG(
+      ANIMATION_NAMES.STATION.FEATURE_IDLE.ATTACK,
+      structure,
+      featureIdleAttackContainerId,
+      {
+        container: document.getElementById(featureIdleAttackContainerId),
+        renderer: 'svg',
+        loop: true,
+        autoplay: false,
+        path: '/lottie/station/idle/space/station-idle-space.json'
+      }
+    );
+
+    const featureIdleDefensive = new StructureLottieAnimationSVG(
+      ANIMATION_NAMES.STATION.FEATURE_IDLE.DEFENSIVE,
+      structure,
+      featureIdleDefensiveContainerId,
+      {
+        container: document.getElementById(featureIdleDefensiveContainerId),
+        renderer: 'svg',
+        loop: true,
+        autoplay: false,
+        path: '/lottie/station/idle/sky/station-idle-sky.json'
+      }
+    );
+
+    const featureIdleEngineering = new StructureLottieAnimationSVG(
+      ANIMATION_NAMES.STATION.FEATURE_IDLE.ENGINEERING,
+      structure,
+      featureIdleEngineeringContainerId,
+      {
+        container: document.getElementById(featureIdleEngineeringContainerId),
+        renderer: 'svg',
+        loop: true,
+        autoplay: false,
+        path: '/lottie/station/idle/land/station-idle-land.json'
+      }
+    );
+
+    const featureIdlePower = new StructureLottieAnimationSVG(
+      ANIMATION_NAMES.STATION.FEATURE_IDLE.POWER,
+      structure,
+      featureIdlePowerContainerId,
+      {
+        container: document.getElementById(featureIdlePowerContainerId),
+        renderer: 'svg',
+        loop: true,
+        autoplay: false,
+        path: '/lottie/station/idle/water/station-idle-water.json'
+      }
+    );
+
+    super(
+      idleSpace,
+      idleSky,
+      idleLand,
+      idleWater,
+      featureIdleAttack,
+      featureIdleDefensive,
+      featureIdleEngineering,
+      featureIdlePower
+    );
   }
 }

@@ -4,6 +4,9 @@ import {Footer} from "./common/Footer";
 import {DummyUtil} from "../util/DummyUtil";
 import {AMBITS, FEATURES} from "../Constants";
 import {DroidUIStructureViewPlayer} from "../ui/components/DroidUIStructureViewPlayer";
+import {StructureLottieAnimationSVG} from "../art_rendering/lottie/StructureLottieAnimationSVG";
+import {ANIMATION_NAMES} from "../AnimationNameConstants";
+import {LottieCustomPlayer} from "../art_rendering/lottie/LottieCustomPlayer";
 
 const instance = new Instance();
 await instance.init();
@@ -46,8 +49,8 @@ const mech1 = DummyUtil.getDummyStructure(
 );
 mech1.build_rate = 100;
 
-const structureViewPlayer = new DroidUIStructureViewPlayer(car1, 'structureViewPlayer');
-structureViewPlayer.init();
+// const structureViewPlayer = new DroidUIStructureViewPlayer(car1, 'structureViewPlayer');
+// structureViewPlayer.init();
 
 // window.lottie.loadAnimation({
 //   container: document.getElementById('structureViewPlayer'), // the dom element that will contain the animation
@@ -56,6 +59,24 @@ structureViewPlayer.init();
 //   autoplay: true,
 //   path: '/lottie/test/defensive-test.json' // the path to the animation json
 // });
+
+const animation = new StructureLottieAnimationSVG(
+  ANIMATION_NAMES.CAR.IDLE.WATER,
+  car1,
+  'structureViewPlayer',
+  {
+    container: document.getElementById('structureViewPlayer'),
+    renderer: 'svg',
+    loop: true,
+    autoplay: false,
+    path: '/lottie/test/car/defensive/car-defensive-256.json'
+    // path: '/lottie/car/idle/land/car-idle-land.json'
+  }
+);
+const lottieCustomPlayer = new LottieCustomPlayer();
+await lottieCustomPlayer.registerAnimation(animation);
+await lottieCustomPlayer.init('', false);
+lottieCustomPlayer.playRandom();
 
 const footer = new Footer();
 footer.init('footer-wrapper');

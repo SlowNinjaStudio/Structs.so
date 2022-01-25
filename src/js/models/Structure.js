@@ -180,7 +180,7 @@ export class Structure {
     const slots = this.getChargingSlotCount();
     let used = 0;
     for (let i = 0; i < slots; i++) {
-      if (this.charging_slot[i].trim().length > 0) {
+      if ((typeof this.charging_slot[i] === 'string' ? this.charging_slot[i] : '').trim().length > 0) {
         used++;
       }
     }

@@ -786,6 +786,42 @@ a.ambit-button.disabled#ambitSpaceButton:active img
 {
   filter: grayscale(1) invert(100) !important;
 }
+a.feature-button img {
+  width: 32px;
+  margin: 14px 13px 13px 14px;
+}
+a.feature-button:hover, a.feature-button:active {
+  filter: brightness(1.5);
+}
+a.feature-button {
+  box-sizing: border-box;
+  border-left: 4px solid rgb(38,38,38);
+  border-bottom: 4px solid rgb(38,38,38);
+  display: inline-block;
+}
+a.feature-button.last-ambit-button {
+  border-right: 4px solid rgb(38,38,38);
+}
+a.feature-button.disabled,
+a.feature-button.disabled:link,
+a.feature-button.disabled:hover,
+a.feature-button.disabled:visited,
+a.feature-button.disabled:active
+{
+  filter: grayscale(1) !important;
+}
+#featureAttackButton {
+  background: rgb(231, 110, 85);
+}
+#featureDefensiveButton {
+  background: rgb(32, 156, 238);
+}
+#featureEngineeringButton {
+  background: rgb(247, 213, 29);
+}
+#featurePowerButton {
+  background: rgb(146, 204, 65);
+}
 
 /**
  * Responsive Styling Page Overrides

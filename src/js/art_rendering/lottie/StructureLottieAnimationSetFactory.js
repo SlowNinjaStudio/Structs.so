@@ -19,6 +19,10 @@ export class StructureLottieAnimationSetFactory {
    * @param {string} idleSkyContainerId
    * @param {string} idleLandContainerId
    * @param {string} idleWaterContainerId
+   * @param {string} featureIdleAttackContainerId
+   * @param {string} featureIdleDefensiveContainerId
+   * @param {string} featureIdleEngineeringContainerId
+   * @param {string} featureIdlePowerContainerId
    * @return {LottieArtConfiguratorCity|LottieArtConfiguratorCar|StationLottieAnimationSet|LottieArtConfiguratorMech}
    */
   make(
@@ -26,7 +30,11 @@ export class StructureLottieAnimationSetFactory {
     idleSpaceContainerId,
     idleSkyContainerId,
     idleLandContainerId,
-    idleWaterContainerId
+    idleWaterContainerId,
+    featureIdleAttackContainerId,
+    featureIdleDefensiveContainerId,
+    featureIdleEngineeringContainerId,
+    featureIdlePowerContainerId
   ) {
     const type = this.structureClassifier.getType(structure);
     let animationSet;
@@ -36,7 +44,11 @@ export class StructureLottieAnimationSetFactory {
         idleSpaceContainerId,
         idleSkyContainerId,
         idleLandContainerId,
-        idleWaterContainerId
+        idleWaterContainerId,
+        featureIdleAttackContainerId,
+        featureIdleDefensiveContainerId,
+        featureIdleEngineeringContainerId,
+        featureIdlePowerContainerId
       );
     } else if (type === STRUCTURE_TYPES.MECH) {
       animationSet = new MechLottieAnimationSet(
@@ -44,7 +56,11 @@ export class StructureLottieAnimationSetFactory {
         idleSpaceContainerId,
         idleSkyContainerId,
         idleLandContainerId,
-        idleWaterContainerId
+        idleWaterContainerId,
+        featureIdleAttackContainerId,
+        featureIdleDefensiveContainerId,
+        featureIdleEngineeringContainerId,
+        featureIdlePowerContainerId
       );
     } else if (type === STRUCTURE_TYPES.STATION) {
       animationSet = new StationLottieAnimationSet(
@@ -52,7 +68,11 @@ export class StructureLottieAnimationSetFactory {
         idleSpaceContainerId,
         idleSkyContainerId,
         idleLandContainerId,
-        idleWaterContainerId
+        idleWaterContainerId,
+        featureIdleAttackContainerId,
+        featureIdleDefensiveContainerId,
+        featureIdleEngineeringContainerId,
+        featureIdlePowerContainerId
       );
     } else {
       animationSet = new CityLottieAnimationSet(
@@ -60,7 +80,11 @@ export class StructureLottieAnimationSetFactory {
         idleSpaceContainerId,
         idleSkyContainerId,
         idleLandContainerId,
-        idleWaterContainerId
+        idleWaterContainerId,
+        featureIdleAttackContainerId,
+        featureIdleDefensiveContainerId,
+        featureIdleEngineeringContainerId,
+        featureIdlePowerContainerId
       );
     }
     return animationSet;
