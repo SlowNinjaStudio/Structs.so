@@ -1,0 +1,161 @@
+<!doctype html>
+<html lang="en-us">
+	<head>
+    <title>Drag and Drop</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+      html {
+        background-image: url("im/dot-grid.png");
+        background-repeat: repeat;
+        font-family:  sans-serif;
+        image-rendering: -moz-crisp-edges;
+        image-rendering: -webkit-crisp-edges;
+        image-rendering: pixelated;
+        image-rendering: crisp-edges;
+        text-align: center;
+      }
+      h1 {
+        display: inline-block;
+        font-size:  24px;
+        margin-top:  40px;
+        margin-bottom: 30px;
+      }
+      #testLogo {
+        margin-right:  10px;
+        vertical-align: text-bottom;
+        width: 32px;
+      }
+      #display {
+        margin: 20px 0;
+      }
+      .draggableBox {
+        border: 1px solid black;
+        display: inline-block;
+        height: 64px;
+        width: 64px;
+      }
+      .droppableContainer {
+        border: 1px solid black;
+        margin: 20px;
+        min-height: 200px;
+        padding: 20px;
+      }
+      /*.bg-red {*/
+      /*  background: indianred;*/
+      /*}*/
+      .bg-green {
+        background: mediumseagreen;
+      }
+      .bg-blue {
+        background: dodgerblue;
+      }
+      .bg-yellow {
+        background: goldenrod;
+      }
+    </style>
+	</head>
+	<body id="body">
+
+		<div>
+			<h1><img id="testLogo" src="im/test_logo.png" alt="Test Logo">Drag & Drop</h1>
+		</div>
+    <div id="display"></div>
+    <div class="droppableContainer bg-blue">
+      <div id="box1" class="draggableItem draggableBox bg-yellow"></div>
+    </div>
+    <div class="droppableContainer bg-green"></div>
+		<!--script src="js/lottie-5.8.1.min.js"></script-->
+    <script>
+      class CoordinateError extends Error {
+        constructor(message) {
+          super(message);
+          this.name = "CoordinateError";
+        }
+      }
+
+      class Coordinate {
+        /**
+         * @param {number} x
+         * @param {number} y
+         */
+        constructor(x, y) {
+          this.x = x;
+          this.y = y;
+        }
+
+        /**
+         * @param {Event} event
+         * @return {Coordinate}
+         */
+        static makeFromEvent(event) {
+          if (event instanceof TouchEvent && event.changedTouches.length > 0) {
+            return new Coordinate(event.changedTouches[0].pageX, event.changedTouches[0].pageY);
+          } else if (event instanceof MouseEvent) {
+            return new Coordinate(event.pageX, event.pageY);
+          } else {
+            throw new CoordinateError('Unknown event type');
+          }
+        }
+      }
+
+      class ElementInfo {
+        /**
+         * @param {HTMLElement} element
+         */
+        static getElementCenter(element) {
+          return new Coordinate(
+            Math.floor(element.offsetWidth / 2),
+            Math.floor(element.offsetHeight / 2),
+          );
+        }
+      }
+
+      class DraggableItem {
+        /**
+         * @param {string} draggableItemId
+         */
+        constructor(draggableItemId) {
+          this.draggableItemId = draggableItemId;
+        }
+
+        init() {
+          const draggableItem = document.getElementById(this.draggableItemId);
+          const itemCenter = ElementInfo.getElementCenter(draggableItem);
+
+          const onDrag = draggableItem => (e) => {
+            const coordinate = Coordinate.makeFromEvent(e);
+            draggableItem.style.position = 'absolute';
+            draggableItem.style.left = coordinate.x - itemCenter.x + 'px';
+            draggableItem.style.top = coordinate.y - itemCenter.y + 'px';
+          }
+
+          const itemDragHandler = onDrag(draggableItem);
+
+          draggableItem.addEventListener('touchstart', function (e) {
+            e.preventDefault();
+            document.addEventListener('touchmove', itemDragHandler);
+          });
+          draggableItem.addEventListener('touchend', function (e) {
+            e.preventDefault();
+            document.removeEventListener('touchmove', itemDragHandler);
+          });
+
+          draggableItem.addEventListener('mousedown', function (e) {
+            e.preventDefault();
+            document.addEventListener('mousemove', itemDragHandler);
+          });
+          draggableItem.addEventListener('mouseup', function (e) {
+            e.preventDefault();
+            document.removeEventListener('mousemove', itemDragHandler);
+          });
+        }
+      }
+
+      window.addEventListener('DOMContentLoaded', () => {
+        const draggableBox = new DraggableItem('box1');
+        draggableBox.init();
+      });
+    </script>
+	</body>
+</html>
