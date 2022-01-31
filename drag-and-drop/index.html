@@ -41,6 +41,15 @@
         min-height: 200px;
         padding: 20px;
       }
+      .snapTarget {
+        display: inline-block;
+        position: relative;
+        height: 65px;
+        width: 65px;
+        padding: 4px;
+        border: 4px solid #222222;
+        background: #444444;
+      }
       /*.bg-red {*/
       /*  background: indianred;*/
       /*}*/
@@ -64,9 +73,13 @@
     <div class="droppableContainer bg-blue">
       <div id="box1" class="draggableItem draggableBox bg-yellow"></div>
     </div>
-    <div class="droppableContainer bg-green"></div>
+    <div id='container2' class="droppableContainer bg-green">
+      <div id='snapTarget2' class="snapTarget"></div>
+    </div>
+    <div id="dragNDropEventBus"></div>
 		<!--script src="js/lottie-5.8.1.min.js"></script-->
     <script>
+      var isDragging = false;
       class CoordinateError extends Error {
         constructor(message) {
           super(message);
@@ -100,6 +113,7 @@
       }
 
       class ElementInfo {
+
         /**
          * @param {HTMLElement} element
          */
@@ -109,6 +123,35 @@
             Math.floor(element.offsetHeight / 2),
           );
         }
+
+        /**
+         * @param {HTMLElement} element
+         * @return {Coordinate}
+         */
+        static getPosition(element) {
+          const rect = element.getBoundingClientRect();
+          const scrollLeft = window.scrollX || document.documentElement.scrollLeft;
+          const scrollTop = window.scrollY || document.documentElement.scrollTop;
+          return new Coordinate(rect.left + scrollLeft, rect.top + scrollTop);
+        }
+      }
+
+      class Rectangle {
+        constructor(width, height, x = 0, y = 0) {
+          this.width = width;
+          this.height = height;
+          this.x = x;
+          this.y = y;
+        }
+
+        /**
+         * @param {Coordinate} point
+         * @return {boolean}
+         */
+        isPointInside(point) {
+          return this.x <= point.x && point.x <= this.x + this.width
+            && this.y <= point.y && point.y <= this.y + this.height;
+        }
       }
 
       class DraggableItem {
@@ -117,10 +160,13 @@
          */
         constructor(draggableItemId) {
           this.draggableItemId = draggableItemId;
+          this.initalZIndex = 0;
         }
 
         init() {
           const draggableItem = document.getElementById(this.draggableItemId);
+          this.initalZIndex = draggableItem.style.zIndex;
+          const initialZIndex = this.initalZIndex;
           const itemCenter = ElementInfo.getElementCenter(draggableItem);
 
           const onDrag = draggableItem => (e) => {
@@ -128,26 +174,57 @@
             draggableItem.style.position = 'absolute';
             draggableItem.style.left = coordinate.x - itemCenter.x + 'px';
             draggableItem.style.top = coordinate.y - itemCenter.y + 'px';
+            draggableItem.style.zIndex = '999';
           }
 
           const itemDragHandler = onDrag(draggableItem);
 
           draggableItem.addEventListener('touchstart', function (e) {
             e.preventDefault();
+            isDragging = true;
+            document.body.appendChild(draggableItem);
             document.addEventListener('touchmove', itemDragHandler);
           });
           draggableItem.addEventListener('touchend', function (e) {
             e.preventDefault();
+            isDragging = false;
             document.removeEventListener('touchmove', itemDragHandler);
+            draggableItem.style.zIndex = initialZIndex;
+
+            const eventBus = document.getElementById('dragNDropEventBus');
+            const mousePosition = Coordinate.makeFromEvent(e);
+            const dropEvent = new CustomEvent('DRAG_N_DROP_DROP', {
+              detail: {
+                x: mousePosition.x,
+                y: mousePosition.y,
+                draggableItem
+              }
+            });
+            eventBus.dispatchEvent(dropEvent);
           });
 
           draggableItem.addEventListener('mousedown', function (e) {
             e.preventDefault();
+            isDragging = true;
+            document.body.appendChild(draggableItem);
             document.addEventListener('mousemove', itemDragHandler);
           });
           draggableItem.addEventListener('mouseup', function (e) {
             e.preventDefault();
+            isDragging = false;
             document.removeEventListener('mousemove', itemDragHandler);
+            draggableItem.style.zIndex = initialZIndex;
+
+            const eventBus = document.getElementById('dragNDropEventBus');
+            const mousePosition = Coordinate.makeFromEvent(e);
+            const dropEvent = new CustomEvent('DRAG_N_DROP_DROP', {
+              detail: {
+                x: mousePosition.x,
+                y: mousePosition.y,
+                draggableItem
+              }
+            });
+            eventBus.dispatchEvent(dropEvent);
           });
         }
       }
@@ -155,6 +232,59 @@
       window.addEventListener('DOMContentLoaded', () => {
         const draggableBox = new DraggableItem('box1');
         draggableBox.init();
+
+        const eventBus = document.getElementById('dragNDropEventBus');
+        eventBus.addEventListener('DRAG_N_DROP_DROP', function(e) {
+          const droppableContainer = document.getElementById('container2');
+          const position = ElementInfo.getPosition(droppableContainer);
+          const droppableArea = new Rectangle(
+            droppableContainer.offsetWidth,
+            droppableContainer.offsetHeight,
+            position.x,
+            position.y
+          );
+          if (droppableArea.isPointInside(new Coordinate(e.detail.x, e.detail.y))) {
+            console.log('dropped inside', e);
+            document.getElementById('snapTarget2').appendChild(e.detail.draggableItem);
+            e.detail.draggableItem.style.position = 'relative';
+            e.detail.draggableItem.style.left = 'auto';
+            e.detail.draggableItem.style.top = 'auto';
+            e.detail.draggableItem.style.zIndex = '0';
+          }
+        });
+
+        window.addEventListener('mousemove', (e) => {
+          const droppableContainer = document.getElementById('container2');
+          const position = ElementInfo.getPosition(droppableContainer);
+          const droppableArea = new Rectangle(
+            droppableContainer.offsetWidth,
+            droppableContainer.offsetHeight,
+            position.x,
+            position.y
+          );
+          if (isDragging) {
+            const mousePosition = Coordinate.makeFromEvent(e);
+            if (droppableArea.isPointInside(mousePosition)) {
+              console.log('over container', mousePosition);
+            }
+          }
+        });
+        window.addEventListener('touchmove', (e) => {
+          const droppableContainer = document.getElementById('container2');
+          const position = ElementInfo.getPosition(droppableContainer);
+          const droppableArea = new Rectangle(
+            droppableContainer.offsetWidth,
+            droppableContainer.offsetHeight,
+            position.x,
+            position.y
+          );
+          if (isDragging) {
+            const mousePosition = Coordinate.makeFromEvent(e);
+            if (droppableArea.isPointInside(mousePosition)) {
+              console.log('over container', mousePosition);
+            }
+          }
+        });
       });
     </script>
 	</body>
