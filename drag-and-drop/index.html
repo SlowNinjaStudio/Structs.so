@@ -174,7 +174,8 @@
          */
         constructor(draggableItemId) {
           this.draggableItemId = draggableItemId;
-          this.draggableElement = document.getElementById(this.draggableItemId);
+          this.originalDraggableElement = document.getElementById(this.draggableItemId);
+          this.draggableElement = this.originalDraggableElement;
           this.initialZIndex = this.draggableElement.style.zIndex;
           this.elementCenter = ElementInfo.getElementCenter(this.draggableElement);
         }
@@ -193,12 +194,23 @@
         /**
          * @param {string} eventName
          * @param {function} itemDragHandler
+         * @param {string} dragType COPY|MOVE
          * @return {function}
          */
-        onDragStart(eventName, itemDragHandler) {
+        onDragStart(eventName, itemDragHandler, dragType = 'COPY') {
           return function (event) {
             event.preventDefault();
             isDragging = true;
+
+            if (dragType === 'COPY') {
+              this.draggableElement = this.originalDraggableElement.cloneNode(true);
+              this.draggableElement.id = `${this.draggableElement.id}-copy`;
+            }
+            document.body.appendChild(this.draggableElement);
+
+            const eventEnd = (eventName === 'touchmove') ? 'touchend' : 'mouseup';
+            const endHandler = this.onDrop(eventName, itemDragHandler);
+            document.addEventListener(eventEnd, endHandler, { once: true });
 
             const coordinate = Coordinate.makeFromEvent(event);
             this.draggableElement.style.position = 'absolute';
@@ -206,7 +218,6 @@
             this.draggableElement.style.left = coordinate.x - this.elementCenter.x + 'px';
             this.draggableElement.style.top = coordinate.y - this.elementCenter.y + 'px';
 
-            document.body.appendChild(this.draggableElement);
             document.addEventListener(eventName, itemDragHandler);
           }.bind(this);
         }
@@ -222,6 +233,9 @@
             isDragging = false;
 
             document.removeEventListener(eventName, itemDragHandler);
+
+            const eventStart = (eventName === 'touchmove') ? 'touchstart' : 'mousedown';
+            this.draggableElement.addEventListener(eventStart, this.onDragStart(eventName, itemDragHandler, 'MOVE'));
 
             this.draggableElement.style.zIndex = this.initialZIndex;
 
@@ -242,17 +256,11 @@
         init() {
           const itemDragHandler = this.onDrag();
 
-          const touchStartHandler = this.onDragStart('touchmove', itemDragHandler);
-          const mouseDownHandler = this.onDragStart('mousemove', itemDragHandler);
+          const touchStartHandler = this.onDragStart('touchmove', itemDragHandler, 'COPY');
+          const mouseDownHandler = this.onDragStart('mousemove', itemDragHandler, 'COPY');
 
-          const touchEndHandler = this.onDrop('touchmove', itemDragHandler);
-          const mouseUpHandler = this.onDrop('mousemove', itemDragHandler);
-
-          this.draggableElement.addEventListener('touchstart', touchStartHandler);
-          this.draggableElement.addEventListener('mousedown', mouseDownHandler);
-
-          this.draggableElement.addEventListener('touchend', touchEndHandler);
-          this.draggableElement.addEventListener('mouseup', mouseUpHandler);
+          this.originalDraggableElement.addEventListener('touchstart', touchStartHandler);
+          this.originalDraggableElement.addEventListener('mousedown', mouseDownHandler);
         }
       }
 
@@ -271,11 +279,13 @@
           );
           if (droppableArea.isPointInside(new Coordinate(e.detail.x, e.detail.y))) {
             console.log('dropped inside', e);
-            document.getElementById('snapTarget2').appendChild(e.detail.draggableElement);
+            document.getElementById('snapTarget2').replaceChildren(e.detail.draggableElement);
             e.detail.draggableElement.style.position = 'relative';
             e.detail.draggableElement.style.left = 'auto';
             e.detail.draggableElement.style.top = 'auto';
             e.detail.draggableElement.style.zIndex = '0';
+          } else {
+            e.detail.draggableElement.remove();
           }
         });
 
