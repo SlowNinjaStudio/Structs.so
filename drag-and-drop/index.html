@@ -195,9 +195,10 @@
          * @param {string} eventName
          * @param {function} itemDragHandler
          * @param {string} dragType COPY|MOVE
+         * @param {HTMLElement} selectedDraggableElement
          * @return {function}
          */
-        onDragStart(eventName, itemDragHandler, dragType = 'COPY') {
+        onDragStart(eventName, itemDragHandler, dragType = 'COPY', selectedDraggableElement = null) {
           return function (event) {
             event.preventDefault();
             isDragging = true;
@@ -205,6 +206,8 @@
             if (dragType === 'COPY') {
               this.draggableElement = this.originalDraggableElement.cloneNode(true);
               this.draggableElement.id = `${this.draggableElement.id}-copy`;
+            } else if (dragType === 'MOVE' && selectedDraggableElement !== null) {
+              this.draggableElement = selectedDraggableElement;
             }
             document.body.appendChild(this.draggableElement);
 
@@ -235,7 +238,12 @@
             document.removeEventListener(eventName, itemDragHandler);
 
             const eventStart = (eventName === 'touchmove') ? 'touchstart' : 'mousedown';
-            this.draggableElement.addEventListener(eventStart, this.onDragStart(eventName, itemDragHandler, 'MOVE'));
+            this.draggableElement.addEventListener(eventStart, this.onDragStart(
+              eventName,
+              itemDragHandler,
+              'MOVE',
+              this.draggableElement
+            ));
 
             this.draggableElement.style.zIndex = this.initialZIndex;
 
