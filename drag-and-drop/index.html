@@ -75,8 +75,6 @@
     </div>
     <div id="dragNDropEventBus"></div>
     <script>
-      let isDragging = false;
-
       class CoordinateError extends Error {
 
         /**
@@ -103,6 +101,7 @@
         /**
          * @param {Event} event
          * @return {Coordinate}
+         * @throws {CoordinateError}
          */
         static makeFromEvent(event) {
           if (event instanceof TouchEvent && event.changedTouches.length > 0) {
@@ -178,6 +177,7 @@
           this.draggableElement = this.originalDraggableElement;
           this.initialZIndex = this.draggableElement.style.zIndex;
           this.elementCenter = ElementInfo.getElementCenter(this.draggableElement);
+          this.copyCount = 0;
         }
 
         /**
@@ -186,8 +186,20 @@
         onDrag() {
           return function(event) {
             const coordinate = Coordinate.makeFromEvent(event);
+            const draggableItemId = this.draggableItemId;
+            const draggableElement = this.draggableElement;
+            const dragEvent = new CustomEvent('DRAG_N_DROP_DRAG', {
+              detail: {
+                x: coordinate.x,
+                y: coordinate.y,
+                draggableItemId,
+                draggableElement
+              }
+            });
+
             this.draggableElement.style.left = coordinate.x - this.elementCenter.x + 'px';
             this.draggableElement.style.top = coordinate.y - this.elementCenter.y + 'px';
+            document.dispatchEvent(dragEvent);
           }.bind(this);
         }
 
@@ -201,11 +213,11 @@
         onDragStart(eventName, itemDragHandler, dragType = 'COPY', selectedDraggableElement = null) {
           return function (event) {
             event.preventDefault();
-            isDragging = true;
 
             if (dragType === 'COPY') {
+              this.copyCount++;
               this.draggableElement = this.originalDraggableElement.cloneNode(true);
-              this.draggableElement.id = `${this.draggableElement.id}-copy`;
+              this.draggableElement.id = `${this.draggableElement.id}-copy-${this.copyCount}`;
             } else if (dragType === 'MOVE' && selectedDraggableElement !== null) {
               this.draggableElement = selectedDraggableElement;
             }
@@ -231,9 +243,8 @@
          * @return {function}
          */
         onDrop = function (eventName, itemDragHandler) {
-          return function (e) {
-            e.preventDefault();
-            isDragging = false;
+          return function (event) {
+            event.preventDefault();
 
             document.removeEventListener(eventName, itemDragHandler);
 
@@ -247,7 +258,7 @@
 
             this.draggableElement.style.zIndex = this.initialZIndex;
 
-            const mousePosition = Coordinate.makeFromEvent(e);
+            const mousePosition = Coordinate.makeFromEvent(event);
             const draggableItemId = this.draggableItemId;
             const draggableElement = this.draggableElement;
             const dropEvent = new CustomEvent('DRAG_N_DROP_DROP', {
@@ -274,12 +285,6 @@
         }
       }
 
-      class DragNDrop {
-        constructor() {
-          this.isDragging = false;
-        }
-      }
-
       class DragNDropDroppableArea {
 
         /**
@@ -289,10 +294,11 @@
           this.droppableAreaId = droppableAreaId;
           this.onDropInside = () => {};
           this.onDropOutside = () => {};
+          this.onDragOver = () => {};
         }
 
         init() {
-          document.addEventListener('DRAG_N_DROP_DROP', function(e) {
+          document.addEventListener('DRAG_N_DROP_DROP', function(event) {
             const droppableAreaElement = document.getElementById(this.droppableAreaId);
             const position = ElementInfo.getPosition(droppableAreaElement);
             const droppableArea = new Rectangle(
@@ -302,12 +308,27 @@
               position.y
             );
 
-            if (droppableArea.isPointInside(new Coordinate(e.detail.x, e.detail.y))) {
-              this.onDropInside(e);
+            if (droppableArea.isPointInside(new Coordinate(event.detail.x, event.detail.y))) {
+              this.onDropInside(event);
             } else {
-              this.onDropOutside(e);
+              this.onDropOutside(event);
             }
           }.bind(this));
+
+          document.addEventListener('DRAG_N_DROP_DRAG', (event) => {
+            const droppableAreaElement = document.getElementById(this.droppableAreaId);
+            const position = ElementInfo.getPosition(droppableAreaElement);
+            const droppableArea = new Rectangle(
+              droppableAreaElement.offsetWidth,
+              droppableAreaElement.offsetHeight,
+              position.x,
+              position.y
+            );
+
+            if (droppableArea.isPointInside(new Coordinate(event.detail.x, event.detail.y))) {
+              this.onDragOver(event);
+            }
+          });
         }
       }
 
@@ -327,22 +348,22 @@
         constructor(droppableAreaId) {
           super(droppableAreaId);
           this.snapContainers = new Map();
-          this.onDropInside = function(e) {
-            console.log('dropped inside', e);
+          this.onDropInside = function(event) {
+            console.log('dropped inside', event);
 
-            const snapContainer = this.getSnapContainer(e.detail.draggableItemId);
+            const snapContainer = this.getSnapContainer(event.detail.draggableItemId);
             if (snapContainer) {
-              snapContainer.containerElement.replaceChildren(e.detail.draggableElement);
-              e.detail.draggableElement.style.position = 'relative';
-              e.detail.draggableElement.style.left = 'auto';
-              e.detail.draggableElement.style.top = 'auto';
-              e.detail.draggableElement.style.zIndex = '0';
+              snapContainer.containerElement.replaceChildren(event.detail.draggableElement);
+              event.detail.draggableElement.style.position = 'relative';
+              event.detail.draggableElement.style.left = 'auto';
+              event.detail.draggableElement.style.top = 'auto';
+              event.detail.draggableElement.style.zIndex = '0';
             } else {
-              e.detail.draggableElement.remove();
+              event.detail.draggableElement.remove();
             }
           }.bind(this);
-          this.onDropOutside = function(e) {
-            e.detail.draggableElement.remove();
+          this.onDropOutside = function(event) {
+            event.detail.draggableElement.remove();
           };
         }
 
@@ -369,41 +390,11 @@
         const snapContainer = new DragNDropSnapContainer('snapTarget2', 'box1');
 
         const droppableArea = new DragNDropDroppableAreaAutoSnap('container2');
+        droppableArea.onDragOver = function (event) {
+          console.log('drag over', event);
+        }
         droppableArea.addSnapContainer(snapContainer);
         droppableArea.init();
-
-        window.addEventListener('mousemove', (e) => {
-          const droppableContainer = document.getElementById('container2');
-          const position = ElementInfo.getPosition(droppableContainer);
-          const droppableArea = new Rectangle(
-            droppableContainer.offsetWidth,
-            droppableContainer.offsetHeight,
-            position.x,
-            position.y
-          );
-          if (isDragging) {
-            const mousePosition = Coordinate.makeFromEvent(e);
-            if (droppableArea.isPointInside(mousePosition)) {
-              console.log('over container', mousePosition);
-            }
-          }
-        });
-        window.addEventListener('touchmove', (e) => {
-          const droppableContainer = document.getElementById('container2');
-          const position = ElementInfo.getPosition(droppableContainer);
-          const droppableArea = new Rectangle(
-            droppableContainer.offsetWidth,
-            droppableContainer.offsetHeight,
-            position.x,
-            position.y
-          );
-          if (isDragging) {
-            const mousePosition = Coordinate.makeFromEvent(e);
-            if (droppableArea.isPointInside(mousePosition)) {
-              console.log('over container', mousePosition);
-            }
-          }
-        });
       });
     </script>
 	</body>
