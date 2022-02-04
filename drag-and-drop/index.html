@@ -248,11 +248,13 @@
             this.draggableElement.style.zIndex = this.initialZIndex;
 
             const mousePosition = Coordinate.makeFromEvent(e);
+            const draggableItemId = this.draggableItemId;
             const draggableElement = this.draggableElement;
             const dropEvent = new CustomEvent('DRAG_N_DROP_DROP', {
               detail: {
                 x: mousePosition.x,
                 y: mousePosition.y,
+                draggableItemId,
                 draggableElement
               }
             });
@@ -272,30 +274,103 @@
         }
       }
 
+      class DragNDrop {
+        constructor() {
+          this.isDragging = false;
+        }
+      }
+
+      class DragNDropDroppableArea {
+
+        /**
+         * @param {string} droppableAreaId
+         */
+        constructor(droppableAreaId) {
+          this.droppableAreaId = droppableAreaId;
+          this.onDropInside = () => {};
+          this.onDropOutside = () => {};
+        }
+
+        init() {
+          document.addEventListener('DRAG_N_DROP_DROP', function(e) {
+            const droppableAreaElement = document.getElementById(this.droppableAreaId);
+            const position = ElementInfo.getPosition(droppableAreaElement);
+            const droppableArea = new Rectangle(
+              droppableAreaElement.offsetWidth,
+              droppableAreaElement.offsetHeight,
+              position.x,
+              position.y
+            );
+
+            if (droppableArea.isPointInside(new Coordinate(e.detail.x, e.detail.y))) {
+              this.onDropInside(e);
+            } else {
+              this.onDropOutside(e);
+            }
+          }.bind(this));
+        }
+      }
+
+      class DragNDropSnapContainer {
+        /**
+         * @param {string} snapContainerId
+         * @param {string} draggableItemId
+         */
+        constructor(snapContainerId, draggableItemId) {
+          this.snapContainerId = snapContainerId;
+          this.draggableItemId = draggableItemId;
+          this.containerElement = document.getElementById(this.snapContainerId);
+        }
+      }
+
+      class DragNDropDroppableAreaAutoSnap extends DragNDropDroppableArea{
+        constructor(droppableAreaId) {
+          super(droppableAreaId);
+          this.snapContainers = new Map();
+          this.onDropInside = function(e) {
+            console.log('dropped inside', e);
+
+            const snapContainer = this.getSnapContainer(e.detail.draggableItemId);
+            if (snapContainer) {
+              snapContainer.containerElement.replaceChildren(e.detail.draggableElement);
+              e.detail.draggableElement.style.position = 'relative';
+              e.detail.draggableElement.style.left = 'auto';
+              e.detail.draggableElement.style.top = 'auto';
+              e.detail.draggableElement.style.zIndex = '0';
+            } else {
+              e.detail.draggableElement.remove();
+            }
+          }.bind(this);
+          this.onDropOutside = function(e) {
+            e.detail.draggableElement.remove();
+          };
+        }
+
+        /**
+         * @param {DragNDropSnapContainer} snapContainer
+         */
+        addSnapContainer(snapContainer) {
+          this.snapContainers.set(snapContainer.draggableItemId, snapContainer);
+        }
+
+        /**
+         * @param draggableItemId
+         * @return {DragNDropSnapContainer}
+         */
+        getSnapContainer(draggableItemId) {
+          return this.snapContainers.get(draggableItemId);
+        }
+      }
+
       window.addEventListener('DOMContentLoaded', () => {
         const draggableBox = new DragNDropDraggableItem('box1');
         draggableBox.init();
 
-        document.addEventListener('DRAG_N_DROP_DROP', function(e) {
-          const droppableContainer = document.getElementById('container2');
-          const position = ElementInfo.getPosition(droppableContainer);
-          const droppableArea = new Rectangle(
-            droppableContainer.offsetWidth,
-            droppableContainer.offsetHeight,
-            position.x,
-            position.y
-          );
-          if (droppableArea.isPointInside(new Coordinate(e.detail.x, e.detail.y))) {
-            console.log('dropped inside', e);
-            document.getElementById('snapTarget2').replaceChildren(e.detail.draggableElement);
-            e.detail.draggableElement.style.position = 'relative';
-            e.detail.draggableElement.style.left = 'auto';
-            e.detail.draggableElement.style.top = 'auto';
-            e.detail.draggableElement.style.zIndex = '0';
-          } else {
-            e.detail.draggableElement.remove();
-          }
-        });
+        const snapContainer = new DragNDropSnapContainer('snapTarget2', 'box1');
+
+        const droppableArea = new DragNDropDroppableAreaAutoSnap('container2');
+        droppableArea.addSnapContainer(snapContainer);
+        droppableArea.init();
 
         window.addEventListener('mousemove', (e) => {
           const droppableContainer = document.getElementById('container2');
