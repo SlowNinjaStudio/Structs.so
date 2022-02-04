@@ -166,6 +166,43 @@
 
       }
 
+      class DragNDropEventDetail {
+
+        /**
+         * @param {string} draggableItemId
+         * @param {HTMLElement} draggableElement
+         * @param {number} x
+         * @param {number} y
+         */
+        constructor(draggableItemId, draggableElement, x, y) {
+          this.draggableItemId = draggableItemId;
+          this.draggableElement = draggableElement;
+          this.x = x;
+          this.y = y;
+        }
+
+        /**
+         * @param {CustomEvent} customEvent
+         * @return {DragNDropEventDetail}
+         */
+        static makeFromCustomEvent(customEvent) {
+          return new DragNDropEventDetail(
+            customEvent.detail.draggableItemId,
+            customEvent.detail.draggableElement,
+            customEvent.detail.x,
+            customEvent.detail.y
+          );
+        }
+
+        /**
+         * @return {Coordinate}
+         */
+        getPosition() {
+          return new Coordinate(this.x, this.y);
+        }
+
+      }
+
       class DragNDropDraggableItem {
 
         /**
@@ -242,7 +279,7 @@
          * @param {function} itemDragHandler
          * @return {function}
          */
-        onDrop = function (eventName, itemDragHandler) {
+        onDrop(eventName, itemDragHandler) {
           return function (event) {
             event.preventDefault();
 
@@ -298,41 +335,44 @@
         }
 
         init() {
-          document.addEventListener('DRAG_N_DROP_DROP', function(event) {
+          document.addEventListener('DRAG_N_DROP_DROP', function(customEvent) {
+            const dropEventDetail = DragNDropEventDetail.makeFromCustomEvent(customEvent);
             const droppableAreaElement = document.getElementById(this.droppableAreaId);
-            const position = ElementInfo.getPosition(droppableAreaElement);
-            const droppableArea = new Rectangle(
+            const droppableAreaPosition = ElementInfo.getPosition(droppableAreaElement);
+            const droppableAreaShape = new Rectangle(
               droppableAreaElement.offsetWidth,
               droppableAreaElement.offsetHeight,
-              position.x,
-              position.y
+              droppableAreaPosition.x,
+              droppableAreaPosition.y
             );
 
-            if (droppableArea.isPointInside(new Coordinate(event.detail.x, event.detail.y))) {
-              this.onDropInside(event);
+            if (droppableAreaShape.isPointInside(dropEventDetail.getPosition())) {
+              this.onDropInside(customEvent);
             } else {
-              this.onDropOutside(event);
+              this.onDropOutside(customEvent);
             }
           }.bind(this));
 
-          document.addEventListener('DRAG_N_DROP_DRAG', (event) => {
+          document.addEventListener('DRAG_N_DROP_DRAG', function(customEvent) {
+            const dropEventDetail = DragNDropEventDetail.makeFromCustomEvent(customEvent);
             const droppableAreaElement = document.getElementById(this.droppableAreaId);
-            const position = ElementInfo.getPosition(droppableAreaElement);
+            const droppableAreaPosition = ElementInfo.getPosition(droppableAreaElement);
             const droppableArea = new Rectangle(
               droppableAreaElement.offsetWidth,
               droppableAreaElement.offsetHeight,
-              position.x,
-              position.y
+              droppableAreaPosition.x,
+              droppableAreaPosition.y
             );
 
-            if (droppableArea.isPointInside(new Coordinate(event.detail.x, event.detail.y))) {
-              this.onDragOver(event);
+            if (droppableArea.isPointInside(dropEventDetail.getPosition())) {
+              this.onDragOver(customEvent);
             }
-          });
+          }.bind(this));
         }
       }
 
       class DragNDropSnapContainer {
+
         /**
          * @param {string} snapContainerId
          * @param {string} draggableItemId
@@ -342,9 +382,14 @@
           this.draggableItemId = draggableItemId;
           this.containerElement = document.getElementById(this.snapContainerId);
         }
+
       }
 
-      class DragNDropDroppableAreaAutoSnap extends DragNDropDroppableArea{
+      class DragNDropDroppableAreaAutoSnap extends DragNDropDroppableArea {
+
+        /**
+         * @param {string} droppableAreaId
+         */
         constructor(droppableAreaId) {
           super(droppableAreaId);
           this.snapContainers = new Map();
@@ -381,6 +426,7 @@
         getSnapContainer(draggableItemId) {
           return this.snapContainers.get(draggableItemId);
         }
+
       }
 
       window.addEventListener('DOMContentLoaded', () => {
