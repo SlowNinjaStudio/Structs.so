@@ -4,9 +4,8 @@ import {Footer} from "./common/Footer";
 import {DummyUtil} from "../util/DummyUtil";
 import {AMBITS, FEATURES} from "../Constants";
 import {DroidUIStructureViewPlayer} from "../ui/components/DroidUIStructureViewPlayer";
-import {StructureLottieAnimationSVG} from "../art_rendering/lottie/StructureLottieAnimationSVG";
-import {ANIMATION_NAMES} from "../AnimationNameConstants";
-import {LottieCustomPlayer} from "../art_rendering/lottie/LottieCustomPlayer";
+import {DragNDropDraggableItem} from "../vendor/DragNDrop/DragNDropDraggableItem";
+import {DragNDropDroppableAreaLottie} from "../vendor/DragNDrop/DragNDropDroppableAreaLottie";
 
 const instance = new Instance();
 await instance.init();
@@ -27,7 +26,7 @@ station1.build_rate = 1;
 const car1 = DummyUtil.getDummyStructure(
   true,
   [AMBITS.WATER, AMBITS.LAND, AMBITS.SKY, AMBITS.SPACE],
-  [FEATURES.DEFENSIVE],
+  [FEATURES.ATTACK, FEATURES.ENGINEERING, FEATURES.DEFENSIVE, FEATURES.POWER],
   10
 );
 car1.build_rate = 1;
@@ -39,7 +38,7 @@ const city1 = DummyUtil.getDummyStructure(
   [FEATURES.ATTACK, FEATURES.ENGINEERING, FEATURES.DEFENSIVE, FEATURES.POWER],
   250
 );
-station1.build_rate = 100;
+city1.build_rate = 100;
 
 const mech1 = DummyUtil.getDummyStructure(
   true,
@@ -49,34 +48,53 @@ const mech1 = DummyUtil.getDummyStructure(
 );
 mech1.build_rate = 100;
 
-// const structureViewPlayer = new DroidUIStructureViewPlayer(car1, 'structureViewPlayer');
-// structureViewPlayer.init();
-
-// window.lottie.loadAnimation({
-//   container: document.getElementById('structureViewPlayer'), // the dom element that will contain the animation
-//   renderer: 'svg',
-//   loop: true,
-//   autoplay: true,
-//   path: '/lottie/test/defensive-test.json' // the path to the animation json
-// });
-
-const animation = new StructureLottieAnimationSVG(
-  ANIMATION_NAMES.CAR.IDLE.WATER,
-  car1,
-  'structureViewPlayer',
-  {
-    container: document.getElementById('structureViewPlayer'),
-    renderer: 'svg',
-    loop: true,
-    autoplay: false,
-    path: '/lottie/test/car/defensive/car-defensive-256.json'
-    // path: '/lottie/car/idle/land/car-idle-land.json'
-  }
-);
-const lottieCustomPlayer = new LottieCustomPlayer();
-await lottieCustomPlayer.registerAnimation(animation);
-await lottieCustomPlayer.init('', false);
-lottieCustomPlayer.playRandom();
+const structureViewPlayer = new DroidUIStructureViewPlayer(car1, 'structureViewPlayer');
+structureViewPlayer.init();
 
 const footer = new Footer();
 footer.init('footer-wrapper');
+
+window.addEventListener('load', () => {
+  const lottieElements = document.querySelectorAll('.car_defensive');
+  for (let i = 0; i < lottieElements.length; i++) {
+    console.log(lottieElements[i].style.display);
+    lottieElements[i].style.display = 'none';
+  }
+  const draggableItems = [
+    new DragNDropDraggableItem('draggableItemCarDefensiveShield'),
+  ];
+
+  for (let i = 0; i < draggableItems.length; i++) {
+    draggableItems[i].init();
+    for (let j = 0; j < lottieElements.length; j++) {
+      draggableItems[i].addDragStartListener(lottieElements[j], function() {
+        console.log('before drag start');
+        const lottieElements = document.querySelectorAll('.car_defensive');
+        for (let k = 0; k < lottieElements.length; k++) {
+          lottieElements[k].style.display = 'none';
+        }
+      });
+    }
+  }
+
+  const detailedItemViewDroppableArea = new DragNDropDroppableAreaLottie('structureViewPlayer');
+  detailedItemViewDroppableArea.init();
+
+  // const snapContainers = [
+  //   new DragNDropSnapContainer('snapTargetBarrel', 'barrelStandard'),
+  //   new DragNDropSnapContainer('snapTargetBarrel', 'barrelMuzzleBreak'),
+  //   new DragNDropSnapContainer('snapTargetRecoil', 'recoilSpring'),
+  //   new DragNDropSnapContainer('snapTargetRecoil', 'recoilHydraulic'),
+  //   new DragNDropSnapContainer('snapTargetReceiver', 'receiverMechanical'),
+  //   new DragNDropSnapContainer('snapTargetReceiver', 'receiverElectronic'),
+  // ];
+  //
+  // const detailedItemViewDroppableArea = new DragNDropDroppableAreaAutoSnap('detailedItemViewDroppableArea');
+  //
+  // for (let i = 0; i < snapContainers.length; i++) {
+  //   detailedItemViewDroppableArea.addSnapContainer(snapContainers[i]);
+  // }
+  //
+  // detailedItemViewDroppableArea.init();
+});
+
