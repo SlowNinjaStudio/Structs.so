@@ -53,7 +53,10 @@ structureViewPlayer.init();
 
 document.addEventListener(LOTTIE_CUSTOM_EVENTS.LOTTIE_AUTOPLAY, () => {
   const dragNDropLottie = new DragNDropLottie('structureViewPlayer');
-  dragNDropLottie.linkDraggableItemToLottieElement('draggableItemCarDefensiveShield', '.car_defensive');
+  dragNDropLottie.linkDraggableItemToLottieElement('draggableItemCarAttack', '.car_attack');
+  dragNDropLottie.linkDraggableItemToLottieElement('draggableItemCarDefensive', '.car_defensive');
+  dragNDropLottie.linkDraggableItemToLottieElement('draggableItemCarEngineering', '.car_engineering');
+  dragNDropLottie.linkDraggableItemToLottieElement('draggableItemCarPower', '.car_power');
   dragNDropLottie.init();
 });
 
