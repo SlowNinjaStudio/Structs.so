@@ -1,6 +1,7 @@
 import {StructureArtSet} from "../StructureArtSet";
 import {LottieArtConfiguratorFactory} from "./LottieArtConfiguratorFactory";
-import {LOTTIE_EVENTS} from "../../EventConstants";
+import {LOTTIE_CUSTOM_EVENTS, LOTTIE_EVENTS} from "../../EventConstants";
+import {LottieCustomEventDetailAutoplay} from "./LottieCustomEventDetailAutoplay";
 
 export class StructureLottieAnimationSVG {
 
@@ -155,7 +156,11 @@ export class StructureLottieAnimationSVG {
 
     // If autoplay was originally enabled, automatically play the animation after it's loaded and customized
     if (autoplay) {
-      this.lottieLoadOptions.container.addEventListener(LOTTIE_EVENTS.LOTTIE_CUSTOMIZED, this.play.bind(this));
+      this.lottieLoadOptions.container.addEventListener(LOTTIE_EVENTS.LOTTIE_CUSTOMIZED, function() {
+        this.play();
+        const detail = new LottieCustomEventDetailAutoplay(this.animationName, this.lottieContainerId);
+        document.dispatchEvent(new CustomEvent(LOTTIE_CUSTOM_EVENTS.LOTTIE_AUTOPLAY, { detail }));
+      }.bind(this));
     }
 
     // Once the animation is loaded into the DOM, we can begin customizing it.

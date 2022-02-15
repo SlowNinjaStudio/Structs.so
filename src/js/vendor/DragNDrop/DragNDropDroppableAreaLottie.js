@@ -1,6 +1,6 @@
 import {DragNDropDroppableArea} from "./DragNDropDroppableArea";
 import {DragNDropEventDetail} from "./DragNDropEventDetail";
-import {DragNDropSnapContainer} from "./DragNDropSnapContainer";
+import {DragNDropLinkedLottieElement} from "./DragNDropLinkedLottieElement";
 
 export class DragNDropDroppableAreaLottie extends DragNDropDroppableArea {
 
@@ -9,15 +9,13 @@ export class DragNDropDroppableAreaLottie extends DragNDropDroppableArea {
    */
   constructor(droppableAreaId) {
     super(droppableAreaId);
-    this.snapContainers = new Map();
+    this.linkedLottieElements = new Map();
     this.onDropInside = function(customEvent) {
       const detail = DragNDropEventDetail.makeFromCustomEvent(customEvent);
-      if (detail.draggableItemId === 'draggableItemCarDefensiveShield') {
-        const lottieElements = document.querySelectorAll('.car_defensive');
-        for (let i = 0; i < lottieElements.length; i++) {
-          console.log(lottieElements[i].style.display);
-          lottieElements[i].style.display = 'block';
-        }
+      const linkedLottieElement = this.getLinkedLottieElement(detail.draggableItemId);
+      const lottieElements = document.querySelectorAll(linkedLottieElement.lottieElementSelector);
+      for (let i = 0; i < lottieElements.length; i++) {
+        lottieElements[i].style.display = 'block';
       }
       detail.draggableElement.remove();
     }.bind(this);
@@ -28,18 +26,17 @@ export class DragNDropDroppableAreaLottie extends DragNDropDroppableArea {
   }
 
   /**
-   * @param {DragNDropSnapContainer} snapContainer
+   * @param {DragNDropLinkedLottieElement} linkedLottieElement
    */
-  addSnapContainer(snapContainer) {
-    this.snapContainers.set(snapContainer.draggableItemId, snapContainer);
+  registerLinkedLottieElement(linkedLottieElement) {
+    this.linkedLottieElements.set(linkedLottieElement.draggableItem.draggableItemId, linkedLottieElement);
   }
 
   /**
-   * @param draggableItemId
-   * @return {DragNDropSnapContainer}
+   * @param {string} draggableItemId
+   * @return {DragNDropLinkedLottieElement}
    */
-  getSnapContainer(draggableItemId) {
-    return this.snapContainers.get(draggableItemId);
+  getLinkedLottieElement(draggableItemId) {
+    return this.linkedLottieElements.get(draggableItemId);
   }
-
 }
