@@ -23,12 +23,41 @@
   <link rel="stylesheet" href="/css/bootstrap-icons.css">
   <link rel="stylesheet" href="/css/nes.min.css">
   <link rel="stylesheet" href="/css/main.css">
+  <style type="text/css">
+    .partsContainer {
+      background: rgba(255, 255, 255, 0.5);
+      border: 4px solid black;
+      margin: 8px;
+      padding: 8px;
+    }
+    .partContainer {
+      display: inline-block;
+      border: 1px dashed black;
+      margin: 5px;
+      padding: 10px;
+      background: rgba(255, 255, 255, 0.5);
+    }
+  </style>
 </head>
 
 <body class="d-flex flex-column min-vh-100">
   <div id="nav-wrapper"></div>
   <div class="main-container container-fluid text-center">
     <div id="structureViewPlayer" style="display:inline-block; width:256px;"></div>
+    <div class="partsContainer">
+      <div class="partContainer">
+        <img id="draggableItemCarAttack" src="/img/structures/mobile/car/256-cropped/car-attack.png" alt="Gun">
+      </div>
+      <div class="partContainer">
+        <img id="draggableItemCarDefensive" src="/img/structures/mobile/car/256-cropped/car-defensive.png" alt="Shield">
+      </div>
+      <div class="partContainer">
+        <img id="draggableItemCarEngineering" src="/img/structures/mobile/car/256-cropped/car-engineering.png" alt="Crane Arm">
+      </div>
+      <div class="partContainer">
+        <img id="draggableItemCarPower" src="/img/structures/mobile/car/256-cropped/car-power.png" alt="Power Bar">
+      </div>
+    </div>
   </div>
 
   <div id="footer-wrapper" class="bg-dark mt-auto"></div>

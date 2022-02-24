@@ -41,11 +41,22 @@ export class DragNDropDraggableItem {
    * @param {function} itemDragHandler
    * @param {string} dragType COPY|MOVE
    * @param {HTMLElement} selectedDraggableElement
+   * @param {function} beforeDragStart
+   * @param {function} afterDragEnd
    * @return {function}
    */
-  onDragStart(eventName, itemDragHandler, dragType = 'COPY', selectedDraggableElement = null) {
+  onDragStart(
+    eventName,
+    itemDragHandler,
+    dragType = 'COPY',
+    selectedDraggableElement = null,
+    beforeDragStart = () => {},
+    afterDragEnd = () => {}
+  ) {
     return function (event) {
       event.preventDefault();
+
+      beforeDragStart();
 
       if (dragType === 'COPY') {
         this.copyCount++;
@@ -67,6 +78,8 @@ export class DragNDropDraggableItem {
       this.draggableElement.style.top = mousePosition.y - this.elementCenter.y + 'px';
 
       document.addEventListener(eventName, itemDragHandler);
+
+      afterDragEnd();
     }.bind(this);
   }
 
@@ -104,14 +117,18 @@ export class DragNDropDraggableItem {
     }.bind(this);
   }
 
-  init() {
+  addDragStartListener(element, beforeDragStart = () => {}, afterDragStart = () => {}) {
     const itemDragHandler = this.onDrag();
 
-    const touchStartHandler = this.onDragStart('touchmove', itemDragHandler, 'COPY');
-    const mouseDownHandler = this.onDragStart('mousemove', itemDragHandler, 'COPY');
+    const touchStartHandler = this.onDragStart('touchmove', itemDragHandler, 'COPY', null, beforeDragStart, afterDragStart);
+    const mouseDownHandler = this.onDragStart('mousemove', itemDragHandler, 'COPY', null, beforeDragStart, afterDragStart);
 
-    this.originalDraggableElement.addEventListener('touchstart', touchStartHandler);
-    this.originalDraggableElement.addEventListener('mousedown', mouseDownHandler);
+    element.addEventListener('touchstart', touchStartHandler);
+    element.addEventListener('mousedown', mouseDownHandler);
+  }
+
+  init() {
+    this.addDragStartListener(this.originalDraggableElement);
   }
 
 }
