@@ -4,6 +4,7 @@ const path = require('path');
 module.exports = {
   entry: {
     animationPage: './src/js/pages/animationPage.js',
+    dragAndDropPage: './drag-and-drop/js/dragAndDropPage.js',
     indexPage: './src/js/pages/indexPage.js',
     schematicsPage: './src/js/pages/schematicsPage.js',
     structureViewPage: './src/js/pages/structureViewPage.js',
