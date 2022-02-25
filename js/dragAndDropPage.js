@@ -31,6 +31,8 @@ class DragNDropDraggableItem {
     this.initialZIndex = this.draggableElement.style.zIndex;
     this.elementCenter = _ElementInfo__WEBPACK_IMPORTED_MODULE_0__.ElementInfo.getElementCenter(this.draggableElement);
     this.copyCount = 0;
+    this.dragStartTargetId = `DragNDropDragStart-${this.draggableItemId}`;
+    this.dragStartTargetElement = document.getElementById(this.dragStartTargetId);
   }
 
   /**
@@ -145,7 +147,8 @@ class DragNDropDraggableItem {
   }
 
   init() {
-    this.addDragStartListener(this.originalDraggableElement);
+    const dragStartTarget = this.dragStartTargetElement ? this.dragStartTargetElement : this.originalDraggableElement;
+    this.addDragStartListener(dragStartTarget);
   }
 
 }

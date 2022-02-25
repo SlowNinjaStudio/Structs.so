@@ -14,6 +14,8 @@ export class DragNDropDraggableItem {
     this.initialZIndex = this.draggableElement.style.zIndex;
     this.elementCenter = ElementInfo.getElementCenter(this.draggableElement);
     this.copyCount = 0;
+    this.dragStartTargetId = `DragNDropDragStart-${this.draggableItemId}`;
+    this.dragStartTargetElement = document.getElementById(this.dragStartTargetId);
   }
 
   /**
@@ -128,7 +130,8 @@ export class DragNDropDraggableItem {
   }
 
   init() {
-    this.addDragStartListener(this.originalDraggableElement);
+    const dragStartTarget = this.dragStartTargetElement ? this.dragStartTargetElement : this.originalDraggableElement;
+    this.addDragStartListener(dragStartTarget);
   }
 
 }

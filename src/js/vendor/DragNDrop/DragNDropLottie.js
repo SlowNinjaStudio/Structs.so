@@ -5,7 +5,7 @@ import {DragNDropDroppableAreaLottie} from "./DragNDropDroppableAreaLottie";
 export class DragNDropLottie {
   /**
    * @param {string} droppableAreaId
-   * @param {Map<string, DragNDropLinkedLottieElement>}draggableItemToLottieElementMap
+   * @param {Map<string, string>}draggableItemToLottieElementMap
    */
   constructor(droppableAreaId, draggableItemToLottieElementMap = new Map()) {
     this.droppableAreaId = droppableAreaId;
