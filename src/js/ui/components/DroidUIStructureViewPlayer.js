@@ -30,7 +30,7 @@ export class DroidUIStructureViewPlayer {
     const type = (new StructureClassifier()).getType(structure);
 
     if (type === STRUCTURE_TYPES.CAR) {
-      capable = false;
+      capable = true;
     } else if (type === STRUCTURE_TYPES.CITY) {
       capable = false;
     } else if (type === STRUCTURE_TYPES.MECH) {

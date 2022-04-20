@@ -88,7 +88,7 @@ export class CarLottieAnimationSet extends StructureLottieAnimationSet {
         renderer: 'svg',
         loop: true,
         autoplay: false,
-        path: '/lottie/car/idle/space/car-idle-space.json'
+        path: '/lottie/car/feature/attack/data.json'
       }
     );
 
@@ -101,7 +101,7 @@ export class CarLottieAnimationSet extends StructureLottieAnimationSet {
         renderer: 'svg',
         loop: true,
         autoplay: false,
-        path: '/lottie/car/idle/sky/car-idle-sky.json'
+        path: '/lottie/car/feature/defensive/data.json'
       }
     );
 
@@ -114,7 +114,7 @@ export class CarLottieAnimationSet extends StructureLottieAnimationSet {
         renderer: 'svg',
         loop: true,
         autoplay: false,
-        path: '/lottie/car/idle/land/car-idle-land.json'
+        path: '/lottie/car/feature/engineering/data.json'
       }
     );
 
@@ -127,7 +127,7 @@ export class CarLottieAnimationSet extends StructureLottieAnimationSet {
         renderer: 'svg',
         loop: true,
         autoplay: false,
-        path: '/lottie/car/idle/water/car-idle-water.json'
+        path: '/lottie/car/feature/power/data.json'
       }
     );
 

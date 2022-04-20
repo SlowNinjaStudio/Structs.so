@@ -83,6 +83,14 @@ export class StructurePaletteMobileCar extends AbstractStructurePalette {
       gunAccentColor = new ColorRGB(255, 179, 0);
     }
 
+    const shades = gunAccentColor.getLighterAndDarkerShades(2);
+
+    paletteSwap.push([this.attackFeatureColor[0], shades[0]]);
+    paletteSwap.push([this.attackFeatureColor[1], shades[1]]);
+    paletteSwap.push([this.attackFeatureColor[2], shades[2]]);
+    paletteSwap.push([this.attackFeatureColor[3], shades[3]]);
+    paletteSwap.push([this.attackFeatureColor[4], shades[4]]);
+
     paletteSwap.push([this.attackGunBarrel, gunBarrelColor]);
     paletteSwap.push([this.attackGunAccent, gunAccentColor]);
   }
@@ -117,6 +125,14 @@ export class StructurePaletteMobileCar extends AbstractStructurePalette {
       innerShieldColor = shieldShades[5];
     }
 
+    const shades = outerShieldColor.getLighterAndDarkerShades(2);
+
+    paletteSwap.push([this.defensiveFeatureColor[0], shades[0]]);
+    paletteSwap.push([this.defensiveFeatureColor[1], shades[1]]);
+    paletteSwap.push([this.defensiveFeatureColor[2], shades[2]]);
+    paletteSwap.push([this.defensiveFeatureColor[3], shades[3]]);
+    paletteSwap.push([this.defensiveFeatureColor[4], shades[4]]);
+
     paletteSwap.push([this.defenseOuterShield, outerShieldColor]);
     paletteSwap.push([this.defenseInnerShield, innerShieldColor]);
   }
@@ -141,6 +157,14 @@ export class StructurePaletteMobileCar extends AbstractStructurePalette {
     } else if (structure.getBuildRate() > ranks.rankD) {
       color = new ColorRGB(230, 124, 0);
     }
+
+    const shades = color.getLighterAndDarkerShades(2);
+
+    paletteSwap.push([this.engineeringFeatureColor[0], shades[0]]);
+    paletteSwap.push([this.engineeringFeatureColor[1], shades[1]]);
+    paletteSwap.push([this.engineeringFeatureColor[2], shades[2]]);
+    paletteSwap.push([this.engineeringFeatureColor[3], shades[3]]);
+    paletteSwap.push([this.engineeringFeatureColor[4], shades[4]]);
 
     paletteSwap.push([this.engineeringCraneArm, color]);
   }

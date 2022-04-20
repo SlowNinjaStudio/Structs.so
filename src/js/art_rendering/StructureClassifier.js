@@ -8,11 +8,11 @@ export class StructureClassifier {
    */
   getType(structure) {
     let type = STRUCTURE_TYPES.CITY;
-    if (structure.isMobile() && structure.getMass() < 50) {
+    if (structure.isMobile() && structure.getMass() < 128) {
       type = STRUCTURE_TYPES.CAR;
-    } else if (structure.isMobile() && structure.getMass() >= 50) {
+    } else if (structure.isMobile() && structure.getMass() >= 128) {
       type = STRUCTURE_TYPES.MECH;
-    } else if (!structure.isMobile() && structure.getMass() < 50) {
+    } else if (!structure.isMobile() && structure.getMass() < 128) {
       type = STRUCTURE_TYPES.STATION;
     }
     return type;
