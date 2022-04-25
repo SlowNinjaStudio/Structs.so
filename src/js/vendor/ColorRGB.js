@@ -187,4 +187,23 @@ export class ColorRGB {
   isEqual(color) {
     return (this.r === color.r && this.g === color.g && this.b === color.b);
   }
+
+  /**
+   * Get an equal number of lighter and darker shades using the current color as the median.
+   *
+   * @param {number} numShadesPerSide
+   * @return {ColorRGB[]}
+   */
+  getLighterAndDarkerShades(numShadesPerSide) {
+    if (numShadesPerSide < 1) {
+      throw 'Numbers of shades per side must be greater than or equal to 1.';
+    }
+    const numShades = numShadesPerSide + 2; // 1 color is always the base color and 1 color is always the mix in color
+    const white = new ColorRGB(255, 255, 255);
+    const black = new ColorRGB( 0, 0, 0);
+    const lighter = this.getMixedColorShades(numShades, white);
+    const darker = this.getMixedColorShades(numShades, black);
+    return lighter.reverse().slice(1, lighter.length - 1).concat(darker.slice(0, darker.length - 1));
+  }
+
 }
